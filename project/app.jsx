@@ -436,7 +436,7 @@ function ExamplesMenu({ mode }) {
     if (closeRef.current) clearTimeout(closeRef.current);
     closeRef.current = setTimeout(() => setOpen(false), 120);
   };
-  const href = (id) => `example.html?ex=${id}&mode=${mode}`;
+  const href = (id) => `example?ex=${id}&mode=${mode}`;
   return (
     <div
       className={`examples-menu ${open ? "is-open" : ""}`}

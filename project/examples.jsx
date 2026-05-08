@@ -41,6 +41,19 @@
       lines.light.push(`  --border-strong: ${window.resolveRef(refs.light)};`);
       lines.dark.push(`  --border-strong: ${window.resolveRef(refs.dark)};`);
     }
+    // Per-hue scale-semantic vars: emits e.g. --green-subtle, --talin-solid.
+    // Lets components consume scale tokens via CSS vars so dark-mode swaps
+    // happen automatically without re-reading the token registry.
+    const SCALE_SEMANTIC = window.SCALE_SEMANTIC;
+    if (SCALE_SEMANTIC) {
+      for (const [hue, roles] of Object.entries(SCALE_SEMANTIC)) {
+        for (const [role, refs] of Object.entries(roles)) {
+          const name = `--${hue}-${role}`;
+          lines.light.push(`  ${name}: ${window.resolveRef(refs.light)};`);
+          lines.dark.push(`  ${name}: ${window.resolveRef(refs.dark)};`);
+        }
+      }
+    }
     lines.light.push(
       `  --shadow: 0 1px 0 rgba(20, 22, 26, 0.04), 0 1px 2px rgba(20, 22, 26, 0.04);`,
       `  --swatch-ring: rgba(0, 0, 0, 0.08);`
@@ -579,6 +592,62 @@
     </StrokeIcon>
   );
 
+  // Phosphor duotone icons used by the campaigns view.
+  const UserCircleIcon = (p) => (
+    <PhosphorIcon {...p}>
+      <path d="M128 24a104 104 0 1 0 104 104A104 104 0 0 0 128 24m4 96a32 32 0 1 1 32-32a32 32 0 0 1-32 32" opacity=".2" />
+      <path d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24M74.08 197.5a64 64 0 0 1 119.84 0a87.83 87.83 0 0 1-119.84 0M96 120a32 32 0 1 1 32 32a32 32 0 0 1-32-32m107.76 66.41a79.66 79.66 0 0 0-36.6-28.7a48 48 0 1 0-78.32 0a79.66 79.66 0 0 0-36.6 28.7a88 88 0 1 1 151.52 0" />
+    </PhosphorIcon>
+  );
+
+  const BriefcaseIcon = (p) => (
+    <PhosphorIcon {...p}>
+      <path d="M216 56v144H40V56Z" opacity=".2" />
+      <path d="M216 56h-40V48a16 16 0 0 0-16-16H96a16 16 0 0 0-16 16v8H40a16 16 0 0 0-16 16v128a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V72a16 16 0 0 0-16-16M96 48h64v8H96Zm120 24v41.61A184 184 0 0 1 128 136a184.07 184.07 0 0 1-88-22.38V72Zm0 128H40v-67.93a200.06 200.06 0 0 0 88 21.93a200 200 0 0 0 88-21.93V200Zm-112-88a8 8 0 0 1 8-8h32a8 8 0 0 1 0 16h-32a8 8 0 0 1-8-8" />
+    </PhosphorIcon>
+  );
+
+  const CalendarBlankIcon = (p) => (
+    <PhosphorIcon {...p}>
+      <path d="M216 48v40H40V48a8 8 0 0 1 8-8h160a8 8 0 0 1 8 8" opacity=".2" />
+      <path d="M208 32h-24v-8a8 8 0 0 0-16 0v8H88v-8a8 8 0 0 0-16 0v8H48a16 16 0 0 0-16 16v160a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16M72 48v8a8 8 0 0 0 16 0v-8h80v8a8 8 0 0 0 16 0v-8h24v32H48V48Zm136 168H48V96h160z" />
+    </PhosphorIcon>
+  );
+
+  const XCircleIcon = (p) => (
+    <PhosphorIcon {...p}>
+      <path d="M232 128a104 104 0 1 1-104-104a104 104 0 0 1 104 104" opacity=".2" />
+      <path d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m37.66 130.34a8 8 0 0 1-11.32 11.32L128 139.31l-26.34 26.35a8 8 0 0 1-11.32-11.32L116.69 128L90.34 101.66a8 8 0 0 1 11.32-11.32L128 116.69l26.34-26.35a8 8 0 0 1 11.32 11.32L139.31 128Z" />
+    </PhosphorIcon>
+  );
+
+  const ArrowUpRightIcon = (p) => (
+    <PhosphorIcon {...p}>
+      <path d="M200 64v128L64 56Z" opacity=".2" />
+      <path d="M200 56v128a8 8 0 0 1-16 0V83.31L69.66 197.66a8 8 0 0 1-11.32-11.32L172.69 72H64a8 8 0 0 1 0-16h128a8 8 0 0 1 8 8" />
+    </PhosphorIcon>
+  );
+
+  const ArrowDownRightIcon = (p) => (
+    <PhosphorIcon {...p}>
+      <path d="M200 192H64L200 56Z" opacity=".2" />
+      <path d="M200 64v128a8 8 0 0 1-8 8H64a8 8 0 0 1 0-16h108.69L58.34 69.66a8 8 0 0 1 11.32-11.32L184 172.69V64a8 8 0 0 1 16 0" />
+    </PhosphorIcon>
+  );
+
+  const FunnelSimpleIcon = (p) => (
+    <PhosphorIcon {...p}>
+      <path d="M216 56H40l72 80v60l32 16v-76Z" opacity=".2" />
+      <path d="M216 48H40a8 8 0 0 0-5.91 13.39L104 138.85V196a8 8 0 0 0 4.42 7.16l32 16A8 8 0 0 0 152 212v-73.15l69.91-77.46A8 8 0 0 0 216 48m-77.92 84.6A8 8 0 0 0 136 138v59L120 189v-51a8 8 0 0 0-2.08-5.39L58 64h140Z" />
+    </PhosphorIcon>
+  );
+
+  const PlusIcon = (p) => (
+    <PhosphorIcon {...p}>
+      <path d="M216 128a8 8 0 0 1-8 8h-72v72a8 8 0 0 1-16 0v-72H48a8 8 0 0 1 0-16h72V48a8 8 0 0 1 16 0v72h72a8 8 0 0 1 8 8" />
+    </PhosphorIcon>
+  );
+
   // ── Custom branded illustration icons (user-provided, fixed colors) ────
   // Campaign options — Recruit Candidates / Find Prospects.
   function RecruitCandidatesIcon({ size = 40 }) {
@@ -870,22 +939,35 @@
   }
 
   // ── Sub-components ─────────────────────────────────────────────────────
-  function SideItem({ icon: IconComp, label, active }) {
-    return (
-      <div
-        className={`ex-side-item ${active ? "ex-side-item--active" : ""}`}
-        data-label={label}
-        data-tk-fg={active ? "fg" : "fg.muted"}
-        {...(active ? { "data-tk-bg": "blackAlpha.100" } : {})}
-        style={{ color: active ? "var(--fg)" : "var(--fg-muted)" }}>
+  // Renders as <a> when href is provided (cross-example navigation), else
+  // as a plain <div> (decorative — Inbox/Settings have no example pages).
+  function SideItem({ icon: IconComp, label, active, href }) {
+    const className = `ex-side-item ${active ? "ex-side-item--active" : ""}`;
+    const sharedProps = {
+      className,
+      "data-label": label,
+      "data-tk-fg": active ? "fg" : "fg.muted",
+      ...(active ? { "data-tk-bg": "blackAlpha.100" } : {}),
+      style: { color: active ? "var(--fg)" : "var(--fg-muted)" },
+    };
+    const inner = (
+      <>
         <span
           data-tk-fg="fg.muted"
           style={{ display: "inline-flex", color: "var(--fg-muted)" }}>
           <IconComp size={20} />
         </span>
         <span>{label}</span>
-      </div>
+      </>
     );
+    if (href) {
+      return (
+        <a {...sharedProps} href={href} style={{ ...sharedProps.style, textDecoration: "none" }}>
+          {inner}
+        </a>
+      );
+    }
+    return <div {...sharedProps}>{inner}</div>;
   }
 
   // 20×20 ring with arc drawn for `value` (0..1).
@@ -1066,7 +1148,7 @@
     );
   }
 
-  // ── ExampleHome ────────────────────────────────────────────────────────
+  // ── Sidebar shell (shared by ExampleHome and ExampleCampaigns) ─────────
   const SIDEBAR_STORAGE_KEY = "talin.exHome.sidebar";
   const NARROW_QUERY = "(max-width: 1100px)";
 
@@ -1083,7 +1165,105 @@
     } catch (_) {}
   }
 
-  function ExampleHome() {
+  // The sidebar markup itself. `active` selects which nav item highlights:
+  //   "home" | "campaigns" | "inbox" | "settings"
+  // Home and Campaigns are clickable links to their respective example
+  // pages, preserving the current light/dark mode via the URL.
+  function TalinSidebar({ active, sidebarCollapsed, onToggleSidebar }) {
+    const mode = (typeof document !== "undefined" && document.documentElement.dataset.mode) || "light";
+    const navHref = (id) => `example?ex=${id}&mode=${mode}`;
+    return (
+      <aside
+        className="ex-sidebar"
+        data-tk-bg="bg.muted"
+        data-tk-border="border"
+        style={{ background: "var(--bg-muted)", borderRightColor: "var(--border)" }}>
+        <div className="ex-brand-row">
+          {!sidebarCollapsed && <TalinLogo />}
+          <button
+            type="button"
+            className="ex-sidebar-toggle"
+            aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-expanded={!sidebarCollapsed}
+            data-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            onClick={onToggleSidebar}>
+            <SidebarSimpleIcon size={20} />
+          </button>
+        </div>
+
+        <div
+          className="ex-side-search"
+          data-label="Search"
+          data-tk-bg="bg.panel"
+          data-tk-border="border"
+          data-tk-fg="fg.subtle"
+          style={{
+            background: "var(--bg-panel)",
+            borderColor: "var(--border)",
+            color: "var(--fg-subtle)",
+          }}>
+          <span
+            data-tk-fg="fg.muted"
+            style={{ display: "inline-flex", color: "var(--fg-muted)" }}>
+            <MagnifyingGlassIcon size={16} />
+          </span>
+          <span>Search</span>
+        </div>
+
+        <nav className="ex-side-nav">
+          <SideItem icon={HouseLineIcon} label="Home" active={active === "home"} href={navHref("home")} />
+          <SideItem icon={PaperPlaneTiltIcon} label="Campaigns" active={active === "campaigns"} href={navHref("campaigns")} />
+          <SideItem icon={EnvelopeIcon} label="Inbox" active={active === "inbox"} />
+          <SideItem icon={GearIcon} label="Settings" active={active === "settings"} />
+        </nav>
+
+        <div className="ex-side-foot">
+          <SideItem icon={BookIcon} label="Knowledge Hub" />
+          <SideItem icon={ChatCircleTextIcon} label="Ask a question" />
+          <div
+            className="ex-side-user"
+            data-tk-border="border"
+            style={{ borderTopColor: "var(--border)" }}>
+            <div
+              className="ex-side-avatar"
+              data-tk-bg="fg"
+              data-tk-fg="bg"
+              style={{ background: "var(--fg)", color: "var(--bg)" }}>
+              JS
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div
+                className="ex-side-user-name"
+                data-tk-fg="fg"
+                style={{ color: "var(--fg)" }}>
+                John Smith
+              </div>
+              <div
+                className="ex-side-user-mail"
+                data-tk-fg="fg.subtle"
+                style={{
+                  color: "var(--fg-subtle)",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}>
+                m@example.com
+              </div>
+            </div>
+            {!sidebarCollapsed && (
+              <span data-tk-fg="fg.muted" style={{ color: "var(--fg-muted)", display: "inline-flex" }}>
+                <CaretRightIcon size={16} />
+              </span>
+            )}
+          </div>
+        </div>
+      </aside>
+    );
+  }
+
+  // The frame wrapper that owns the collapse state + listens to viewport
+  // changes. Renders <TalinSidebar> + the page's main content as children.
+  function ShellWithSidebar({ active, children }) {
     const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
       if (typeof window !== "undefined" && window.matchMedia &&
           window.matchMedia(NARROW_QUERY).matches) {
@@ -1121,97 +1301,21 @@
       <div
         className="ex-frame"
         data-sidebar-collapsed={sidebarCollapsed ? "true" : "false"}
-        style={{
-          "--sidebar-w": sidebarCollapsed ? "64px" : "255px",
-        }}>
-        {/* SIDEBAR */}
-        <aside
-          className="ex-sidebar"
-          data-tk-bg="bg.muted"
-          data-tk-border="border"
-          style={{ background: "var(--bg-muted)", borderRightColor: "var(--border)" }}>
-          <div className="ex-brand-row">
-            {!sidebarCollapsed && <TalinLogo />}
-            <button
-              type="button"
-              className="ex-sidebar-toggle"
-              aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-              aria-expanded={!sidebarCollapsed}
-              data-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-              onClick={onToggleSidebar}>
-              <SidebarSimpleIcon size={20} />
-            </button>
-          </div>
+        style={{ "--sidebar-w": sidebarCollapsed ? "64px" : "255px" }}>
+        <TalinSidebar
+          active={active}
+          sidebarCollapsed={sidebarCollapsed}
+          onToggleSidebar={onToggleSidebar}
+        />
+        {children}
+      </div>
+    );
+  }
 
-          <div
-            className="ex-side-search"
-            data-label="Search"
-            data-tk-bg="bg.panel"
-            data-tk-border="border"
-            data-tk-fg="fg.subtle"
-            style={{
-              background: "var(--bg-panel)",
-              borderColor: "var(--border)",
-              color: "var(--fg-subtle)",
-            }}>
-            <span
-              data-tk-fg="fg.muted"
-              style={{ display: "inline-flex", color: "var(--fg-muted)" }}>
-              <MagnifyingGlassIcon size={16} />
-            </span>
-            <span>Search</span>
-          </div>
-
-          <nav className="ex-side-nav">
-            <SideItem icon={HouseLineIcon} label="Home" active />
-            <SideItem icon={PaperPlaneTiltIcon} label="Campaigns" />
-            <SideItem icon={EnvelopeIcon} label="Inbox" />
-            <SideItem icon={GearIcon} label="Settings" />
-          </nav>
-
-          <div className="ex-side-foot">
-            <SideItem icon={BookIcon} label="Knowledge Hub" />
-            <SideItem icon={ChatCircleTextIcon} label="Ask a question" />
-            <div
-              className="ex-side-user"
-              data-tk-border="border"
-              style={{ borderTopColor: "var(--border)" }}>
-              <div
-                className="ex-side-avatar"
-                data-tk-bg="fg"
-                data-tk-fg="bg"
-                style={{ background: "var(--fg)", color: "var(--bg)" }}>
-                JS
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div
-                  className="ex-side-user-name"
-                  data-tk-fg="fg"
-                  style={{ color: "var(--fg)" }}>
-                  John Smith
-                </div>
-                <div
-                  className="ex-side-user-mail"
-                  data-tk-fg="fg.subtle"
-                  style={{
-                    color: "var(--fg-subtle)",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}>
-                  m@example.com
-                </div>
-              </div>
-              {!sidebarCollapsed && (
-                <span data-tk-fg="fg.muted" style={{ color: "var(--fg-muted)", display: "inline-flex" }}>
-                  <CaretRightIcon size={16} />
-                </span>
-              )}
-            </div>
-          </div>
-        </aside>
-
-        {/* MAIN */}
+  // ── ExampleHome ────────────────────────────────────────────────────────
+  function ExampleHome() {
+    return (
+      <ShellWithSidebar active="home">
         <main className="ex-main" data-tk-bg="bg.subtle">
           <h1
             className="ex-h1 ex-h1--inline"
@@ -1352,7 +1456,655 @@
             </div>
           </div>
         </main>
+      </ShellWithSidebar>
+    );
+  }
+
+  // ── ExampleCampaigns ───────────────────────────────────────────────────
+  // Mock data + chart components mirror talin's CampaignAnalytics +
+  // CampaignsTable, but the horizontal CampaignProgressBar is replaced with
+  // a small circular progress ring in the Contacts cell, and the column set
+  // follows the Figma (no Type/Progress, "Replies" split into Replies +
+  // Positive replies).
+
+  // 5 mock campaigns. All named "US/Canada Campaign / October 23, 2025"
+  // matching the Figma.
+  const MOCK_CAMPAIGNS = [
+    { id: 1, type: "candidate", actions: 1, contacts: 800, completed: 520, inProgress: 160, skipped: 120, total: 1000,
+      replies: 135, repliesPct: 9.8,  positive: 34, positivePct: 25.2 },
+    { id: 2, type: "candidate", actions: 3, contacts: 323, completed: 200, inProgress:  80, skipped:  43, total:  500,
+      replies: 200, repliesPct: 24.7, positive: 12, positivePct:  6.8 },
+    { id: 3, type: "employer",  actions: 5, contacts: 543, completed: 380, inProgress:  90, skipped:  73, total:  700,
+      replies: 157, repliesPct: 19.4, positive: 15, positivePct: 14.5 },
+    { id: 4, type: "candidate", actions: 2, contacts: 700, completed: 480, inProgress: 120, skipped: 100, total:  900,
+      replies: 135, repliesPct:  6.8, positive: 28, positivePct: 22.4 },
+    { id: 5, type: "employer",  actions: 1, contacts: 913, completed: 600, inProgress: 200, skipped: 113, total: 1100,
+      replies:  89, repliesPct:  8.3, positive: 29, positivePct: 21.5 },
+  ];
+
+  // Mock stats — totals + period-over-period change for the 3 KPIs.
+  const MOCK_STATS = {
+    messages: {
+      total: 17,
+      change: -23.9,
+      // Segment palette uses project tokens that read as a continuous
+      // navy/blue family — closer to the Figma's chart.primary-dominated
+      // donut while preserving the multi-segment Pie-chart structure
+      // from talin's CampaignMessagesKPI.
+      segments: [
+        { id: "connect", token: "chart.primary", value: 6 },
+        { id: "linmsg",  token: "blue.fg",       value: 5 },
+        { id: "email",   token: "blue.solid",    value: 3 },
+        { id: "sms",     token: "blue.muted",    value: 1 },
+        { id: "inmail",  token: "blue.subtle",   value: 1 },
+        { id: "phone",   token: "gray.muted",    value: 1 },
+      ],
+    },
+    contacts: { value: 9, change: -12.3 },
+    replies:  { value: 4, change: 25 },
+    // Bar heights are scaled visual proportions (matching the Figma
+    // "previous=short, current=tall" composition). The rate values
+    // (22.2% / 20.0%) display as the metric label only.
+    replyRate: { current: 22.2, previous: 20.0, change: 2, prevHeight: 28, currHeight: 92 },
+  };
+
+  // Helpers — token-hex resolution + hex/RGB color interpolation.
+  function tokenHex(path) {
+    if (typeof window === "undefined" || !window.resolveToken) return null;
+    const mode = document.documentElement.dataset.mode === "dark" ? "dark" : "light";
+    const r = window.resolveToken(path, mode);
+    return r ? r.hex : null;
+  }
+  function lerpHex(start, end, progress) {
+    const parse = (hex) => {
+      const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || "");
+      return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : [0, 0, 0];
+    };
+    const [r1, g1, b1] = parse(start);
+    const [r2, g2, b2] = parse(end);
+    const r = Math.round(r1 + (r2 - r1) * progress);
+    const g = Math.round(g1 + (g2 - g1) * progress);
+    const b = Math.round(b1 + (b2 - b1) * progress);
+    return "#" + [r, g, b].map((n) => n.toString(16).padStart(2, "0")).join("");
+  }
+  // Polar → cartesian. 0° = top (12 o'clock); angles grow clockwise.
+  function polarToCartesian(cx, cy, r, deg) {
+    const rad = ((deg - 90) * Math.PI) / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  }
+  function arcPath(cx, cy, r, startDeg, endDeg) {
+    const start = polarToCartesian(cx, cy, r, endDeg);
+    const end = polarToCartesian(cx, cy, r, startDeg);
+    const largeArc = endDeg - startDeg <= 180 ? "0" : "1";
+    return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 0 ${end.x} ${end.y}`;
+  }
+
+  // Trend pill — "↗ 25%" (up=green) or "↘ 23.9%" (down=orange).
+  function TrendPill({ variant, value }) {
+    const up = variant === "up";
+    return (
+      <span
+        className={`ex-trend-pill ex-trend-pill--${up ? "up" : "down"}`}
+        data-tk-bg={up ? "green.subtle" : "orange.subtle"}
+        data-tk-fg={up ? "green.fg" : "orange.fg"}
+        style={{
+          background: up ? "var(--green-subtle)" : "var(--orange-subtle)",
+          color: up ? "var(--green-fg)" : "var(--orange-fg)",
+        }}>
+        <span style={{ display: "inline-flex" }}>
+          {up ? <ArrowUpRightIcon size={10} /> : <ArrowDownRightIcon size={10} />}
+        </span>
+        <span>{value}</span>
+      </span>
+    );
+  }
+
+  // Messages-sent half-donut. Mirrors talin's CampaignMessagesKPI (Nivo
+  // ResponsivePie startAngle -90 / endAngle 90 / innerRadius 0.9 /
+  // padAngle 1.5 / cornerRadius 3). Built as stacked <path> arcs so each
+  // segment keeps its own color and rounded caps.
+  function MessagesSentDonut({ segments, total, change }) {
+    const sum = segments.reduce((a, s) => a + s.value, 0) || 1;
+    const cx = 100, cy = 95, r = 78, gap = 2.4;
+    const availableArc = 180 - gap * (segments.length - 1);
+    let cursor = -90;
+    return (
+      <div className="ex-stat-vis ex-stat-vis--msg">
+        <div className="ex-stat-vis-trend ex-stat-vis-trend--tl">
+          <TrendPill variant={change < 0 ? "down" : "up"} value={`${Math.abs(change)}%`} />
+        </div>
+        <svg className="ex-msg-donut-svg" width="200" height="110" viewBox="0 0 200 110">
+          {segments.map((seg) => {
+            const sweep = (seg.value / sum) * availableArc;
+            const start = cursor;
+            const end = cursor + sweep;
+            cursor = end + gap;
+            const cssVar = "--" + seg.token.replace(".", "-");
+            return (
+              <path
+                key={seg.id}
+                d={arcPath(cx, cy, r, start, end)}
+                stroke={`var(${cssVar})`}
+                strokeWidth="13"
+                strokeLinecap="round"
+                fill="none"
+                data-tk-stroke={seg.token}
+              />
+            );
+          })}
+        </svg>
+        <div className="ex-msg-donut-meta">
+          <span className="ex-msg-donut-num" data-tk-fg="fg" style={{ color: "var(--fg)" }}>
+            {total}
+          </span>
+          <span className="ex-msg-donut-label" data-tk-fg="fg.muted" style={{ color: "var(--fg-muted)" }}>
+            messages sent
+          </span>
+        </div>
       </div>
+    );
+  }
+
+  // 28-bar contacts→replies funnel. Heights taper based on conversionRatio.
+  // Color interpolates from #99c199 (talin "lightGreen") to green.600 across
+  // the 28 bars — same palette and math as talin's VerticalLinesChart.
+  function ContactsRepliesFunnel({ contactsValue, repliesValue, contactsChange, repliesChange }) {
+    const lineCount = 28;
+    const maxHeight = 80;
+    const lineWidth = 5;
+    const funnelAngle = 10;
+    const conversionRatio =
+      contactsValue > 0 && contactsValue > repliesValue
+        ? repliesValue / contactsValue
+        : 0.5;
+    const targetRatio = Math.max(0.45, conversionRatio);
+    const startColor = "#99c199";
+    const endColor = tokenHex("green.600") || "#2F855A";
+
+    return (
+      <div className="ex-stat-vis ex-stat-vis--funnel">
+        <div className="ex-funnel-side ex-funnel-side--left">
+          <div className="ex-stat-vis-trend ex-stat-vis-trend--inline">
+            <TrendPill
+              variant={contactsChange < 0 ? "down" : "up"}
+              value={`${Math.abs(contactsChange)}%`}
+            />
+          </div>
+          <span className="ex-stat-num" data-tk-fg="fg" style={{ color: "var(--fg)" }}>
+            {contactsValue}
+          </span>
+          <span className="ex-stat-label" data-tk-fg="fg.muted" style={{ color: "var(--fg-muted)" }}>
+            contacts
+          </span>
+        </div>
+        <div className="ex-funnel">
+          {Array.from({ length: lineCount }).map((_, i) => {
+            const progress = i / (lineCount - 1);
+            const heightRatio = 1 - progress * (1 - targetRatio);
+            const isEdge = i === 0 || i === lineCount - 1;
+            const heightMul = isEdge ? 1.05 : 1;
+            const height = heightRatio * maxHeight * heightMul;
+            const offsetY = progress * Math.tan((funnelAngle * Math.PI) / 180) * 25;
+            const width = isEdge ? lineWidth + 8 : lineWidth;
+            const color = lerpHex(startColor, endColor, progress);
+            const opacity = isEdge ? 0.8 : 0.5;
+            return (
+              <span
+                key={i}
+                className="ex-funnel-bar"
+                style={{
+                  height: `${height}px`,
+                  width: `${width}px`,
+                  background: color,
+                  transform: `translateY(${offsetY}px)`,
+                  opacity,
+                }}
+              />
+            );
+          })}
+        </div>
+        <div className="ex-funnel-side ex-funnel-side--right">
+          <div className="ex-stat-vis-trend ex-stat-vis-trend--inline">
+            <TrendPill
+              variant={repliesChange < 0 ? "down" : "up"}
+              value={`${Math.abs(repliesChange)}%`}
+            />
+          </div>
+          <span className="ex-stat-num" data-tk-fg="fg" style={{ color: "var(--fg)" }}>
+            {repliesValue}
+          </span>
+          <span className="ex-stat-label" data-tk-fg="fg.muted" style={{ color: "var(--fg-muted)" }}>
+            replies
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // Reply-rate stacked bars — mirrors talin's ReplyRateKPI. Two side-by-side
+  // bars (Previous on the left in gray, Current on the right in
+  // chart.primary). The fill height matches the Figma visual proportions —
+  // the rate value is displayed as the big metric below.
+  function ReplyRateBars({ current, previous, change, prevHeight = 28, currHeight = 92 }) {
+    return (
+      <div className="ex-stat-vis ex-stat-vis--rate">
+        <div className="ex-stat-vis-trend ex-stat-vis-trend--tl">
+          <TrendPill variant={change < 0 ? "down" : "up"} value={`${Math.abs(change)}%`} />
+        </div>
+        <div className="ex-replyrate-bars">
+          <div
+            className="ex-replyrate-bar ex-replyrate-bar--prev"
+            data-tk-bg="bg.panel"
+            data-tk-border="border"
+            style={{ background: "var(--bg-panel)", borderColor: "var(--border)" }}>
+            <span
+              className="ex-replyrate-fill"
+              data-tk-bg="gray.emphasized"
+              style={{ background: "var(--gray-emphasized)", height: `${prevHeight}%` }}
+            />
+          </div>
+          <div
+            className="ex-replyrate-bar ex-replyrate-bar--curr"
+            data-tk-bg="bg.panel"
+            data-tk-border="border"
+            style={{ background: "var(--bg-panel)", borderColor: "var(--border)" }}>
+            <span
+              className="ex-replyrate-fill"
+              data-tk-bg="chart.primary"
+              style={{ background: "var(--chart-primary)", height: `${currHeight}%` }}
+            />
+          </div>
+        </div>
+        <div className="ex-stat-vis-meta">
+          <span className="ex-stat-num" data-tk-fg="fg" style={{ color: "var(--fg)" }}>
+            {current}%
+          </span>
+          <span className="ex-stat-label" data-tk-fg="fg.muted" style={{ color: "var(--fg-muted)" }}>
+            reply rate
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // Small circular progress ring for the table's Contacts cell.
+  // Replaces talin's horizontal CampaignProgressBar — three concentric arcs
+  // proportional to completed / inProgress / skipped of total contacts,
+  // overlaid on a faint border-colored track.
+  function ContactsProgressRing({ completed, inProgress, skipped, total, size = 22 }) {
+    const stroke = 3;
+    const r = size / 2 - stroke / 2;
+    const c = 2 * Math.PI * r;
+    const safeTotal = total || 1;
+    const segs = [
+      { value: completed,  token: "talin.solid",     cssVar: "--talin-solid" },
+      { value: inProgress, token: "orange.solid",    cssVar: "--orange-solid" },
+      { value: skipped,    token: "gray.emphasized", cssVar: "--gray-emphasized" },
+    ];
+    let cursor = 0;
+    return (
+      <svg className="ex-progress-ring" width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          stroke="var(--border)"
+          strokeWidth={stroke}
+          fill="none"
+        />
+        {segs.map((seg, i) => {
+          const len = (seg.value / safeTotal) * c;
+          const offset = -cursor;
+          cursor += len;
+          return (
+            <circle
+              key={i}
+              cx={size / 2}
+              cy={size / 2}
+              r={r}
+              stroke={`var(${seg.cssVar})`}
+              strokeWidth={stroke}
+              fill="none"
+              strokeDasharray={`${len} ${c - len}`}
+              strokeDashoffset={offset}
+              transform={`rotate(-90 ${size / 2} ${size / 2})`}
+              data-tk-stroke={seg.token}
+            />
+          );
+        })}
+      </svg>
+    );
+  }
+
+  // ── Filter row sub-components ──────────────────────────────────────────
+  function SearchFilter() {
+    return (
+      <div
+        className="ex-filter-input"
+        data-tk-bg="bg.panel"
+        data-tk-border="border"
+        data-tk-fg="fg.subtle"
+        style={{
+          background: "var(--bg-panel)",
+          borderColor: "var(--border)",
+          color: "var(--fg-subtle)",
+        }}>
+        <span data-tk-fg="fg.muted" style={{ display: "inline-flex", color: "var(--fg-muted)" }}>
+          <MagnifyingGlassIcon size={14} />
+        </span>
+        <span>Filter by campaign name</span>
+      </div>
+    );
+  }
+
+  function FiltersDropdown() {
+    return (
+      <button
+        type="button"
+        className="ex-filter-btn"
+        data-tk-bg="bg.panel"
+        data-tk-border="border"
+        data-tk-fg="fg"
+        style={{
+          background: "var(--bg-panel)",
+          borderColor: "var(--border)",
+          color: "var(--fg)",
+        }}>
+        <span>Filters</span>
+        <span data-tk-fg="fg.muted" style={{ display: "inline-flex", color: "var(--fg-muted)" }}>
+          <CaretDownIcon size={12} />
+        </span>
+      </button>
+    );
+  }
+
+  function FilterPill({ label, value }) {
+    return (
+      <button
+        type="button"
+        className="ex-filter-pill"
+        data-tk-bg="bg.muted"
+        data-tk-border="border"
+        data-tk-fg="fg"
+        style={{
+          background: "var(--bg-muted)",
+          borderColor: "var(--border)",
+          color: "var(--fg)",
+        }}>
+        <span className="ex-filter-pill-label" data-tk-fg="fg.muted" style={{ color: "var(--fg-muted)" }}>
+          {label}
+        </span>
+        <span className="ex-filter-pill-val" data-tk-fg="fg" style={{ color: "var(--fg)" }}>
+          {value}
+        </span>
+        <span className="ex-filter-pill-x" data-tk-fg="fg.muted" style={{ color: "var(--fg-muted)" }}>
+          <XCircleIcon size={14} />
+        </span>
+      </button>
+    );
+  }
+
+  function NewCampaignButton() {
+    return (
+      <button
+        type="button"
+        className="ex-btn ex-btn--green"
+        data-tk-bg="talin.solid"
+        data-tk-fg="talin.contrast"
+        style={{
+          background: "var(--talin-solid)",
+          color: "var(--talin-contrast)",
+        }}>
+        <PlusIcon size={14} />
+        <span>New Campaign</span>
+      </button>
+    );
+  }
+
+  // ── Campaigns table ────────────────────────────────────────────────────
+  function PercentPill({ value, variant }) {
+    const green = variant === "green";
+    return (
+      <span
+        className={`ex-pct-pill ex-pct-pill--${green ? "green" : "neutral"}`}
+        data-tk-bg={green ? "green.subtle" : "bg.muted"}
+        data-tk-fg={green ? "green.fg" : "fg.muted"}
+        style={{
+          background: green ? "var(--green-subtle)" : "var(--bg-muted)",
+          color: green ? "var(--green-fg)" : "var(--fg-muted)",
+        }}>
+        {value}%
+      </span>
+    );
+  }
+
+  function CampaignRow({ row }) {
+    const RowIcon = row.type === "candidate" ? UserCircleIcon : BriefcaseIcon;
+    return (
+      <div
+        className="ex-tr ex-tr--campaign"
+        data-tk-border="border.muted"
+        style={{ borderTopColor: "var(--border-muted)" }}>
+        <div className="ex-td ex-td--name">
+          <span
+            className="ex-row-icon"
+            data-tk-bg="bg.muted"
+            data-tk-border="border"
+            data-tk-fg="fg.muted"
+            style={{
+              background: "var(--bg-muted)",
+              borderColor: "var(--border)",
+              color: "var(--fg-muted)",
+            }}>
+            <RowIcon size={18} />
+          </span>
+          <div className="ex-row-name">
+            <span className="ex-row-name-title" data-tk-fg="fg" style={{ color: "var(--fg)" }}>
+              US/Canada Campaign
+            </span>
+            <span
+              className="ex-row-name-sub"
+              data-tk-fg="fg.muted"
+              style={{ color: "var(--fg-muted)" }}>
+              <CalendarBlankIcon size={11} />
+              <span>October 23, 2025</span>
+            </span>
+          </div>
+        </div>
+        <div className="ex-td ex-td--centered">
+          <span
+            className="ex-mini-avatar"
+            data-tk-bg="fg"
+            data-tk-fg="bg"
+            style={{ background: "var(--fg)", color: "var(--bg)" }}>
+            JS
+          </span>
+        </div>
+        <div className="ex-td ex-td--centered">
+          <span
+            className="ex-td-toggle"
+            data-tk-bg="talin.solid"
+            style={{ background: "var(--talin-solid)" }}>
+            <span
+              className="ex-td-toggle-knob"
+              data-tk-bg="bg.panel"
+              style={{ background: "var(--bg-panel)" }}
+            />
+          </span>
+        </div>
+        <div className="ex-td ex-td--centered">
+          <span
+            className="ex-td-select"
+            data-tk-bg="bg.panel"
+            data-tk-border="border"
+            data-tk-fg="fg"
+            style={{
+              background: "var(--bg-panel)",
+              borderColor: "var(--border)",
+              color: "var(--fg)",
+            }}>
+            <span>20</span>
+            <span data-tk-fg="fg.muted" style={{ color: "var(--fg-muted)", display: "inline-flex" }}>
+              <CaretDownIcon size={10} />
+            </span>
+          </span>
+        </div>
+        <div className="ex-td ex-td--centered">
+          <span
+            className="ex-td-badge"
+            data-tk-bg="bg.panel"
+            data-tk-border="border"
+            data-tk-fg="fg"
+            style={{
+              background: "var(--bg-panel)",
+              borderColor: "var(--border)",
+              color: "var(--fg)",
+            }}>
+            {row.actions}
+          </span>
+        </div>
+        <div className="ex-td ex-td--centered ex-td--num">
+          <span data-tk-fg="fg" style={{ color: "var(--fg)" }}>
+            {row.contacts}
+          </span>
+          <ContactsProgressRing
+            completed={row.completed}
+            inProgress={row.inProgress}
+            skipped={row.skipped}
+            total={row.total}
+            size={22}
+          />
+        </div>
+        <div className="ex-td ex-td--centered ex-td--num">
+          <span data-tk-fg="fg" style={{ color: "var(--fg)" }}>
+            {row.replies}
+          </span>
+          <PercentPill value={row.repliesPct} variant={row.repliesPct >= 15 ? "green" : "neutral"} />
+        </div>
+        <div className="ex-td ex-td--centered ex-td--num">
+          <span data-tk-fg="fg" style={{ color: "var(--fg)" }}>
+            {row.positive}
+          </span>
+          <PercentPill value={row.positivePct} variant={row.positivePct >= 15 ? "green" : "neutral"} />
+        </div>
+      </div>
+    );
+  }
+
+  function CampaignsTable({ rows }) {
+    return (
+      <div
+        className="ex-table ex-table--campaigns"
+        data-tk-bg="bg.panel"
+        data-tk-border="border"
+        style={{ background: "var(--bg-panel)", borderColor: "var(--border)" }}>
+        <div
+          className="ex-thead"
+          data-tk-bg="bg.subtle"
+          data-tk-border="border"
+          data-tk-fg="fg.muted"
+          style={{
+            background: "var(--bg-subtle)",
+            borderBottomColor: "var(--border)",
+            color: "var(--fg-muted)",
+          }}>
+          <div className="ex-th">Campaign</div>
+          <div className="ex-th ex-th--centered">Owner</div>
+          <div className="ex-th ex-th--centered">Status</div>
+          <div className="ex-th ex-th--centered">Sending limit</div>
+          <div className="ex-th ex-th--centered">Actions</div>
+          <div className="ex-th ex-th--centered">Contacts</div>
+          <div className="ex-th ex-th--centered">Replies</div>
+          <div className="ex-th ex-th--centered">Positive replies</div>
+        </div>
+        {rows.map((r) => <CampaignRow key={r.id} row={r} />)}
+      </div>
+    );
+  }
+
+  // ── ExampleCampaigns view ──────────────────────────────────────────────
+  function ExampleCampaigns() {
+    return (
+      <ShellWithSidebar active="campaigns">
+        <main className="ex-main ex-main--campaigns" data-tk-bg="bg.subtle">
+          <h1
+            className="ex-h1 ex-h1--inline"
+            data-tk-fg="fg"
+            style={{ color: "var(--fg)" }}>
+            Campaigns
+          </h1>
+
+          <section className="ex-campaigns-section">
+            <h2
+              className="ex-h2--lg"
+              data-tk-fg="fg"
+              style={{ color: "var(--fg)" }}>
+              Campaign stats
+            </h2>
+            <div
+              className="ex-stat-card-row"
+              data-tk-bg="bg.muted"
+              data-tk-border="border"
+              style={{
+                background: "var(--bg-muted)",
+                borderColor: "var(--border)",
+              }}>
+              <div className="ex-stat-kpi">
+                <MessagesSentDonut
+                  segments={MOCK_STATS.messages.segments}
+                  total={MOCK_STATS.messages.total}
+                  change={MOCK_STATS.messages.change}
+                />
+              </div>
+              <div
+                className="ex-stat-divider"
+                data-tk-bg="border"
+                style={{ background: "var(--border)" }}
+              />
+              <div className="ex-stat-kpi">
+                <ContactsRepliesFunnel
+                  contactsValue={MOCK_STATS.contacts.value}
+                  repliesValue={MOCK_STATS.replies.value}
+                  contactsChange={MOCK_STATS.contacts.change}
+                  repliesChange={MOCK_STATS.replies.change}
+                />
+              </div>
+              <div
+                className="ex-stat-divider"
+                data-tk-bg="border"
+                style={{ background: "var(--border)" }}
+              />
+              <div className="ex-stat-kpi">
+                <ReplyRateBars
+                  current={MOCK_STATS.replyRate.current}
+                  previous={MOCK_STATS.replyRate.previous}
+                  change={MOCK_STATS.replyRate.change}
+                  prevHeight={MOCK_STATS.replyRate.prevHeight}
+                  currHeight={MOCK_STATS.replyRate.currHeight}
+                />
+              </div>
+            </div>
+          </section>
+
+          <section className="ex-campaigns-section">
+            <h2
+              className="ex-h2--lg"
+              data-tk-fg="fg"
+              style={{ color: "var(--fg)" }}>
+              Your Campaigns
+            </h2>
+            <div className="ex-filter-row">
+              <SearchFilter />
+              <FiltersDropdown />
+              <FilterPill label="Owner" value="You" />
+              <FilterPill label="Date range" value="Last 30 days" />
+              <span className="ex-filter-spacer" />
+              <NewCampaignButton />
+            </div>
+            <CampaignsTable rows={MOCK_CAMPAIGNS} />
+          </section>
+        </main>
+      </ShellWithSidebar>
     );
   }
 
@@ -1387,16 +2139,13 @@
       </div>
     );
   }
-  function ExampleCampaignsStub() {
-    return <StubScreen title="Campaigns" />;
-  }
   function ExampleCreateStub() {
     return <StubScreen title="Create campaign" />;
   }
 
   // ── Register globals ───────────────────────────────────────────────────
   window.ExampleHome = ExampleHome;
-  window.ExampleCampaigns = ExampleCampaignsStub;
+  window.ExampleCampaigns = ExampleCampaigns;
   window.ExampleCreate = ExampleCreateStub;
   window.TokenPill = TokenPill;
 })();

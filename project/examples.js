@@ -48,6 +48,19 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       lines.light.push(`  --border-strong: ${window.resolveRef(refs.light)};`);
       lines.dark.push(`  --border-strong: ${window.resolveRef(refs.dark)};`);
     }
+    // Per-hue scale-semantic vars: emits e.g. --green-subtle, --talin-solid.
+    // Lets components consume scale tokens via CSS vars so dark-mode swaps
+    // happen automatically without re-reading the token registry.
+    const SCALE_SEMANTIC = window.SCALE_SEMANTIC;
+    if (SCALE_SEMANTIC) {
+      for (const [hue, roles] of Object.entries(SCALE_SEMANTIC)) {
+        for (const [role, refs] of Object.entries(roles)) {
+          const name = `--${hue}-${role}`;
+          lines.light.push(`  ${name}: ${window.resolveRef(refs.light)};`);
+          lines.dark.push(`  ${name}: ${window.resolveRef(refs.dark)};`);
+        }
+      }
+    }
     lines.light.push(`  --shadow: 0 1px 0 rgba(20, 22, 26, 0.04), 0 1px 2px rgba(20, 22, 26, 0.04);`, `  --swatch-ring: rgba(0, 0, 0, 0.08);`);
     lines.dark.push(`  --shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.3);`, `  --swatch-ring: rgba(255, 255, 255, 0.06);`);
     const css = `html[data-mode="light"] {\n${lines.light.join("\n")}\n}\n` + `html[data-mode="dark"] {\n${lines.dark.join("\n")}\n}\n`;
@@ -591,6 +604,53 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     stroke: "none"
   }), /*#__PURE__*/React.createElement("polygon", {
     points: "6 4 20 12 6 20"
+  }));
+
+  // Phosphor duotone icons used by the campaigns view.
+  const UserCircleIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M128 24a104 104 0 1 0 104 104A104 104 0 0 0 128 24m4 96a32 32 0 1 1 32-32a32 32 0 0 1-32 32",
+    opacity: ".2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24M74.08 197.5a64 64 0 0 1 119.84 0a87.83 87.83 0 0 1-119.84 0M96 120a32 32 0 1 1 32 32a32 32 0 0 1-32-32m107.76 66.41a79.66 79.66 0 0 0-36.6-28.7a48 48 0 1 0-78.32 0a79.66 79.66 0 0 0-36.6 28.7a88 88 0 1 1 151.52 0"
+  }));
+  const BriefcaseIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M216 56v144H40V56Z",
+    opacity: ".2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M216 56h-40V48a16 16 0 0 0-16-16H96a16 16 0 0 0-16 16v8H40a16 16 0 0 0-16 16v128a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V72a16 16 0 0 0-16-16M96 48h64v8H96Zm120 24v41.61A184 184 0 0 1 128 136a184.07 184.07 0 0 1-88-22.38V72Zm0 128H40v-67.93a200.06 200.06 0 0 0 88 21.93a200 200 0 0 0 88-21.93V200Zm-112-88a8 8 0 0 1 8-8h32a8 8 0 0 1 0 16h-32a8 8 0 0 1-8-8"
+  }));
+  const CalendarBlankIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M216 48v40H40V48a8 8 0 0 1 8-8h160a8 8 0 0 1 8 8",
+    opacity: ".2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M208 32h-24v-8a8 8 0 0 0-16 0v8H88v-8a8 8 0 0 0-16 0v8H48a16 16 0 0 0-16 16v160a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16M72 48v8a8 8 0 0 0 16 0v-8h80v8a8 8 0 0 0 16 0v-8h24v32H48V48Zm136 168H48V96h160z"
+  }));
+  const XCircleIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M232 128a104 104 0 1 1-104-104a104 104 0 0 1 104 104",
+    opacity: ".2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m37.66 130.34a8 8 0 0 1-11.32 11.32L128 139.31l-26.34 26.35a8 8 0 0 1-11.32-11.32L116.69 128L90.34 101.66a8 8 0 0 1 11.32-11.32L128 116.69l26.34-26.35a8 8 0 0 1 11.32 11.32L139.31 128Z"
+  }));
+  const ArrowUpRightIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M200 64v128L64 56Z",
+    opacity: ".2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M200 56v128a8 8 0 0 1-16 0V83.31L69.66 197.66a8 8 0 0 1-11.32-11.32L172.69 72H64a8 8 0 0 1 0-16h128a8 8 0 0 1 8 8"
+  }));
+  const ArrowDownRightIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M200 192H64L200 56Z",
+    opacity: ".2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M200 64v128a8 8 0 0 1-8 8H64a8 8 0 0 1 0-16h108.69L58.34 69.66a8 8 0 0 1 11.32-11.32L184 172.69V64a8 8 0 0 1 16 0"
+  }));
+  const FunnelSimpleIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M216 56H40l72 80v60l32 16v-76Z",
+    opacity: ".2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M216 48H40a8 8 0 0 0-5.91 13.39L104 138.85V196a8 8 0 0 0 4.42 7.16l32 16A8 8 0 0 0 152 212v-73.15l69.91-77.46A8 8 0 0 0 216 48m-77.92 84.6A8 8 0 0 0 136 138v59L120 189v-51a8 8 0 0 0-2.08-5.39L58 64h140Z"
+  }));
+  const PlusIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M216 128a8 8 0 0 1-8 8h-72v72a8 8 0 0 1-16 0v-72H48a8 8 0 0 1 0-16h72V48a8 8 0 0 1 16 0v72h72a8 8 0 0 1 8 8"
   }));
 
   // ── Custom branded illustration icons (user-provided, fixed colors) ────
@@ -1472,13 +1532,17 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
   }
 
   // ── Sub-components ─────────────────────────────────────────────────────
+  // Renders as <a> when href is provided (cross-example navigation), else
+  // as a plain <div> (decorative — Inbox/Settings have no example pages).
   function SideItem({
     icon: IconComp,
     label,
-    active
+    active,
+    href
   }) {
-    return /*#__PURE__*/React.createElement("div", _extends({
-      className: `ex-side-item ${active ? "ex-side-item--active" : ""}`,
+    const className = `ex-side-item ${active ? "ex-side-item--active" : ""}`;
+    const sharedProps = _extends({
+      className: className,
       "data-label": label,
       "data-tk-fg": active ? "fg" : "fg.muted"
     }, active ? {
@@ -1487,15 +1551,25 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       style: {
         color: active ? "var(--fg)" : "var(--fg-muted)"
       }
-    }), /*#__PURE__*/React.createElement("span", {
-      "data-tk-fg": "fg.muted",
-      style: {
-        display: "inline-flex",
-        color: "var(--fg-muted)"
-      }
-    }, /*#__PURE__*/React.createElement(IconComp, {
-      size: 20
-    })), /*#__PURE__*/React.createElement("span", null, label));
+    });
+    const innerChildren = [
+      /*#__PURE__*/React.createElement("span", {
+        key: "icon",
+        "data-tk-fg": "fg.muted",
+        style: {
+          display: "inline-flex",
+          color: "var(--fg-muted)"
+        }
+      }, /*#__PURE__*/React.createElement(IconComp, { size: 20 })),
+      /*#__PURE__*/React.createElement("span", { key: "label" }, label)
+    ];
+    if (href) {
+      return /*#__PURE__*/React.createElement("a", _extends({}, sharedProps, {
+        href: href,
+        style: _extends({}, sharedProps.style, { textDecoration: "none" })
+      }), innerChildren);
+    }
+    return /*#__PURE__*/React.createElement("div", sharedProps, innerChildren);
   }
 
   // 20×20 ring with arc drawn for `value` (0..1).
@@ -1732,7 +1806,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     })), /*#__PURE__*/React.createElement("span", null, label));
   }
 
-  // ── ExampleHome ────────────────────────────────────────────────────────
+  // ── Sidebar shell (shared by ExampleHome and ExampleCampaigns) ─────────
   const SIDEBAR_STORAGE_KEY = "talin.exHome.sidebar";
   const NARROW_QUERY = "(max-width: 1100px)";
   function readSidebarPref() {
@@ -1747,41 +1821,19 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       localStorage.setItem(SIDEBAR_STORAGE_KEY, collapsed ? "collapsed" : "expanded");
     } catch (_) {}
   }
-  function ExampleHome() {
-    const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
-      if (typeof window !== "undefined" && window.matchMedia && window.matchMedia(NARROW_QUERY).matches) {
-        return true;
-      }
-      return readSidebarPref();
-    });
 
-    // Auto-collapse on viewport narrowing; restore user pref on widening.
-    // System-driven changes do NOT persist — only explicit clicks do.
-    useEffect(() => {
-      if (typeof window === "undefined" || !window.matchMedia) return;
-      const mql = window.matchMedia(NARROW_QUERY);
-      const handler = e => {
-        if (e.matches) setSidebarCollapsed(true);else setSidebarCollapsed(readSidebarPref());
-      };
-      if (mql.addEventListener) mql.addEventListener("change", handler);else if (mql.addListener) mql.addListener(handler);
-      return () => {
-        if (mql.removeEventListener) mql.removeEventListener("change", handler);else if (mql.removeListener) mql.removeListener(handler);
-      };
-    }, []);
-    const onToggleSidebar = () => {
-      setSidebarCollapsed(c => {
-        const next = !c;
-        writeSidebarPref(next);
-        return next;
-      });
-    };
-    return /*#__PURE__*/React.createElement("div", {
-      className: "ex-frame",
-      "data-sidebar-collapsed": sidebarCollapsed ? "true" : "false",
-      style: {
-        "--sidebar-w": sidebarCollapsed ? "64px" : "255px"
-      }
-    }, /*#__PURE__*/React.createElement("aside", {
+  // The sidebar markup itself. `active` selects which nav item highlights:
+  //   "home" | "campaigns" | "inbox" | "settings"
+  // Home and Campaigns are clickable links to their respective example
+  // pages, preserving the current light/dark mode via the URL.
+  function TalinSidebar({
+    active,
+    sidebarCollapsed,
+    onToggleSidebar
+  }) {
+    const mode = (typeof document !== "undefined" && document.documentElement.dataset.mode) || "light";
+    const navHref = id => `example?ex=${id}&mode=${mode}`;
+    return /*#__PURE__*/React.createElement("aside", {
       className: "ex-sidebar",
       "data-tk-bg": "bg.muted",
       "data-tk-border": "border",
@@ -1824,16 +1876,21 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     }, /*#__PURE__*/React.createElement(SideItem, {
       icon: HouseLineIcon,
       label: "Home",
-      active: true
+      active: active === "home",
+      href: navHref("home")
     }), /*#__PURE__*/React.createElement(SideItem, {
       icon: PaperPlaneTiltIcon,
-      label: "Campaigns"
+      label: "Campaigns",
+      active: active === "campaigns",
+      href: navHref("campaigns")
     }), /*#__PURE__*/React.createElement(SideItem, {
       icon: EnvelopeIcon,
-      label: "Inbox"
+      label: "Inbox",
+      active: active === "inbox"
     }), /*#__PURE__*/React.createElement(SideItem, {
       icon: GearIcon,
-      label: "Settings"
+      label: "Settings",
+      active: active === "settings"
     })), /*#__PURE__*/React.createElement("div", {
       className: "ex-side-foot"
     }, /*#__PURE__*/React.createElement(SideItem, {
@@ -1884,7 +1941,60 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       }
     }, /*#__PURE__*/React.createElement(CaretRightIcon, {
       size: 16
-    }))))), /*#__PURE__*/React.createElement("main", {
+    })))));
+  }
+
+  // The frame wrapper that owns the collapse state + listens to viewport
+  // changes. Renders <TalinSidebar> + the page's main content as children.
+  function ShellWithSidebar({
+    active,
+    children
+  }) {
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+      if (typeof window !== "undefined" && window.matchMedia && window.matchMedia(NARROW_QUERY).matches) {
+        return true;
+      }
+      return readSidebarPref();
+    });
+
+    // Auto-collapse on viewport narrowing; restore user pref on widening.
+    // System-driven changes do NOT persist — only explicit clicks do.
+    useEffect(() => {
+      if (typeof window === "undefined" || !window.matchMedia) return;
+      const mql = window.matchMedia(NARROW_QUERY);
+      const handler = e => {
+        if (e.matches) setSidebarCollapsed(true);else setSidebarCollapsed(readSidebarPref());
+      };
+      if (mql.addEventListener) mql.addEventListener("change", handler);else if (mql.addListener) mql.addListener(handler);
+      return () => {
+        if (mql.removeEventListener) mql.removeEventListener("change", handler);else if (mql.removeListener) mql.removeListener(handler);
+      };
+    }, []);
+    const onToggleSidebar = () => {
+      setSidebarCollapsed(c => {
+        const next = !c;
+        writeSidebarPref(next);
+        return next;
+      });
+    };
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ex-frame",
+      "data-sidebar-collapsed": sidebarCollapsed ? "true" : "false",
+      style: {
+        "--sidebar-w": sidebarCollapsed ? "64px" : "255px"
+      }
+    }, /*#__PURE__*/React.createElement(TalinSidebar, {
+      active: active,
+      sidebarCollapsed: sidebarCollapsed,
+      onToggleSidebar: onToggleSidebar
+    }), children);
+  }
+
+  // ── ExampleHome ────────────────────────────────────────────────────────
+  function ExampleHome() {
+    return /*#__PURE__*/React.createElement(ShellWithSidebar, {
+      active: "home"
+    }, /*#__PURE__*/React.createElement("main", {
       className: "ex-main",
       "data-tk-bg": "bg.subtle"
     }, /*#__PURE__*/React.createElement("h1", {
@@ -2053,6 +2163,604 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     }))))));
   }
 
+  // ── ExampleCampaigns ───────────────────────────────────────────────────
+  // Mock data + chart components mirror talin's CampaignAnalytics +
+  // CampaignsTable, but the horizontal CampaignProgressBar is replaced with
+  // a small circular progress ring in the Contacts cell, and the column set
+  // follows the Figma (no Type/Progress, "Replies" split into Replies +
+  // Positive replies).
+
+  const MOCK_CAMPAIGNS = [{
+    id: 1, type: "candidate", actions: 1, contacts: 800, completed: 520, inProgress: 160, skipped: 120, total: 1000,
+    replies: 135, repliesPct: 9.8, positive: 34, positivePct: 25.2
+  }, {
+    id: 2, type: "candidate", actions: 3, contacts: 323, completed: 200, inProgress: 80, skipped: 43, total: 500,
+    replies: 200, repliesPct: 24.7, positive: 12, positivePct: 6.8
+  }, {
+    id: 3, type: "employer", actions: 5, contacts: 543, completed: 380, inProgress: 90, skipped: 73, total: 700,
+    replies: 157, repliesPct: 19.4, positive: 15, positivePct: 14.5
+  }, {
+    id: 4, type: "candidate", actions: 2, contacts: 700, completed: 480, inProgress: 120, skipped: 100, total: 900,
+    replies: 135, repliesPct: 6.8, positive: 28, positivePct: 22.4
+  }, {
+    id: 5, type: "employer", actions: 1, contacts: 913, completed: 600, inProgress: 200, skipped: 113, total: 1100,
+    replies: 89, repliesPct: 8.3, positive: 29, positivePct: 21.5
+  }];
+
+  const MOCK_STATS = {
+    messages: {
+      total: 17,
+      change: -23.9,
+      // Segment palette uses project tokens that read as a continuous
+      // navy/blue family — closer to the Figma's chart.primary-dominated
+      // donut while preserving the multi-segment Pie-chart structure
+      // from talin's CampaignMessagesKPI.
+      segments: [
+        { id: "connect", token: "chart.primary", value: 6 },
+        { id: "linmsg", token: "blue.fg", value: 5 },
+        { id: "email", token: "blue.solid", value: 3 },
+        { id: "sms", token: "blue.muted", value: 1 },
+        { id: "inmail", token: "blue.subtle", value: 1 },
+        { id: "phone", token: "gray.muted", value: 1 }
+      ]
+    },
+    contacts: { value: 9, change: -12.3 },
+    replies: { value: 4, change: 25 },
+    // Bar heights are scaled visual proportions (matching the Figma
+    // "previous=short, current=tall" composition). The rate values
+    // (22.2% / 20.0%) display as the metric label only.
+    replyRate: { current: 22.2, previous: 20.0, change: 2, prevHeight: 28, currHeight: 92 }
+  };
+
+  function tokenHex(path) {
+    if (typeof window === "undefined" || !window.resolveToken) return null;
+    const mode = document.documentElement.dataset.mode === "dark" ? "dark" : "light";
+    const r = window.resolveToken(path, mode);
+    return r ? r.hex : null;
+  }
+  function lerpHex(start, end, progress) {
+    const parse = hex => {
+      const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || "");
+      return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : [0, 0, 0];
+    };
+    const [r1, g1, b1] = parse(start);
+    const [r2, g2, b2] = parse(end);
+    const r = Math.round(r1 + (r2 - r1) * progress);
+    const g = Math.round(g1 + (g2 - g1) * progress);
+    const b = Math.round(b1 + (b2 - b1) * progress);
+    return "#" + [r, g, b].map(n => n.toString(16).padStart(2, "0")).join("");
+  }
+  function polarToCartesian(cx, cy, r, deg) {
+    const rad = (deg - 90) * Math.PI / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  }
+  function arcPath(cx, cy, r, startDeg, endDeg) {
+    const start = polarToCartesian(cx, cy, r, endDeg);
+    const end = polarToCartesian(cx, cy, r, startDeg);
+    const largeArc = endDeg - startDeg <= 180 ? "0" : "1";
+    return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 0 ${end.x} ${end.y}`;
+  }
+
+  function TrendPill({ variant, value }) {
+    const up = variant === "up";
+    return /*#__PURE__*/React.createElement("span", {
+      className: `ex-trend-pill ex-trend-pill--${up ? "up" : "down"}`,
+      "data-tk-bg": up ? "green.subtle" : "orange.subtle",
+      "data-tk-fg": up ? "green.fg" : "orange.fg",
+      style: {
+        background: up ? "var(--green-subtle)" : "var(--orange-subtle)",
+        color: up ? "var(--green-fg)" : "var(--orange-fg)"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: { display: "inline-flex" }
+    }, up ? /*#__PURE__*/React.createElement(ArrowUpRightIcon, { size: 10 })
+         : /*#__PURE__*/React.createElement(ArrowDownRightIcon, { size: 10 })),
+       /*#__PURE__*/React.createElement("span", null, value));
+  }
+
+  function MessagesSentDonut({ segments, total, change }) {
+    const sum = segments.reduce((a, s) => a + s.value, 0) || 1;
+    const cx = 100, cy = 95, r = 78, gap = 2.4;
+    const availableArc = 180 - gap * (segments.length - 1);
+    let cursor = -90;
+    const arcs = segments.map(seg => {
+      const sweep = (seg.value / sum) * availableArc;
+      const start = cursor;
+      const end = cursor + sweep;
+      cursor = end + gap;
+      const cssVar = "--" + seg.token.replace(".", "-");
+      return /*#__PURE__*/React.createElement("path", {
+        key: seg.id,
+        d: arcPath(cx, cy, r, start, end),
+        stroke: `var(${cssVar})`,
+        strokeWidth: "13",
+        strokeLinecap: "round",
+        fill: "none",
+        "data-tk-stroke": seg.token
+      });
+    });
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ex-stat-vis ex-stat-vis--msg"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ex-stat-vis-trend ex-stat-vis-trend--tl"
+    }, /*#__PURE__*/React.createElement(TrendPill, {
+      variant: change < 0 ? "down" : "up",
+      value: `${Math.abs(change)}%`
+    })), /*#__PURE__*/React.createElement("svg", {
+      className: "ex-msg-donut-svg",
+      width: "200",
+      height: "110",
+      viewBox: "0 0 200 110"
+    }, arcs), /*#__PURE__*/React.createElement("div", {
+      className: "ex-msg-donut-meta"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "ex-msg-donut-num",
+      "data-tk-fg": "fg",
+      style: { color: "var(--fg)" }
+    }, total), /*#__PURE__*/React.createElement("span", {
+      className: "ex-msg-donut-label",
+      "data-tk-fg": "fg.muted",
+      style: { color: "var(--fg-muted)" }
+    }, "messages sent")));
+  }
+
+  function ContactsRepliesFunnel({ contactsValue, repliesValue, contactsChange, repliesChange }) {
+    const lineCount = 28;
+    const maxHeight = 80;
+    const lineWidth = 5;
+    const funnelAngle = 10;
+    const conversionRatio = contactsValue > 0 && contactsValue > repliesValue
+      ? repliesValue / contactsValue
+      : 0.5;
+    const targetRatio = Math.max(0.45, conversionRatio);
+    const startColor = "#99c199";
+    const endColor = tokenHex("green.600") || "#2F855A";
+
+    const bars = Array.from({ length: lineCount }).map((_, i) => {
+      const progress = i / (lineCount - 1);
+      const heightRatio = 1 - progress * (1 - targetRatio);
+      const isEdge = i === 0 || i === lineCount - 1;
+      const heightMul = isEdge ? 1.05 : 1;
+      const height = heightRatio * maxHeight * heightMul;
+      const offsetY = progress * Math.tan(funnelAngle * Math.PI / 180) * 25;
+      const width = isEdge ? lineWidth + 8 : lineWidth;
+      const color = lerpHex(startColor, endColor, progress);
+      const opacity = isEdge ? 0.8 : 0.5;
+      return /*#__PURE__*/React.createElement("span", {
+        key: i,
+        className: "ex-funnel-bar",
+        style: {
+          height: `${height}px`,
+          width: `${width}px`,
+          background: color,
+          transform: `translateY(${offsetY}px)`,
+          opacity
+        }
+      });
+    });
+
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ex-stat-vis ex-stat-vis--funnel"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ex-funnel-side ex-funnel-side--left"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ex-stat-vis-trend ex-stat-vis-trend--inline"
+    }, /*#__PURE__*/React.createElement(TrendPill, {
+      variant: contactsChange < 0 ? "down" : "up",
+      value: `${Math.abs(contactsChange)}%`
+    })), /*#__PURE__*/React.createElement("span", {
+      className: "ex-stat-num",
+      "data-tk-fg": "fg",
+      style: { color: "var(--fg)" }
+    }, contactsValue), /*#__PURE__*/React.createElement("span", {
+      className: "ex-stat-label",
+      "data-tk-fg": "fg.muted",
+      style: { color: "var(--fg-muted)" }
+    }, "contacts")), /*#__PURE__*/React.createElement("div", {
+      className: "ex-funnel"
+    }, bars), /*#__PURE__*/React.createElement("div", {
+      className: "ex-funnel-side ex-funnel-side--right"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ex-stat-vis-trend ex-stat-vis-trend--inline"
+    }, /*#__PURE__*/React.createElement(TrendPill, {
+      variant: repliesChange < 0 ? "down" : "up",
+      value: `${Math.abs(repliesChange)}%`
+    })), /*#__PURE__*/React.createElement("span", {
+      className: "ex-stat-num",
+      "data-tk-fg": "fg",
+      style: { color: "var(--fg)" }
+    }, repliesValue), /*#__PURE__*/React.createElement("span", {
+      className: "ex-stat-label",
+      "data-tk-fg": "fg.muted",
+      style: { color: "var(--fg-muted)" }
+    }, "replies")));
+  }
+
+  function ReplyRateBars({ current, previous, change, prevHeight = 28, currHeight = 92 }) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ex-stat-vis ex-stat-vis--rate"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ex-stat-vis-trend ex-stat-vis-trend--tl"
+    }, /*#__PURE__*/React.createElement(TrendPill, {
+      variant: change < 0 ? "down" : "up",
+      value: `${Math.abs(change)}%`
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "ex-replyrate-bars"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ex-replyrate-bar ex-replyrate-bar--prev",
+      "data-tk-bg": "bg.panel",
+      "data-tk-border": "border",
+      style: { background: "var(--bg-panel)", borderColor: "var(--border)" }
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "ex-replyrate-fill",
+      "data-tk-bg": "gray.emphasized",
+      style: { background: "var(--gray-emphasized)", height: `${prevHeight}%` }
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "ex-replyrate-bar ex-replyrate-bar--curr",
+      "data-tk-bg": "bg.panel",
+      "data-tk-border": "border",
+      style: { background: "var(--bg-panel)", borderColor: "var(--border)" }
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "ex-replyrate-fill",
+      "data-tk-bg": "chart.primary",
+      style: { background: "var(--chart-primary)", height: `${currHeight}%` }
+    }))), /*#__PURE__*/React.createElement("div", {
+      className: "ex-stat-vis-meta"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "ex-stat-num",
+      "data-tk-fg": "fg",
+      style: { color: "var(--fg)" }
+    }, current, "%"), /*#__PURE__*/React.createElement("span", {
+      className: "ex-stat-label",
+      "data-tk-fg": "fg.muted",
+      style: { color: "var(--fg-muted)" }
+    }, "reply rate")));
+  }
+
+  function ContactsProgressRing({ completed, inProgress, skipped, total, size = 22 }) {
+    const stroke = 3;
+    const r = size / 2 - stroke / 2;
+    const c = 2 * Math.PI * r;
+    const safeTotal = total || 1;
+    const segs = [
+      { value: completed, token: "talin.solid", cssVar: "--talin-solid" },
+      { value: inProgress, token: "orange.solid", cssVar: "--orange-solid" },
+      { value: skipped, token: "gray.emphasized", cssVar: "--gray-emphasized" }
+    ];
+    let cursor = 0;
+    const arcs = segs.map((seg, i) => {
+      const len = (seg.value / safeTotal) * c;
+      const offset = -cursor;
+      cursor += len;
+      return /*#__PURE__*/React.createElement("circle", {
+        key: i,
+        cx: size / 2,
+        cy: size / 2,
+        r: r,
+        stroke: `var(${seg.cssVar})`,
+        strokeWidth: stroke,
+        fill: "none",
+        strokeDasharray: `${len} ${c - len}`,
+        strokeDashoffset: offset,
+        transform: `rotate(-90 ${size / 2} ${size / 2})`,
+        "data-tk-stroke": seg.token
+      });
+    });
+    return /*#__PURE__*/React.createElement("svg", {
+      className: "ex-progress-ring",
+      width: size,
+      height: size,
+      viewBox: `0 0 ${size} ${size}`
+    }, /*#__PURE__*/React.createElement("circle", {
+      cx: size / 2,
+      cy: size / 2,
+      r: r,
+      stroke: "var(--border)",
+      strokeWidth: stroke,
+      fill: "none"
+    }), arcs);
+  }
+
+  function SearchFilter() {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ex-filter-input",
+      "data-tk-bg": "bg.panel",
+      "data-tk-border": "border",
+      "data-tk-fg": "fg.subtle",
+      style: {
+        background: "var(--bg-panel)",
+        borderColor: "var(--border)",
+        color: "var(--fg-subtle)"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      "data-tk-fg": "fg.muted",
+      style: { display: "inline-flex", color: "var(--fg-muted)" }
+    }, /*#__PURE__*/React.createElement(MagnifyingGlassIcon, { size: 14 })),
+       /*#__PURE__*/React.createElement("span", null, "Filter by campaign name"));
+  }
+
+  function FiltersDropdown() {
+    return /*#__PURE__*/React.createElement("button", {
+      type: "button",
+      className: "ex-filter-btn",
+      "data-tk-bg": "bg.panel",
+      "data-tk-border": "border",
+      "data-tk-fg": "fg",
+      style: {
+        background: "var(--bg-panel)",
+        borderColor: "var(--border)",
+        color: "var(--fg)"
+      }
+    }, /*#__PURE__*/React.createElement("span", null, "Filters"),
+       /*#__PURE__*/React.createElement("span", {
+      "data-tk-fg": "fg.muted",
+      style: { display: "inline-flex", color: "var(--fg-muted)" }
+    }, /*#__PURE__*/React.createElement(CaretDownIcon, { size: 12 })));
+  }
+
+  function FilterPill({ label, value }) {
+    return /*#__PURE__*/React.createElement("button", {
+      type: "button",
+      className: "ex-filter-pill",
+      "data-tk-bg": "bg.muted",
+      "data-tk-border": "border",
+      "data-tk-fg": "fg",
+      style: {
+        background: "var(--bg-muted)",
+        borderColor: "var(--border)",
+        color: "var(--fg)"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "ex-filter-pill-label",
+      "data-tk-fg": "fg.muted",
+      style: { color: "var(--fg-muted)" }
+    }, label), /*#__PURE__*/React.createElement("span", {
+      className: "ex-filter-pill-val",
+      "data-tk-fg": "fg",
+      style: { color: "var(--fg)" }
+    }, value), /*#__PURE__*/React.createElement("span", {
+      className: "ex-filter-pill-x",
+      "data-tk-fg": "fg.muted",
+      style: { color: "var(--fg-muted)" }
+    }, /*#__PURE__*/React.createElement(XCircleIcon, { size: 14 })));
+  }
+
+  function NewCampaignButton() {
+    return /*#__PURE__*/React.createElement("button", {
+      type: "button",
+      className: "ex-btn ex-btn--green",
+      "data-tk-bg": "talin.solid",
+      "data-tk-fg": "talin.contrast",
+      style: {
+        background: "var(--talin-solid)",
+        color: "var(--talin-contrast)"
+      }
+    }, /*#__PURE__*/React.createElement(PlusIcon, { size: 14 }),
+       /*#__PURE__*/React.createElement("span", null, "New Campaign"));
+  }
+
+  function PercentPill({ value, variant }) {
+    const green = variant === "green";
+    return /*#__PURE__*/React.createElement("span", {
+      className: `ex-pct-pill ex-pct-pill--${green ? "green" : "neutral"}`,
+      "data-tk-bg": green ? "green.subtle" : "bg.muted",
+      "data-tk-fg": green ? "green.fg" : "fg.muted",
+      style: {
+        background: green ? "var(--green-subtle)" : "var(--bg-muted)",
+        color: green ? "var(--green-fg)" : "var(--fg-muted)"
+      }
+    }, value, "%");
+  }
+
+  function CampaignRow({ row }) {
+    const RowIcon = row.type === "candidate" ? UserCircleIcon : BriefcaseIcon;
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ex-tr ex-tr--campaign",
+      "data-tk-border": "border.muted",
+      style: { borderTopColor: "var(--border-muted)" }
+    },
+      /*#__PURE__*/React.createElement("div", {
+        className: "ex-td ex-td--name"
+      }, /*#__PURE__*/React.createElement("span", {
+        className: "ex-row-icon",
+        "data-tk-bg": "bg.muted",
+        "data-tk-border": "border",
+        "data-tk-fg": "fg.muted",
+        style: {
+          background: "var(--bg-muted)",
+          borderColor: "var(--border)",
+          color: "var(--fg-muted)"
+        }
+      }, /*#__PURE__*/React.createElement(RowIcon, { size: 18 })),
+        /*#__PURE__*/React.createElement("div", {
+        className: "ex-row-name"
+      }, /*#__PURE__*/React.createElement("span", {
+        className: "ex-row-name-title",
+        "data-tk-fg": "fg",
+        style: { color: "var(--fg)" }
+      }, "US/Canada Campaign"), /*#__PURE__*/React.createElement("span", {
+        className: "ex-row-name-sub",
+        "data-tk-fg": "fg.muted",
+        style: { color: "var(--fg-muted)" }
+      }, /*#__PURE__*/React.createElement(CalendarBlankIcon, { size: 11 }),
+         /*#__PURE__*/React.createElement("span", null, "October 23, 2025")))),
+      /*#__PURE__*/React.createElement("div", {
+        className: "ex-td ex-td--centered"
+      }, /*#__PURE__*/React.createElement("span", {
+        className: "ex-mini-avatar",
+        "data-tk-bg": "fg",
+        "data-tk-fg": "bg",
+        style: { background: "var(--fg)", color: "var(--bg)" }
+      }, "JS")),
+      /*#__PURE__*/React.createElement("div", {
+        className: "ex-td ex-td--centered"
+      }, /*#__PURE__*/React.createElement("span", {
+        className: "ex-td-toggle",
+        "data-tk-bg": "talin.solid",
+        style: { background: "var(--talin-solid)" }
+      }, /*#__PURE__*/React.createElement("span", {
+        className: "ex-td-toggle-knob",
+        "data-tk-bg": "bg.panel",
+        style: { background: "var(--bg-panel)" }
+      }))),
+      /*#__PURE__*/React.createElement("div", {
+        className: "ex-td ex-td--centered"
+      }, /*#__PURE__*/React.createElement("span", {
+        className: "ex-td-select",
+        "data-tk-bg": "bg.panel",
+        "data-tk-border": "border",
+        "data-tk-fg": "fg",
+        style: {
+          background: "var(--bg-panel)",
+          borderColor: "var(--border)",
+          color: "var(--fg)"
+        }
+      }, /*#__PURE__*/React.createElement("span", null, "20"),
+        /*#__PURE__*/React.createElement("span", {
+        "data-tk-fg": "fg.muted",
+        style: { color: "var(--fg-muted)", display: "inline-flex" }
+      }, /*#__PURE__*/React.createElement(CaretDownIcon, { size: 10 })))),
+      /*#__PURE__*/React.createElement("div", {
+        className: "ex-td ex-td--centered"
+      }, /*#__PURE__*/React.createElement("span", {
+        className: "ex-td-badge",
+        "data-tk-bg": "bg.panel",
+        "data-tk-border": "border",
+        "data-tk-fg": "fg",
+        style: {
+          background: "var(--bg-panel)",
+          borderColor: "var(--border)",
+          color: "var(--fg)"
+        }
+      }, row.actions)),
+      /*#__PURE__*/React.createElement("div", {
+        className: "ex-td ex-td--centered ex-td--num"
+      }, /*#__PURE__*/React.createElement("span", {
+        "data-tk-fg": "fg",
+        style: { color: "var(--fg)" }
+      }, row.contacts), /*#__PURE__*/React.createElement(ContactsProgressRing, {
+        completed: row.completed,
+        inProgress: row.inProgress,
+        skipped: row.skipped,
+        total: row.total,
+        size: 22
+      })),
+      /*#__PURE__*/React.createElement("div", {
+        className: "ex-td ex-td--centered ex-td--num"
+      }, /*#__PURE__*/React.createElement("span", {
+        "data-tk-fg": "fg",
+        style: { color: "var(--fg)" }
+      }, row.replies), /*#__PURE__*/React.createElement(PercentPill, {
+        value: row.repliesPct,
+        variant: row.repliesPct >= 15 ? "green" : "neutral"
+      })),
+      /*#__PURE__*/React.createElement("div", {
+        className: "ex-td ex-td--centered ex-td--num"
+      }, /*#__PURE__*/React.createElement("span", {
+        "data-tk-fg": "fg",
+        style: { color: "var(--fg)" }
+      }, row.positive), /*#__PURE__*/React.createElement(PercentPill, {
+        value: row.positivePct,
+        variant: row.positivePct >= 15 ? "green" : "neutral"
+      })));
+  }
+
+  function CampaignsTable({ rows }) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "ex-table ex-table--campaigns",
+      "data-tk-bg": "bg.panel",
+      "data-tk-border": "border",
+      style: { background: "var(--bg-panel)", borderColor: "var(--border)" }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ex-thead",
+      "data-tk-bg": "bg.subtle",
+      "data-tk-border": "border",
+      "data-tk-fg": "fg.muted",
+      style: {
+        background: "var(--bg-subtle)",
+        borderBottomColor: "var(--border)",
+        color: "var(--fg-muted)"
+      }
+    }, /*#__PURE__*/React.createElement("div", { className: "ex-th" }, "Campaign"),
+       /*#__PURE__*/React.createElement("div", { className: "ex-th ex-th--centered" }, "Owner"),
+       /*#__PURE__*/React.createElement("div", { className: "ex-th ex-th--centered" }, "Status"),
+       /*#__PURE__*/React.createElement("div", { className: "ex-th ex-th--centered" }, "Sending limit"),
+       /*#__PURE__*/React.createElement("div", { className: "ex-th ex-th--centered" }, "Actions"),
+       /*#__PURE__*/React.createElement("div", { className: "ex-th ex-th--centered" }, "Contacts"),
+       /*#__PURE__*/React.createElement("div", { className: "ex-th ex-th--centered" }, "Replies"),
+       /*#__PURE__*/React.createElement("div", { className: "ex-th ex-th--centered" }, "Positive replies")),
+       rows.map(r => /*#__PURE__*/React.createElement(CampaignRow, { key: r.id, row: r })));
+  }
+
+  function ExampleCampaigns() {
+    return /*#__PURE__*/React.createElement(ShellWithSidebar, {
+      active: "campaigns"
+    }, /*#__PURE__*/React.createElement("main", {
+      className: "ex-main ex-main--campaigns",
+      "data-tk-bg": "bg.subtle"
+    }, /*#__PURE__*/React.createElement("h1", {
+      className: "ex-h1 ex-h1--inline",
+      "data-tk-fg": "fg",
+      style: { color: "var(--fg)" }
+    }, "Campaigns"),
+       /*#__PURE__*/React.createElement("section", {
+      className: "ex-campaigns-section"
+    }, /*#__PURE__*/React.createElement("h2", {
+      className: "ex-h2--lg",
+      "data-tk-fg": "fg",
+      style: { color: "var(--fg)" }
+    }, "Campaign stats"), /*#__PURE__*/React.createElement("div", {
+      className: "ex-stat-card-row",
+      "data-tk-bg": "bg.muted",
+      "data-tk-border": "border",
+      style: { background: "var(--bg-muted)", borderColor: "var(--border)" }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ex-stat-kpi"
+    }, /*#__PURE__*/React.createElement(MessagesSentDonut, {
+      segments: MOCK_STATS.messages.segments,
+      total: MOCK_STATS.messages.total,
+      change: MOCK_STATS.messages.change
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "ex-stat-divider",
+      "data-tk-bg": "border",
+      style: { background: "var(--border)" }
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "ex-stat-kpi"
+    }, /*#__PURE__*/React.createElement(ContactsRepliesFunnel, {
+      contactsValue: MOCK_STATS.contacts.value,
+      repliesValue: MOCK_STATS.replies.value,
+      contactsChange: MOCK_STATS.contacts.change,
+      repliesChange: MOCK_STATS.replies.change
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "ex-stat-divider",
+      "data-tk-bg": "border",
+      style: { background: "var(--border)" }
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "ex-stat-kpi"
+    }, /*#__PURE__*/React.createElement(ReplyRateBars, {
+      current: MOCK_STATS.replyRate.current,
+      previous: MOCK_STATS.replyRate.previous,
+      change: MOCK_STATS.replyRate.change,
+      prevHeight: MOCK_STATS.replyRate.prevHeight,
+      currHeight: MOCK_STATS.replyRate.currHeight
+    })))),
+       /*#__PURE__*/React.createElement("section", {
+      className: "ex-campaigns-section"
+    }, /*#__PURE__*/React.createElement("h2", {
+      className: "ex-h2--lg",
+      "data-tk-fg": "fg",
+      style: { color: "var(--fg)" }
+    }, "Your Campaigns"), /*#__PURE__*/React.createElement("div", {
+      className: "ex-filter-row"
+    }, /*#__PURE__*/React.createElement(SearchFilter, null),
+       /*#__PURE__*/React.createElement(FiltersDropdown, null),
+       /*#__PURE__*/React.createElement(FilterPill, { label: "Owner", value: "You" }),
+       /*#__PURE__*/React.createElement(FilterPill, { label: "Date range", value: "Last 30 days" }),
+       /*#__PURE__*/React.createElement("span", { className: "ex-filter-spacer" }),
+       /*#__PURE__*/React.createElement(NewCampaignButton, null)),
+       /*#__PURE__*/React.createElement(CampaignsTable, { rows: MOCK_CAMPAIGNS }))));
+  }
+
   // ── Stubs for the other examples (built later) ─────────────────────────
   function StubScreen({
     title
@@ -2085,11 +2793,6 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       }
     }, title, " \u2014 coming soon"), /*#__PURE__*/React.createElement("div", null, "This example will be built out in a follow-up session.")));
   }
-  function ExampleCampaignsStub() {
-    return /*#__PURE__*/React.createElement(StubScreen, {
-      title: "Campaigns"
-    });
-  }
   function ExampleCreateStub() {
     return /*#__PURE__*/React.createElement(StubScreen, {
       title: "Create campaign"
@@ -2098,7 +2801,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
 
   // ── Register globals ───────────────────────────────────────────────────
   window.ExampleHome = ExampleHome;
-  window.ExampleCampaigns = ExampleCampaignsStub;
+  window.ExampleCampaigns = ExampleCampaigns;
   window.ExampleCreate = ExampleCreateStub;
   window.TokenPill = TokenPill;
 })();

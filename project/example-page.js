@@ -6,7 +6,13 @@ const {
   useState: useExState,
   useEffect: useExEffect
 } = React;
-const exParams = new URLSearchParams(window.location.search);
+function readExampleParams() {
+  const searchParams = new URLSearchParams(window.location.search);
+  if (searchParams.has("ex") || searchParams.has("mode")) return searchParams;
+  const hash = window.location.hash.replace(/^#\/?/, "");
+  return new URLSearchParams(hash);
+}
+const exParams = readExampleParams();
 const exId = exParams.get("ex") || "home";
 const initialExMode = exParams.get("mode") === "dark" ? "dark" : "light";
 const exTitles = {

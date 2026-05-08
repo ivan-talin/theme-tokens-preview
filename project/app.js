@@ -463,7 +463,7 @@ function ExamplesMenu({
     if (closeRef.current) clearTimeout(closeRef.current);
     closeRef.current = setTimeout(() => setOpen(false), 120);
   };
-  const href = id => `example.html?ex=${id}&mode=${mode}`;
+  const href = id => `example?ex=${id}&mode=${mode}`;
   return /*#__PURE__*/React.createElement("div", {
     className: `examples-menu ${open ? "is-open" : ""}`,
     onMouseEnter: onEnter,
