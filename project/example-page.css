@@ -1,0 +1,105 @@
+/* Single-example page chrome — no header, no extra titles, just the example. */
+
+html, body.example-body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+.example-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.example-stage {
+  flex: 1;
+  display: flex;
+}
+/* Stretch ONLY the wrapper variants that should grow into the stage.
+   Do NOT use a broad `.example-stage > div` selector — it would clobber
+   .ex-frame's `display: grid` and stack the sidebar on top of the main canvas. */
+.example-stage > .examples-view,
+.example-stage > .example-missing {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.example-stage > .ex-frame {
+  flex: 1;
+  min-height: 100vh;
+}
+
+.example-missing {
+  margin: auto;
+  color: var(--fg-muted);
+  font: 14px/1.4 var(--font-sans, system-ui);
+}
+
+/* Floating return-to-tokens FAB */
+.example-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 100;
+}
+
+.example-fab-mode {
+  display: inline-flex;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+  box-shadow:
+    0 1px 0 0 color-mix(in oklab, var(--border) 60%, transparent),
+    0 12px 28px -16px color-mix(in oklab, var(--fg) 28%, transparent);
+}
+.example-fab-mode button {
+  border: 0;
+  background: transparent;
+  color: var(--fg-muted);
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.example-fab-mode button.active {
+  background: var(--bg-subtle);
+  color: var(--fg);
+}
+
+.example-fab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px 0 14px;
+  border-radius: 999px;
+  background: var(--fg);
+  color: var(--bg);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  border: 1px solid var(--fg);
+  box-shadow:
+    0 1px 0 0 color-mix(in oklab, var(--border) 60%, transparent),
+    0 16px 32px -16px color-mix(in oklab, var(--fg) 40%, transparent);
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+.example-fab-btn:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 1px 0 0 color-mix(in oklab, var(--border) 60%, transparent),
+    0 20px 40px -16px color-mix(in oklab, var(--fg) 50%, transparent);
+}
+.example-fab-btn svg { color: var(--bg); }
