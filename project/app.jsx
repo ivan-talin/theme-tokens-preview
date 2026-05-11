@@ -32,10 +32,12 @@ const { useState, useEffect } = React;
   }
   lines.light.push(
     `  --shadow: 0 1px 0 rgba(20, 22, 26, 0.04), 0 1px 2px rgba(20, 22, 26, 0.04);`,
+    `  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);`,
     `  --swatch-ring: rgba(0, 0, 0, 0.08);`
   );
   lines.dark.push(
     `  --shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.3);`,
+    `  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);`,
     `  --swatch-ring: rgba(255, 255, 255, 0.06);`
   );
   const css =
@@ -81,19 +83,38 @@ function Swatch({ hex, height = 80 }) {
   if (!hex) {
     return <div className="swatch swatch-empty" style={{ height }} />;
   }
+  const isAlpha = /^rgba?\(/i.test(hex);
+  const label = isAlpha ? hex : hex.toUpperCase();
+  const copy = () => {
+    navigator.clipboard?.writeText(hex);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 900);
+  };
+  if (isAlpha) {
+    return (
+      <button
+        className="swatch swatch--alpha"
+        style={{ height }}
+        onClick={copy}
+        title={`Copy ${hex}`}>
+
+        <span className="swatch-checker" />
+        <span className="swatch-fill" style={{ background: hex }} />
+        <span className={`swatch-hex ${copied ? "is-copied" : ""}`}>
+          {copied ? "copied" : hex}
+        </span>
+      </button>);
+
+  }
   return (
     <button
       className="swatch"
       style={{ background: hex, height, color: readableOn(hex) }}
-      onClick={() => {
-        navigator.clipboard?.writeText(hex);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 900);
-      }}
-      title={`Copy ${hex.toUpperCase()}`}>
-      
+      onClick={copy}
+      title={`Copy ${label}`}>
+
       <span className={`swatch-hex ${copied ? "is-copied" : ""}`}>
-        {copied ? "copied" : hex.toUpperCase()}
+        {copied ? "copied" : label}
       </span>
     </button>);
 
@@ -243,17 +264,18 @@ function ColorGroupsSection({ mode }) {
       <SectionHeader
         kicker="03"
         title="Color group semantics"
-        hint="Will not be used that often, but useful for elements like badges." data-comment-anchor="e54780575e-p-150-15" />
+        hint="Will not be used that often, but useful for elements like badges. Includes a dedicated Alpha semantic group for layered elements and hover states — handy for things like the sidebar." data-comment-anchor="e54780575e-p-150-15" />
       
       <div className="group-stack">
         {window.SCALE_ORDER.map((hue) => {
           const semantic = window.SCALE_SEMANTIC[hue];
+          const isAlpha = hue === "alpha";
           return (
             <GroupPanel
               key={hue}
               title={hue} data-comment-anchor="178c41a9b8-span-138-18">
-              
-              <div className="token-row">
+
+              <div className={`token-row${isAlpha ? ` token-row--alpha mode-${mode}` : ""}`}>
                 {window.SEMANTIC_ROLE_ORDER.map((role) => {
                   const refs = semantic[role];
                   const hex = window.resolveRef(refs[mode]);
@@ -326,7 +348,7 @@ function TalinTuner({ baseHex, onChange }) {
 
 function BasePaletteSection({ mode, talinBase, setTalinBase }) {
   // Render talin first, then the rest of the scales in their normal order.
-  const ordered = ["talin", ...window.SCALE_ORDER.filter((h) => h !== "talin")];
+  const ordered = ["talin", ...window.SCALE_ORDER.filter((h) => h !== "talin" && h !== "alpha")];
   return (
     <section className="block">
       <SectionHeader
@@ -455,7 +477,6 @@ function ExamplesMenu({ mode }) {
         </svg>
       </button>
       <div className="examples-popover" role="menu" aria-hidden={!open}>
-        <div className="examples-popover-head mono">Open as page</div>
         {EXAMPLE_LINKS.map((it) => (
           <a
             key={it.id}
@@ -467,7 +488,6 @@ function ExamplesMenu({ mode }) {
             <span className="examples-item-arrow" aria-hidden="true">→</span>
           </a>
         ))}
-        <div className="examples-popover-foot mono">⌘-click to open in a new tab</div>
       </div>
     </div>);
 
@@ -558,10 +578,6 @@ function App() {
       <ChartSection />
       <ColorGroupsSection mode={mode} />
       <BasePaletteSection mode={mode} talinBase={talinBase} setTalinBase={setTalinBase} />
-      <footer className="page-footer mono">
-        <span>talin · theme tokens preview</span>
-        <span className="dim">edit values in tokens.js</span>
-      </footer>
     </div>);
 
 }

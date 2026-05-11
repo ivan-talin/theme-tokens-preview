@@ -35,8 +35,8 @@ const {
     lines.light.push(`  --border-strong: ${window.resolveRef(refs.light)};`);
     lines.dark.push(`  --border-strong: ${window.resolveRef(refs.dark)};`);
   }
-  lines.light.push(`  --shadow: 0 1px 0 rgba(20, 22, 26, 0.04), 0 1px 2px rgba(20, 22, 26, 0.04);`, `  --swatch-ring: rgba(0, 0, 0, 0.08);`);
-  lines.dark.push(`  --shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.3);`, `  --swatch-ring: rgba(255, 255, 255, 0.06);`);
+  lines.light.push(`  --shadow: 0 1px 0 rgba(20, 22, 26, 0.04), 0 1px 2px rgba(20, 22, 26, 0.04);`, `  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);`, `  --swatch-ring: rgba(0, 0, 0, 0.08);`);
+  lines.dark.push(`  --shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.3);`, `  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);`, `  --swatch-ring: rgba(255, 255, 255, 0.06);`);
   const css = `html[data-mode="light"] {\n${lines.light.join("\n")}\n}\n` + `html[data-mode="dark"] {\n${lines.dark.join("\n")}\n}\n`;
   let style = document.getElementById("__semantic-tokens__");
   if (!style) {
@@ -83,6 +83,32 @@ function Swatch({
       }
     });
   }
+  const isAlpha = /^rgba?\(/i.test(hex);
+  const label = isAlpha ? hex : hex.toUpperCase();
+  const copy = () => {
+    navigator.clipboard?.writeText(hex);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 900);
+  };
+  if (isAlpha) {
+    return /*#__PURE__*/React.createElement("button", {
+      className: "swatch swatch--alpha",
+      style: {
+        height
+      },
+      onClick: copy,
+      title: `Copy ${hex}`
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "swatch-checker"
+    }), /*#__PURE__*/React.createElement("span", {
+      className: "swatch-fill",
+      style: {
+        background: hex
+      }
+    }), /*#__PURE__*/React.createElement("span", {
+      className: `swatch-hex ${copied ? "is-copied" : ""}`
+    }, copied ? "copied" : hex));
+  }
   return /*#__PURE__*/React.createElement("button", {
     className: "swatch",
     style: {
@@ -90,15 +116,11 @@ function Swatch({
       height,
       color: readableOn(hex)
     },
-    onClick: () => {
-      navigator.clipboard?.writeText(hex);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 900);
-    },
-    title: `Copy ${hex.toUpperCase()}`
+    onClick: copy,
+    title: `Copy ${label}`
   }, /*#__PURE__*/React.createElement("span", {
     className: `swatch-hex ${copied ? "is-copied" : ""}`
-  }, copied ? "copied" : hex.toUpperCase()));
+  }, copied ? "copied" : label));
 }
 function TokenCard({
   name,
@@ -273,18 +295,19 @@ function ColorGroupsSection({
   }, /*#__PURE__*/React.createElement(SectionHeader, {
     kicker: "03",
     title: "Color group semantics",
-    hint: "Will not be used that often, but useful for elements like badges.",
+    hint: "Will not be used that often, but useful for elements like badges. Includes a dedicated Alpha semantic group for layered elements and hover states — handy for things like the sidebar.",
     "data-comment-anchor": "e54780575e-p-150-15"
   }), /*#__PURE__*/React.createElement("div", {
     className: "group-stack"
   }, window.SCALE_ORDER.map(hue => {
     const semantic = window.SCALE_SEMANTIC[hue];
+    const isAlpha = hue === "alpha";
     return /*#__PURE__*/React.createElement(GroupPanel, {
       key: hue,
       title: hue,
       "data-comment-anchor": "178c41a9b8-span-138-18"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "token-row"
+      className: `token-row${isAlpha ? ` token-row--alpha mode-${mode}` : ""}`
     }, window.SEMANTIC_ROLE_ORDER.map(role => {
       const refs = semantic[role];
       const hex = window.resolveRef(refs[mode]);
@@ -360,7 +383,7 @@ function BasePaletteSection({
   setTalinBase
 }) {
   // Render talin first, then the rest of the scales in their normal order.
-  const ordered = ["talin", ...window.SCALE_ORDER.filter(h => h !== "talin")];
+  const ordered = ["talin", ...window.SCALE_ORDER.filter(h => h !== "talin" && h !== "alpha")];
   return /*#__PURE__*/React.createElement("section", {
     className: "block"
   }, /*#__PURE__*/React.createElement(SectionHeader, {
@@ -492,9 +515,7 @@ function ExamplesMenu({
     className: "examples-popover",
     role: "menu",
     "aria-hidden": !open
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "examples-popover-head mono"
-  }, "Open as page"), EXAMPLE_LINKS.map(it => /*#__PURE__*/React.createElement("a", {
+  }, EXAMPLE_LINKS.map(it => /*#__PURE__*/React.createElement("a", {
     key: it.id,
     className: "examples-item",
     role: "menuitem",
@@ -506,9 +527,7 @@ function ExamplesMenu({
   }, it.sub), /*#__PURE__*/React.createElement("span", {
     className: "examples-item-arrow",
     "aria-hidden": "true"
-  }, "\u2192"))), /*#__PURE__*/React.createElement("div", {
-    className: "examples-popover-foot mono"
-  }, "\u2318-click to open in a new tab")));
+  }, "\u2192")))));
 }
 function PageHeader({
   mode,
@@ -598,10 +617,6 @@ function App() {
     mode: mode,
     talinBase: talinBase,
     setTalinBase: setTalinBase
-  }), /*#__PURE__*/React.createElement("footer", {
-    className: "page-footer mono"
-  }, /*#__PURE__*/React.createElement("span", null, "talin \xB7 theme tokens preview"), /*#__PURE__*/React.createElement("span", {
-    className: "dim"
-  }, "edit values in tokens.js")));
+  }));
 }
 ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));

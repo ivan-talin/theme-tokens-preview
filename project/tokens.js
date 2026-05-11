@@ -7,7 +7,7 @@ window.PALETTE = {
   gray: {
     50: "#FDFDFC", 100: "#F8F7F4", 200: "#F1EFEC", 300: "#D6D3D1",
     400: "#ACA8A4", 500: "#84807A", 600: "#65625C", 700: "#4D4A45",
-    800: "#36332D", 900: "#21201C", 950: "#100F0D"
+    800: "#302D27", 900: "#1A1915", 950: "#131210"
   },
   red: {
     50: "#FFF5F5", 100: "#FED7D7", 200: "#FEB2B2", 300: "#FC8181",
@@ -137,9 +137,9 @@ window.SEMANTIC = {
     info:       { light: "{colors.blue.600}",    dark: "{colors.blue.300}" }
   },
   border: {
-    DEFAULT:    { light: "{colors.gray.200}",   dark: "{colors.gray.800}" },
+    DEFAULT:    { light: "{colors.blackAlpha.200}", dark: "{colors.whiteAlpha.200}" },
     muted:      { light: "{colors.gray.100}",   dark: "{colors.gray.900}" },
-    subtle:     { light: "{colors.gray.50}",    dark: "{colors.gray.950}" },
+    subtle:     { light: "{colors.blackAlpha.100}", dark: "{colors.whiteAlpha.100}" },
     emphasized: { light: "{colors.gray.300}",   dark: "{colors.gray.700}" },
     inverted:   { light: "{colors.gray.800}",   dark: "{colors.gray.200}" },
     error:      { light: "{colors.red.500}",    dark: "{colors.red.400}" },
@@ -157,10 +157,10 @@ const role = (hue, lightStep, darkStep) => ({
 });
 const stdScaleRoles = (hue, opts = {}) => ({
   contrast:   { light: opts.contrastLight || "white", dark: opts.contrastDark || "white" },
-  fg:         role(hue, opts.fg?.[0] || 700, opts.fg?.[1] || 300),
-  subtle:     role(hue, 100, 900),
-  muted:      role(hue, 200, 800),
-  emphasized: role(hue, 300, 700),
+  fg:         role(hue, opts.fg?.[0] || 800, opts.fg?.[1] || 300),
+  subtle:     role(hue, 50, 900),
+  muted:      role(hue, 100, 800),
+  emphasized: role(hue, 200, 700),
   solid:      role(hue, opts.solid?.[0] || 600, opts.solid?.[1] || 600),
   focusRing:  role(hue, 500, 500),
   border:     role(hue, 500, 400)
@@ -170,21 +170,34 @@ window.SCALE_SEMANTIC = {
   gray: {
     contrast:   { light: "{colors.white}",      dark: "{colors.black}" },
     fg:         { light: "{colors.gray.800}",   dark: "{colors.gray.200}" },
-    subtle:     { light: "{colors.gray.100}",   dark: "{colors.gray.900}" },
-    muted:      { light: "{colors.gray.200}",   dark: "{colors.gray.800}" },
-    emphasized: { light: "{colors.gray.300}",   dark: "{colors.gray.700}" },
+    subtle:     { light: "{colors.gray.50}",    dark: "{colors.gray.900}" },
+    muted:      { light: "{colors.gray.100}",   dark: "{colors.gray.800}" },
+    emphasized: { light: "{colors.gray.200}",   dark: "{colors.gray.700}" },
     solid:      { light: "{colors.gray.900}",   dark: "{colors.white}" },
     focusRing:  { light: "{colors.gray.400}",   dark: "{colors.gray.400}" },
     border:     { light: "{colors.gray.200}",   dark: "{colors.gray.800}" }
+  },
+  // Mirrors the gray scale but uses alpha values: blackAlpha in light mode
+  // (darkens the light surface), whiteAlpha in dark mode (lightens the dark
+  // surface). contrast inverts because it sits on top of `solid`.
+  alpha: {
+    contrast:   { light: "{colors.whiteAlpha.800}", dark: "{colors.blackAlpha.800}" },
+    fg:         { light: "{colors.blackAlpha.800}", dark: "{colors.whiteAlpha.800}" },
+    subtle:     { light: "{colors.blackAlpha.50}",  dark: "{colors.whiteAlpha.50}" },
+    muted:      { light: "{colors.blackAlpha.100}", dark: "{colors.whiteAlpha.100}" },
+    emphasized: { light: "{colors.blackAlpha.200}", dark: "{colors.whiteAlpha.200}" },
+    solid:      { light: "{colors.blackAlpha.700}", dark: "{colors.whiteAlpha.700}" },
+    focusRing:  { light: "{colors.blackAlpha.400}", dark: "{colors.whiteAlpha.400}" },
+    border:     { light: "{colors.blackAlpha.200}", dark: "{colors.whiteAlpha.200}" }
   },
   red:    stdScaleRoles("red"),
   orange: { ...stdScaleRoles("orange"), contrast: { light: "white", dark: "black" }, solid: role("orange", 600, 500) },
   yellow: {
     contrast:   { light: "black", dark: "black" },
     fg:         role("yellow", 800, 300),
-    subtle:     role("yellow", 100, 900),
-    muted:      role("yellow", 200, 800),
-    emphasized: role("yellow", 300, 700),
+    subtle:     role("yellow", 50, 900),
+    muted:      role("yellow", 100, 800),
+    emphasized: role("yellow", 200, 700),
     solid:      role("yellow", 300, 300),
     focusRing:  role("yellow", 500, 500),
     border:     { light: "{colors.yellow.500}", dark: "{colors.yellow.500}" }
@@ -206,7 +219,7 @@ window.SCALE_SEMANTIC = {
 };
 
 window.SCALE_ORDER = [
-  "gray","talin","red","orange","yellow","green","teal","blue","cyan","purple","pink"
+  "gray","alpha","talin","red","orange","yellow","green","teal","blue","cyan","purple","pink"
 ];
 window.SCALE_STEPS = [50,100,200,300,400,500,600,700,800,900,950];
 window.SEMANTIC_ROLE_ORDER = ["contrast","fg","subtle","muted","emphasized","solid","focusRing","border"];

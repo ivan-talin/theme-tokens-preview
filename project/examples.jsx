@@ -56,10 +56,12 @@
     }
     lines.light.push(
       `  --shadow: 0 1px 0 rgba(20, 22, 26, 0.04), 0 1px 2px rgba(20, 22, 26, 0.04);`,
+      `  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);`,
       `  --swatch-ring: rgba(0, 0, 0, 0.08);`
     );
     lines.dark.push(
       `  --shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.3);`,
+      `  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);`,
       `  --swatch-ring: rgba(255, 255, 255, 0.06);`
     );
     const css =
@@ -163,12 +165,9 @@
   }
 
   // ── Reverse-lookup index ───────────────────────────────────────────────
-  // Maps a normalized color key → { token, base }. First-set wins, so
-  // iteration order encodes priority: non-DEFAULT semantic roles before
-  // DEFAULT (so #FFFFFF prefers `bg.panel` over plain `bg`), then
-  // scale-semantic, then palette steps, then alpha tokens. Cheap to
-  // rebuild — the whole token tree is ~150 entries — but we cache by
-  // (mode, talin.500) so repeated lookups during a hover are free.
+  // Maps a normalized color key → ordered candidates. A single base value can
+  // be used by multiple semantic tokens (e.g. blackAlpha.100 is both
+  // border.subtle and alpha.muted), so the renderer picks by CSS property.
   let tokenIndexCache = null;
   function buildTokenIndex(mode) {
     const talinKey = window.PALETTE && window.PALETTE.talin ? window.PALETTE.talin[500] : null;
@@ -176,8 +175,13 @@
       return tokenIndexCache.map;
     }
     const map = new Map();
-    const set = (key, value) => {
-      if (key && !map.has(key)) map.set(key, value);
+    const add = (key, value) => {
+      if (!key) return;
+      const candidates = map.get(key) || [];
+      if (!candidates.some((candidate) => candidate.token === value.token)) {
+        candidates.push(value);
+      }
+      map.set(key, candidates);
     };
     const baseFromRef = (ref) => {
       if (!ref) return null;
@@ -192,9 +196,11 @@
         for (const [role, refs] of Object.entries(roles)) {
           if (role === "DEFAULT") continue;
           const ref = refs[mode];
-          set(normalizeColor(window.resolveRef(ref)), {
+          add(normalizeColor(window.resolveRef(ref)), {
             token: `${group}.${role}`,
             base: baseFromRef(ref),
+            group,
+            family: "semantic",
           });
         }
       }
@@ -202,9 +208,11 @@
         const refs = roles.DEFAULT;
         if (!refs) continue;
         const ref = refs[mode];
-        set(normalizeColor(window.resolveRef(ref)), {
+        add(normalizeColor(window.resolveRef(ref)), {
           token: group,
           base: baseFromRef(ref),
+          group,
+          family: "semantic",
         });
       }
     }
@@ -212,9 +220,11 @@
       for (const [hue, roles] of Object.entries(window.SCALE_SEMANTIC)) {
         for (const [role, refs] of Object.entries(roles)) {
           const ref = refs[mode];
-          set(normalizeColor(window.resolveRef(ref)), {
+          add(normalizeColor(window.resolveRef(ref)), {
             token: `${hue}.${role}`,
             base: baseFromRef(ref),
+            group: hue,
+            family: "scale",
           });
         }
       }
@@ -222,25 +232,45 @@
     if (window.PALETTE) {
       for (const [hue, node] of Object.entries(window.PALETTE)) {
         if (typeof node === "string") {
-          set(normalizeColor(node), { token: hue, base: hue });
+          add(normalizeColor(node), { token: hue, base: hue, group: hue, family: "palette" });
           continue;
         }
         if (hue === "blackAlpha" || hue === "whiteAlpha" || hue === "chart") continue;
         for (const [step, hex] of Object.entries(node)) {
-          set(normalizeColor(hex), { token: `${hue}.${step}`, base: `${hue}.${step}` });
+          add(normalizeColor(hex), { token: `${hue}.${step}`, base: `${hue}.${step}`, group: hue, family: "palette" });
         }
       }
       for (const hue of ["blackAlpha", "whiteAlpha"]) {
         const node = window.PALETTE[hue];
         if (!node) continue;
         for (const [step, rgba] of Object.entries(node)) {
-          set(normalizeColor(rgba), { token: `${hue}.${step}`, base: `${hue}.${step}` });
+          add(normalizeColor(rgba), { token: `${hue}.${step}`, base: `${hue}.${step}`, group: hue, family: "palette" });
         }
       }
     }
 
     tokenIndexCache = { mode, talin: talinKey, map };
     return map;
+  }
+
+  function pickTokenCandidate(candidates, prop) {
+    if (!candidates || candidates.length === 0) return null;
+    const normalizedProp = String(prop || "").toLowerCase();
+    const preferredGroup =
+      normalizedProp === "stroke" ? "border" :
+      normalizedProp === "border" ? "border" :
+      normalizedProp === "fg" ? "fg" :
+      normalizedProp === "bg" ? "bg" :
+      null;
+    if (preferredGroup) {
+      const direct = candidates.find((candidate) => candidate.group === preferredGroup);
+      if (direct) return direct;
+    }
+    if (normalizedProp === "bg") {
+      const scale = candidates.find((candidate) => candidate.family === "scale");
+      if (scale) return scale;
+    }
+    return candidates.find((candidate) => candidate.family !== "palette") || candidates[0];
   }
 
   // ── Effective background ───────────────────────────────────────────────
@@ -259,7 +289,10 @@
           key,
           source: cur === el ? "self" : "ancestor",
           element: cur,
-          declaredToken: cur.getAttribute("data-tk-bg"),
+          declaredToken:
+            cur.matches(":hover") && cur.getAttribute("data-tk-bg-hover")
+              ? cur.getAttribute("data-tk-bg-hover")
+              : cur.getAttribute("data-tk-bg"),
         };
       }
       cur = cur.parentElement;
@@ -278,7 +311,15 @@
   //      indicator when the bg comes from an ancestor.
   function buildRows(el, mode) {
     const tokenIndex = buildTokenIndex(mode);
-    const attrs = Array.from(el.attributes).filter((a) => a.name.indexOf("data-tk-") === 0);
+    // data-tk-tooltip is a free-form description rendered above the rows
+    // by TokenPill — exclude it from the token-row builder so it doesn't
+    // appear as a misleading "TOOLTIP" prop with no resolvable hex.
+    const attrs = Array.from(el.attributes).filter(
+      (a) =>
+        a.name.indexOf("data-tk-") === 0 &&
+        a.name !== "data-tk-tooltip" &&
+        a.name !== "data-tk-bg-hover",
+    );
     const rows = attrs.map((a) => {
       const prop = a.name.replace(/^data-tk-/, "").toUpperCase();
       const token = a.value;
@@ -296,7 +337,7 @@
           return { prop: "BG", token: effective.declaredToken, hex, base, source: effective.source };
         }
       }
-      const matched = tokenIndex.get(effective.key);
+      const matched = pickTokenCandidate(tokenIndex.get(effective.key), "BG");
       if (matched) {
         const { hex } = resolveToken(matched.token, mode);
         return {
@@ -331,7 +372,7 @@
 
   // ── TokenPill — cursor-follow inspector ────────────────────────────────
   function TokenPill() {
-    const [state, setState] = useState({ visible: false, x: 0, y: 0, label: "", rows: [] });
+    const [state, setState] = useState({ visible: false, x: 0, y: 0, label: "", tooltip: "", rows: [] });
     const [, setMode] = useState(readMode());
     const elRef = useRef(null);
 
@@ -391,7 +432,7 @@
         elRef.current = el;
 
         // Position near cursor with edge-clamp.
-        const pillW = 320;
+        const pillW = 440;
         const pillH = 40 + rows.length * 24;
         const offset = 16;
         let x = ev.clientX + offset;
@@ -406,8 +447,9 @@
           .split(" ")
           .filter(Boolean)[0];
         const label = cls ? `${tag}.${cls}` : tag;
+        const tooltip = el.getAttribute("data-tk-tooltip") || "";
 
-        setState({ visible: true, x, y, label, rows });
+        setState({ visible: true, x, y, label, tooltip, rows });
       };
 
       const onMove = (e) => {
@@ -431,8 +473,9 @@
     if (!state.visible || state.rows.length === 0) return null;
 
     return (
-      <div className="tk-pill" style={{ left: state.x, top: state.y, width: 320 }}>
+      <div className="tk-pill" style={{ left: state.x, top: state.y, width: 440 }}>
         <div className="tk-pill-label">{state.label}</div>
+        {state.tooltip ? <div className="tk-pill-tooltip">{state.tooltip}</div> : null}
         <div className="tk-pill-rows">
           {state.rows.map((r, i) => {
             const isAlpha = r.hex && r.hex.toLowerCase().startsWith("rgba");
@@ -440,7 +483,7 @@
               <div
                 className={`tk-pill-row${r.source === "ancestor" ? " tk-pill-row--inherited" : ""}`}
                 key={i}
-                style={{ gridTemplateColumns: "44px 1fr auto" }}>
+                style={{ gridTemplateColumns: "44px minmax(112px, 1fr) minmax(180px, auto)" }}>
                 <span className="tk-pill-prop">
                   {r.prop}
                   {r.source === "ancestor" ? (
@@ -539,10 +582,10 @@
     </PhosphorIcon>
   );
 
+  // Bold weight (single solid path, no duotone layer).
   const CaretRightIcon = (p) => (
     <PhosphorIcon {...p}>
-      <path d="m176 128l-80 80V48Z" opacity=".2" />
-      <path d="m181.66 122.34l-80-80A8 8 0 0 0 88 48v160a8 8 0 0 0 13.66 5.66l80-80a8 8 0 0 0 0-11.32M104 188.69V67.31L164.69 128Z" />
+      <path d="M184.49 136.49l-80 80a12 12 0 0 1-17-17L159 128L87.51 56.49a12 12 0 0 1 17-17l80 80a12 12 0 0 1 0 17Z" />
     </PhosphorIcon>
   );
 
@@ -569,6 +612,38 @@
     <StrokeIcon {...p} fill="currentColor" stroke="none">
       <polygon points="6 9 12 15 18 9" />
     </StrokeIcon>
+  );
+  // Phosphor bold-weight carets — used by the sortable headers. Mirrors
+  // the style of CaretRightIcon above (12px arc radii, single solid path).
+  // The existing CaretDownIcon (chunky polygon) is kept for dropdown
+  // affordances elsewhere; sort headers use CaretDownBoldIcon instead.
+  const CaretUpIcon = (p) => (
+    <PhosphorIcon {...p}>
+      <path d="M136.49,71.51l80,80a12,12,0,0,1-17,17L128,97L56.49,168.49a12,12,0,0,1-17-17l80-80a12,12,0,0,1,17,0Z" />
+    </PhosphorIcon>
+  );
+  const CaretDownBoldIcon = (p) => (
+    <PhosphorIcon {...p}>
+      <path d="M119.51,184.49l-80-80a12,12,0,0,1,17-17L128,159l71.51-71.49a12,12,0,0,1,17,17l-80,80a12,12,0,0,1-17,0Z" />
+    </PhosphorIcon>
+  );
+  const CaretUpDownIcon = (p) => (
+    <PhosphorIcon {...p}>
+      <path d="M183.51,167.51l-48,48a12,12,0,0,1-17,0l-48-48a12,12,0,0,1,17-17L128,189.51l39.51-39.51a12,12,0,0,1,17,17ZM88.49,89.51a12,12,0,0,1-17-17l48-48a12,12,0,0,1,17,0l48,48a12,12,0,0,1-17,17L128,66.49,88.49,89.51Z" />
+    </PhosphorIcon>
+  );
+  // Phosphor hash + percent — the inline indicator on Replies / Positive
+  // replies headers showing whether the column is being sorted by the
+  // count value (hash) or the percentage (percent).
+  const HashIcon = (p) => (
+    <PhosphorIcon {...p}>
+      <path d="M224,88H175.4l8.47-47.92a8,8,0,1,0-15.74-2.78L159.14,88H111.4l8.47-47.92a8,8,0,1,0-15.74-2.78L95.14,88H48a8,8,0,0,0,0,16H92.32L85.36,152H32a8,8,0,0,0,0,16H82.54L74,216.92a8,8,0,0,0,6.5,9.27A7.6,7.6,0,0,0,82,226a8,8,0,0,0,7.87-6.61L98.81,168h47.74l-8.51,48.92a8,8,0,0,0,6.5,9.27A7.6,7.6,0,0,0,146,226a8,8,0,0,0,7.87-6.61L162.81,168H208a8,8,0,0,0,0-16H165.65l7-48H224a8,8,0,0,0,0-16ZM149.45,152H101.71l7-48h47.74Z" />
+    </PhosphorIcon>
+  );
+  const PercentIcon = (p) => (
+    <PhosphorIcon {...p}>
+      <path d="M195.31,76.69a8,8,0,0,1,0,11.31l-112,112a8,8,0,0,1-11.31-11.31l112-112A8,8,0,0,1,195.31,76.69ZM72,104A32,32,0,1,0,40,72,32,32,0,0,0,72,104Zm0-48A16,16,0,1,1,56,72,16,16,0,0,1,72,56Zm112,96a32,32,0,1,0,32,32A32,32,0,0,0,184,152Zm0,48a16,16,0,1,1,16-16A16,16,0,0,1,184,200Z" />
+    </PhosphorIcon>
   );
   const ArrowRightIcon = ({ size = 20, ...rest }) => (
     <svg
@@ -604,6 +679,13 @@
     <PhosphorIcon {...p}>
       <path d="M216 56v144H40V56Z" opacity=".2" />
       <path d="M216 56h-40V48a16 16 0 0 0-16-16H96a16 16 0 0 0-16 16v8H40a16 16 0 0 0-16 16v128a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V72a16 16 0 0 0-16-16M96 48h64v8H96Zm120 24v41.61A184 184 0 0 1 128 136a184.07 184.07 0 0 1-88-22.38V72Zm0 128H40v-67.93a200.06 200.06 0 0 0 88 21.93a200 200 0 0 0 88-21.93V200Zm-112-88a8 8 0 0 1 8-8h32a8 8 0 0 1 0 16h-32a8 8 0 0 1-8-8" />
+    </PhosphorIcon>
+  );
+
+  const UserIcon = (p) => (
+    <PhosphorIcon {...p}>
+      <path d="M200 152a72 72 0 1 0-144 0a72 72 0 0 0 144 0" opacity=".2" />
+      <path d="M230.92 212c-15.23-26.33-38.7-45.21-66.09-54.16a72 72 0 1 0-73.66 0c-27.39 8.94-50.86 27.82-66.09 54.16a8 8 0 1 0 13.85 8c18.84-32.56 52.14-52 89.07-52s70.23 19.44 89.07 52a8 8 0 1 0 13.85-8M72 96a56 56 0 1 1 56 56a56.06 56.06 0 0 1-56-56" />
     </PhosphorIcon>
   );
 
@@ -947,7 +1029,8 @@
       className,
       "data-label": label,
       "data-tk-fg": active ? "fg" : "fg.muted",
-      ...(active ? { "data-tk-bg": "blackAlpha.100" } : {}),
+      ...(active ? { "data-tk-bg": "alpha.muted" } : {}),
+      "data-tk-bg-hover": active ? "alpha.muted" : "alpha.subtle",
       style: { color: active ? "var(--fg)" : "var(--fg-muted)" },
     };
     const inner = (
@@ -1467,18 +1550,24 @@
   // follows the Figma (no Type/Progress, "Replies" split into Replies +
   // Positive replies).
 
-  // 5 mock campaigns. All named "US/Canada Campaign / October 23, 2025"
-  // matching the Figma.
+  // 5 mock campaigns spread across the last 6 weeks (today is 2026-05-09).
+  // Mix of candidate/prospect targeting; per-row actions/contacts/replies
+  // chosen to exercise all three pill tiers (<10 / 10–25 / >25).
   const MOCK_CAMPAIGNS = [
-    { id: 1, type: "candidate", actions: 1, contacts: 800, completed: 520, inProgress: 160, skipped: 120, total: 1000,
+    { id: 1, name: "US Solar Project Managers",  dateCreated: "March 28, 2026", type: "candidate",
+      actions: 1, contacts: 800, completed: 520, inProgress: 160, skipped: 120, total: 1000,
       replies: 135, repliesPct: 9.8,  positive: 34, positivePct: 25.2 },
-    { id: 2, type: "candidate", actions: 3, contacts: 323, completed: 200, inProgress:  80, skipped:  43, total:  500,
+    { id: 2, name: "EU Sales VPs",               dateCreated: "April 11, 2026", type: "prospect",
+      actions: 3, contacts: 323, completed: 200, inProgress:  80, skipped:  43, total:  500,
       replies: 200, repliesPct: 24.7, positive: 12, positivePct:  6.8 },
-    { id: 3, type: "employer",  actions: 5, contacts: 543, completed: 380, inProgress:  90, skipped:  73, total:  700,
+    { id: 3, name: "APAC Construction Leads",    dateCreated: "April 22, 2026", type: "candidate",
+      actions: 5, contacts: 543, completed: 380, inProgress:  90, skipped:  73, total:  700,
       replies: 157, repliesPct: 19.4, positive: 15, positivePct: 14.5 },
-    { id: 4, type: "candidate", actions: 2, contacts: 700, completed: 480, inProgress: 120, skipped: 100, total:  900,
+    { id: 4, name: "Renewable IPP Operators",    dateCreated: "April 30, 2026", type: "prospect",
+      actions: 2, contacts: 700, completed: 480, inProgress: 120, skipped: 100, total:  900,
       replies: 135, repliesPct:  6.8, positive: 28, positivePct: 22.4 },
-    { id: 5, type: "employer",  actions: 1, contacts: 913, completed: 600, inProgress: 200, skipped: 113, total: 1100,
+    { id: 5, name: "Bay Area Engineering",       dateCreated: "May 5, 2026",    type: "candidate",
+      actions: 1, contacts: 913, completed: 600, inProgress: 200, skipped: 113, total: 1100,
       replies:  89, repliesPct:  8.3, positive: 29, positivePct: 21.5 },
   ];
 
@@ -1487,17 +1576,19 @@
     messages: {
       total: 17,
       change: -23.9,
-      // Segment palette uses project tokens that read as a continuous
-      // navy/blue family — closer to the Figma's chart.primary-dominated
-      // donut while preserving the multi-segment Pie-chart structure
-      // from talin's CampaignMessagesKPI.
+      // Single chart.primary base, opacity stepped per segment (largest
+      // value = full opacity, smallest = lightest). Diverges from talin's
+      // multi-color Pie palette in favour of a calmer single-hue donut.
+      // Labels mirror the readable strings produced by talin's
+      // useMessagesSentData hook (CONNECTION_REQUESTS → "Connection
+      // requests", etc.) and surface as native browser tooltips on hover.
       segments: [
-        { id: "connect", token: "chart.primary", value: 6 },
-        { id: "linmsg",  token: "blue.fg",       value: 5 },
-        { id: "email",   token: "blue.solid",    value: 3 },
-        { id: "sms",     token: "blue.muted",    value: 1 },
-        { id: "inmail",  token: "blue.subtle",   value: 1 },
-        { id: "phone",   token: "gray.muted",    value: 1 },
+        { id: "connect", label: "Connection requests", value: 6, opacity: 1.0  },
+        { id: "linmsg",  label: "LinkedIn messages",   value: 5, opacity: 0.85 },
+        { id: "email",   label: "Emails",              value: 3, opacity: 0.7  },
+        { id: "sms",     label: "SMS",                 value: 1, opacity: 0.55 },
+        { id: "inmail",  label: "LinkedIn InMails",    value: 1, opacity: 0.4  },
+        { id: "phone",   label: "Phone calls",         value: 1, opacity: 0.25 },
       ],
     },
     contacts: { value: 9, change: -12.3 },
@@ -1508,24 +1599,12 @@
     replyRate: { current: 22.2, previous: 20.0, change: 2, prevHeight: 28, currHeight: 92 },
   };
 
-  // Helpers — token-hex resolution + hex/RGB color interpolation.
+  // Helper — token-hex resolution (mode-aware via data-mode on <html>).
   function tokenHex(path) {
     if (typeof window === "undefined" || !window.resolveToken) return null;
     const mode = document.documentElement.dataset.mode === "dark" ? "dark" : "light";
     const r = window.resolveToken(path, mode);
     return r ? r.hex : null;
-  }
-  function lerpHex(start, end, progress) {
-    const parse = (hex) => {
-      const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || "");
-      return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : [0, 0, 0];
-    };
-    const [r1, g1, b1] = parse(start);
-    const [r2, g2, b2] = parse(end);
-    const r = Math.round(r1 + (r2 - r1) * progress);
-    const g = Math.round(g1 + (g2 - g1) * progress);
-    const b = Math.round(b1 + (b2 - b1) * progress);
-    return "#" + [r, g, b].map((n) => n.toString(16).padStart(2, "0")).join("");
   }
   // Polar → cartesian. 0° = top (12 o'clock); angles grow clockwise.
   function polarToCartesian(cx, cy, r, deg) {
@@ -1538,6 +1617,36 @@
     const largeArc = endDeg - startDeg <= 180 ? "0" : "1";
     return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 0 ${end.x} ${end.y}`;
   }
+  // Filled annular sector with rounded corners on all four corners
+  // (outer-start, outer-end, inner-start, inner-end). Mirrors Nivo's
+  // ResponsivePie cornerRadius behaviour. Used by the half-donut so each
+  // segment is one fill path — no stroke + cap-overlay composition that
+  // can leave anti-aliased seams at segment joints.
+  function annularSectorPath(cx, cy, rOut, rIn, startDeg, endDeg, cr) {
+    const dOut = (cr / rOut) * 180 / Math.PI;
+    const dIn  = (cr / rIn)  * 180 / Math.PI;
+    const A = polarToCartesian(cx, cy, rOut - cr, startDeg);
+    const B = polarToCartesian(cx, cy, rOut,      startDeg + dOut);
+    const C = polarToCartesian(cx, cy, rOut,      endDeg   - dOut);
+    const D = polarToCartesian(cx, cy, rOut - cr, endDeg);
+    const E = polarToCartesian(cx, cy, rIn  + cr, endDeg);
+    const F = polarToCartesian(cx, cy, rIn,       endDeg   - dIn);
+    const G = polarToCartesian(cx, cy, rIn,       startDeg + dIn);
+    const H = polarToCartesian(cx, cy, rIn  + cr, startDeg);
+    const outerLargeArc = (endDeg - dOut) - (startDeg + dOut) > 180 ? 1 : 0;
+    const innerLargeArc = (endDeg - dIn)  - (startDeg + dIn)  > 180 ? 1 : 0;
+    return [
+      `M ${A.x} ${A.y}`,
+      `A ${cr} ${cr} 0 0 1 ${B.x} ${B.y}`,                   // outer-start corner
+      `A ${rOut} ${rOut} 0 ${outerLargeArc} 1 ${C.x} ${C.y}`, // outer ring (CW visually)
+      `A ${cr} ${cr} 0 0 1 ${D.x} ${D.y}`,                   // outer-end corner
+      `L ${E.x} ${E.y}`,                                      // radial line at endDeg
+      `A ${cr} ${cr} 0 0 1 ${F.x} ${F.y}`,                   // inner-end corner
+      `A ${rIn} ${rIn} 0 ${innerLargeArc} 0 ${G.x} ${G.y}`,  // inner ring (CCW back)
+      `A ${cr} ${cr} 0 0 1 ${H.x} ${H.y}`,                   // inner-start corner
+      "Z",
+    ].join(" ");
+  }
 
   // Trend pill — "↗ 25%" (up=green) or "↘ 23.9%" (down=orange).
   function TrendPill({ variant, value }) {
@@ -1545,10 +1654,10 @@
     return (
       <span
         className={`ex-trend-pill ex-trend-pill--${up ? "up" : "down"}`}
-        data-tk-bg={up ? "green.subtle" : "orange.subtle"}
+        data-tk-bg={up ? "green.muted" : "orange.muted"}
         data-tk-fg={up ? "green.fg" : "orange.fg"}
         style={{
-          background: up ? "var(--green-subtle)" : "var(--orange-subtle)",
+          background: up ? "var(--green-muted)" : "var(--orange-muted)",
           color: up ? "var(--green-fg)" : "var(--orange-fg)",
         }}>
         <span style={{ display: "inline-flex" }}>
@@ -1565,7 +1674,13 @@
   // segment keeps its own color and rounded caps.
   function MessagesSentDonut({ segments, total, change }) {
     const sum = segments.reduce((a, s) => a + s.value, 0) || 1;
-    const cx = 100, cy = 95, r = 78, gap = 2.4;
+    // Each segment is one filled annular-sector path with rounded corners
+    // (cornerRadius=2). rOut=83, rIn=73 → effective stroke width 10. Since
+    // the segment ends exactly at its angular endpoint (no protrusion past
+    // it), adjacent segments cannot overlap visually — the angular gap IS
+    // the visible gap. ~4° gap at r=78 ≈ 5.4px clear separation.
+    const cx = 100, cy = 95, r = 78, gap = 4;
+    const rOut = r + 5, rIn = r - 5, cr = 2;
     const availableArc = 180 - gap * (segments.length - 1);
     let cursor = -90;
     return (
@@ -1579,17 +1694,17 @@
             const start = cursor;
             const end = cursor + sweep;
             cursor = end + gap;
-            const cssVar = "--" + seg.token.replace(".", "-");
+            const tooltip = `${seg.label}: ${seg.value}`;
             return (
               <path
                 key={seg.id}
-                d={arcPath(cx, cy, r, start, end)}
-                stroke={`var(${cssVar})`}
-                strokeWidth="13"
-                strokeLinecap="round"
-                fill="none"
-                data-tk-stroke={seg.token}
-              />
+                d={annularSectorPath(cx, cy, rOut, rIn, start, end, cr)}
+                fill="var(--chart-primary)"
+                fillOpacity={seg.opacity}
+                data-tk-fill="chart.primary"
+                data-tk-tooltip={tooltip}>
+                <title>{tooltip}</title>
+              </path>
             );
           })}
         </svg>
@@ -1606,8 +1721,11 @@
   }
 
   // 28-bar contacts→replies funnel. Heights taper based on conversionRatio.
-  // Color interpolates from #99c199 (talin "lightGreen") to green.600 across
-  // the 28 bars — same palette and math as talin's VerticalLinesChart.
+  // Color interpolates from chart.primary (purple, anchoring the contacts
+  // stat) to blue.solid (anchoring the replies stat) using CSS color-mix in
+  // OKLCH, so the hue arc is perceptually smooth — no muddy mid-tones the
+  // way linear-RGB lerp produces. Both endpoint tokens are mode-stable, so
+  // the gradient holds in dark mode without re-tuning.
   function ContactsRepliesFunnel({ contactsValue, repliesValue, contactsChange, repliesChange }) {
     const lineCount = 28;
     const maxHeight = 80;
@@ -1618,8 +1736,29 @@
         ? repliesValue / contactsValue
         : 0.5;
     const targetRatio = Math.max(0.45, conversionRatio);
-    const startColor = "#99c199";
-    const endColor = tokenHex("green.600") || "#2F855A";
+    const startColor = tokenHex("chart.primary") || "#4D4F91";
+    const endColor   = tokenHex("blue.solid")    || "#2B6CB0";
+
+    // Materialize the OKLCH gradient to concrete hex strings via a 1x1
+    // canvas — same trick as regenerateScale() in tokens.js. Letting the
+    // browser resolve color-mix() and reading the pixel back as sRGB gives
+    // a concrete hex per bar, which makes the token inspector's
+    // getComputedStyle readback parse cleanly (normalizeColor only handles
+    // rgb/hex, not color-mix() / oklch() / color() outputs). Also degrades
+    // gracefully on engines without color-mix support — the prior
+    // ctx.fillStyle assignment is preserved as the fallback.
+    const barCanvas = document.createElement("canvas");
+    barCanvas.width = 1;
+    barCanvas.height = 1;
+    const barCtx = barCanvas.getContext("2d");
+    const barColors = Array.from({ length: lineCount }, (_, i) => {
+      const progress = i / (lineCount - 1);
+      barCtx.fillStyle = startColor;
+      barCtx.fillStyle = `color-mix(in oklch, ${startColor}, ${endColor} ${(progress * 100).toFixed(2)}%)`;
+      barCtx.fillRect(0, 0, 1, 1);
+      const [r, g, b] = barCtx.getImageData(0, 0, 1, 1).data;
+      return "#" + [r, g, b].map((n) => n.toString(16).padStart(2, "0")).join("").toUpperCase();
+    });
 
     return (
       <div className="ex-stat-vis ex-stat-vis--funnel">
@@ -1646,12 +1785,14 @@
             const height = heightRatio * maxHeight * heightMul;
             const offsetY = progress * Math.tan((funnelAngle * Math.PI) / 180) * 25;
             const width = isEdge ? lineWidth + 8 : lineWidth;
-            const color = lerpHex(startColor, endColor, progress);
+            const color = barColors[i];
             const opacity = isEdge ? 0.8 : 0.5;
             return (
               <span
                 key={i}
                 className="ex-funnel-bar"
+                data-tk-from="chart.primary"
+                data-tk-to="blue.solid"
                 style={{
                   height: `${height}px`,
                   width: `${width}px`,
@@ -1682,9 +1823,11 @@
   }
 
   // Reply-rate stacked bars — mirrors talin's ReplyRateKPI. Two side-by-side
-  // bars (Previous on the left in gray, Current on the right in
-  // chart.primary). The fill height matches the Figma visual proportions —
-  // the rate value is displayed as the big metric below.
+  // bars (Previous in gray.emphasized, Current in green.solid =
+  // talin's green[500]). Bar containers are transparent (no bg, no border)
+  // so the surrounding stat-card bg.muted shows through, matching the
+  // production Nivo ResponsiveBar where 'Not Replied' is rendered white-on-
+  // transparent rather than a chip with a background.
   function ReplyRateBars({ current, previous, change, prevHeight = 28, currHeight = 92 }) {
     return (
       <div className="ex-stat-vis ex-stat-vis--rate">
@@ -1692,26 +1835,18 @@
           <TrendPill variant={change < 0 ? "down" : "up"} value={`${Math.abs(change)}%`} />
         </div>
         <div className="ex-replyrate-bars">
-          <div
-            className="ex-replyrate-bar ex-replyrate-bar--prev"
-            data-tk-bg="bg.panel"
-            data-tk-border="border"
-            style={{ background: "var(--bg-panel)", borderColor: "var(--border)" }}>
+          <div className="ex-replyrate-bar ex-replyrate-bar--prev">
             <span
               className="ex-replyrate-fill"
-              data-tk-bg="gray.emphasized"
-              style={{ background: "var(--gray-emphasized)", height: `${prevHeight}%` }}
+              data-tk-bg="alpha.emphasized"
+              style={{ background: "var(--alpha-emphasized)", height: `${prevHeight}%` }}
             />
           </div>
-          <div
-            className="ex-replyrate-bar ex-replyrate-bar--curr"
-            data-tk-bg="bg.panel"
-            data-tk-border="border"
-            style={{ background: "var(--bg-panel)", borderColor: "var(--border)" }}>
+          <div className="ex-replyrate-bar ex-replyrate-bar--curr">
             <span
               className="ex-replyrate-fill"
-              data-tk-bg="chart.primary"
-              style={{ background: "var(--chart-primary)", height: `${currHeight}%` }}
+              data-tk-bg="green.solid"
+              style={{ background: "var(--green-solid)", height: `${currHeight}%` }}
             />
           </div>
         </div>
@@ -1728,18 +1863,22 @@
   }
 
   // Small circular progress ring for the table's Contacts cell.
-  // Replaces talin's horizontal CampaignProgressBar — three concentric arcs
+  // Replaces talin's horizontal CampaignProgressBar — concentric arcs
   // proportional to completed / inProgress / skipped of total contacts,
-  // overlaid on a faint border-colored track.
-  function ContactsProgressRing({ completed, inProgress, skipped, total, size = 22 }) {
-    const stroke = 3;
+  // overlaid on a border-colored "not started" track. Each arc carries an
+  // SVG <title> child so the browser shows a native tooltip on hover,
+  // mirroring talin's chakra Tooltip on the production progress bar.
+  function ContactsProgressRing({ completed, inProgress, skipped, total, size = 32 }) {
+    const stroke = 5;
     const r = size / 2 - stroke / 2;
     const c = 2 * Math.PI * r;
     const safeTotal = total || 1;
+    const notStarted = Math.max(0, total - completed - inProgress - skipped);
+    const noun = (n) => (n === 1 ? "contact" : "contacts");
     const segs = [
-      { value: completed,  token: "talin.solid",     cssVar: "--talin-solid" },
-      { value: inProgress, token: "orange.solid",    cssVar: "--orange-solid" },
-      { value: skipped,    token: "gray.emphasized", cssVar: "--gray-emphasized" },
+      { value: completed,  token: "chart.primary", stroke: "var(--chart-primary)", opacity: 1,   title: `Completed: ${completed} ${noun(completed)}` },
+      { value: inProgress, token: "chart.primary", stroke: "var(--chart-primary)", opacity: 0.6, title: `In progress: ${inProgress} ${noun(inProgress)}` },
+      { value: skipped,    token: "orange.solid",  stroke: "var(--orange-solid)",  opacity: 1,   title: `Skipped: ${skipped} ${noun(skipped)}` },
     ];
     let cursor = 0;
     return (
@@ -1751,7 +1890,10 @@
           stroke="var(--border)"
           strokeWidth={stroke}
           fill="none"
-        />
+          data-tk-stroke="border"
+          data-tk-tooltip={`Not started: ${notStarted} ${noun(notStarted)}`}>
+          <title>{`Not started: ${notStarted} ${noun(notStarted)}`}</title>
+        </circle>
         {segs.map((seg, i) => {
           const len = (seg.value / safeTotal) * c;
           const offset = -cursor;
@@ -1762,14 +1904,18 @@
               cx={size / 2}
               cy={size / 2}
               r={r}
-              stroke={`var(${seg.cssVar})`}
+              stroke={seg.stroke}
+              strokeOpacity={seg.opacity}
               strokeWidth={stroke}
+              strokeLinecap="round"
               fill="none"
               strokeDasharray={`${len} ${c - len}`}
               strokeDashoffset={offset}
               transform={`rotate(-90 ${size / 2} ${size / 2})`}
               data-tk-stroke={seg.token}
-            />
+              data-tk-tooltip={seg.title}>
+              <title>{seg.title}</title>
+            </circle>
           );
         })}
       </svg>
@@ -1812,7 +1958,7 @@
         }}>
         <span>Filters</span>
         <span data-tk-fg="fg.muted" style={{ display: "inline-flex", color: "var(--fg-muted)" }}>
-          <CaretDownIcon size={12} />
+          <CaretDownBoldIcon size={12} />
         </span>
       </button>
     );
@@ -1823,11 +1969,11 @@
       <button
         type="button"
         className="ex-filter-pill"
-        data-tk-bg="bg.muted"
+        data-tk-bg="bg.emphasized"
         data-tk-border="border"
         data-tk-fg="fg"
         style={{
-          background: "var(--bg-muted)",
+          background: "var(--bg-emphasized)",
           borderColor: "var(--border)",
           color: "var(--fg)",
         }}>
@@ -1862,52 +2008,59 @@
   }
 
   // ── Campaigns table ────────────────────────────────────────────────────
+  // Three-tier ramp: <10% = okay (subtle), 10–25% = good (muted),
+  // >25% = great (emphasized). Replies use the blue ramp; Positive replies
+  // use the green ramp. Pill is fixed-width so columns align vertically.
+  const PCT_PILL_TOKENS = {
+    replies: {
+      okay:  { bg: "blue.subtle",     fg: "blue.fg" },
+      good:  { bg: "blue.muted",      fg: "blue.fg" },
+      great: { bg: "blue.emphasized", fg: "blue.fg" },
+    },
+    positive: {
+      okay:  { bg: "green.subtle",     fg: "green.fg" },
+      good:  { bg: "green.muted",      fg: "green.fg" },
+      great: { bg: "green.emphasized", fg: "green.fg" },
+    },
+  };
   function PercentPill({ value, variant }) {
-    const green = variant === "green";
+    const tier = value < 10 ? "okay" : value <= 25 ? "good" : "great";
+    const { bg, fg } = PCT_PILL_TOKENS[variant][tier];
+    const cssVar = (token) => `var(--${token.replace(".", "-")})`;
     return (
       <span
-        className={`ex-pct-pill ex-pct-pill--${green ? "green" : "neutral"}`}
-        data-tk-bg={green ? "green.subtle" : "bg.muted"}
-        data-tk-fg={green ? "green.fg" : "fg.muted"}
-        style={{
-          background: green ? "var(--green-subtle)" : "var(--bg-muted)",
-          color: green ? "var(--green-fg)" : "var(--fg-muted)",
-        }}>
-        {value}%
+        className={`ex-pct-pill ex-pct-pill--${variant} ex-pct-pill--${tier}`}
+        data-tk-bg={bg}
+        data-tk-fg={fg}
+        style={{ background: cssVar(bg), color: cssVar(fg) }}>
+        <span>{value}%</span>
       </span>
     );
   }
 
   function CampaignRow({ row }) {
-    const RowIcon = row.type === "candidate" ? UserCircleIcon : BriefcaseIcon;
+    const RowIcon = row.type === "candidate" ? UserIcon : BriefcaseIcon;
     return (
       <div
         className="ex-tr ex-tr--campaign"
-        data-tk-border="border.muted"
-        style={{ borderTopColor: "var(--border-muted)" }}>
+        data-tk-border="border.subtle"
+        style={{ borderTopColor: "var(--border-subtle)" }}>
         <div className="ex-td ex-td--name">
           <span
             className="ex-row-icon"
-            data-tk-bg="bg.muted"
-            data-tk-border="border"
             data-tk-fg="fg.muted"
-            style={{
-              background: "var(--bg-muted)",
-              borderColor: "var(--border)",
-              color: "var(--fg-muted)",
-            }}>
+            style={{ color: "var(--fg-muted)" }}>
             <RowIcon size={18} />
           </span>
           <div className="ex-row-name">
             <span className="ex-row-name-title" data-tk-fg="fg" style={{ color: "var(--fg)" }}>
-              US/Canada Campaign
+              {row.name}
             </span>
             <span
               className="ex-row-name-sub"
               data-tk-fg="fg.muted"
               style={{ color: "var(--fg-muted)" }}>
-              <CalendarBlankIcon size={11} />
-              <span>October 23, 2025</span>
+              <span>{row.dateCreated}</span>
             </span>
           </div>
         </div>
@@ -1935,31 +2088,26 @@
         <div className="ex-td ex-td--centered">
           <span
             className="ex-td-select"
-            data-tk-bg="bg.panel"
+            data-tk-bg="bg.emphasized"
             data-tk-border="border"
             data-tk-fg="fg"
             style={{
-              background: "var(--bg-panel)",
+              background: "var(--bg-emphasized)",
               borderColor: "var(--border)",
               color: "var(--fg)",
             }}>
             <span>20</span>
             <span data-tk-fg="fg.muted" style={{ color: "var(--fg-muted)", display: "inline-flex" }}>
-              <CaretDownIcon size={10} />
+              <CaretDownBoldIcon size={10} />
             </span>
           </span>
         </div>
         <div className="ex-td ex-td--centered">
           <span
             className="ex-td-badge"
-            data-tk-bg="bg.panel"
-            data-tk-border="border"
-            data-tk-fg="fg"
-            style={{
-              background: "var(--bg-panel)",
-              borderColor: "var(--border)",
-              color: "var(--fg)",
-            }}>
+            data-tk-bg="gray.emphasized"
+            data-tk-fg="gray.fg"
+            style={{ background: "var(--gray-emphasized)", color: "var(--gray-fg)" }}>
             {row.actions}
           </span>
         </div>
@@ -1972,26 +2120,113 @@
             inProgress={row.inProgress}
             skipped={row.skipped}
             total={row.total}
-            size={22}
+            size={32}
           />
         </div>
-        <div className="ex-td ex-td--centered ex-td--num">
+        <div className="ex-td ex-td--right ex-td--num">
           <span data-tk-fg="fg" style={{ color: "var(--fg)" }}>
             {row.replies}
           </span>
-          <PercentPill value={row.repliesPct} variant={row.repliesPct >= 15 ? "green" : "neutral"} />
+          <PercentPill value={row.repliesPct} variant="replies" />
         </div>
-        <div className="ex-td ex-td--centered ex-td--num">
+        <div className="ex-td ex-td--right ex-td--num">
           <span data-tk-fg="fg" style={{ color: "var(--fg)" }}>
             {row.positive}
           </span>
-          <PercentPill value={row.positivePct} variant={row.positivePct >= 15 ? "green" : "neutral"} />
+          <PercentPill value={row.positivePct} variant="positive" />
         </div>
       </div>
     );
   }
 
+  // Sortable column header. The label sits inline with two icon slots so
+  // the header stays the same height as the non-sortable .ex-th cells:
+  //   [label] [optional key-icon] [direction-icon]
+  // - Inactive columns show CaretUpDownIcon (the "click to sort" hint).
+  // - Active columns show CaretUp/CaretDownIcon depending on direction.
+  // - Columns with two sort keys (Replies / Positive replies) also render
+  //   a HashIcon (count) or PercentIcon (rate) when active.
+  function SortableHeader({ label, active, dir, sortKey, alignRight, onClick }) {
+    const dirIcon = !active
+      ? <CaretUpDownIcon size={12} />
+      : dir === "asc"
+        ? <CaretUpIcon size={12} />
+        : <CaretDownBoldIcon size={12} />;
+    const keyIcon = active && (sortKey === "count" || sortKey === "rate")
+      ? (sortKey === "count" ? <HashIcon size={11} /> : <PercentIcon size={11} />)
+      : null;
+    const className =
+      "ex-th ex-th--sortable" +
+      (alignRight ? " ex-th--right" : "") +
+      (active ? " ex-th--sorted" : "");
+    return (
+      <button
+        type="button"
+        className={className}
+        onClick={onClick}
+        data-tk-fg={active ? "fg" : "fg.muted"}
+        style={{ color: active ? "var(--fg)" : "var(--fg-muted)" }}>
+        <span className="ex-th-label">{label}</span>
+        <span className="ex-th-sort-cluster">
+          {keyIcon && (
+            <span
+              className="ex-th-sort-icon ex-th-sort-icon--key"
+              data-tk-fg="fg.muted"
+              style={{ color: "var(--fg-muted)" }}>
+              {keyIcon}
+            </span>
+          )}
+          <span
+            className="ex-th-sort-icon ex-th-sort-icon--dir"
+            data-tk-fg="fg.subtle"
+            style={{ color: "var(--fg-subtle)" }}>
+            {dirIcon}
+          </span>
+        </span>
+      </button>
+    );
+  }
+
   function CampaignsTable({ rows }) {
+    // Default: sorted by date created, newest first.
+    const DEFAULT_SORT = { column: "campaign", key: "date", dir: "desc" };
+    const [sort, setSort] = useState(DEFAULT_SORT);
+
+    // Click cycle (each column ends back at DEFAULT_SORT):
+    //   Campaign: desc (default) → asc → DEFAULT.
+    //   Replies / Positive: count-desc → count-asc → rate-desc → rate-asc → DEFAULT.
+    //   Switching column starts at that column's first state (desc).
+    const cycleSort = (column) =>
+      setSort((prev) => {
+        if (prev.column !== column) {
+          return {
+            column,
+            key: column === "campaign" ? "date" : "count",
+            dir: "desc",
+          };
+        }
+        if (column === "campaign") {
+          return prev.dir === "desc"
+            ? { column, key: "date", dir: "asc" }
+            : DEFAULT_SORT;
+        }
+        if (prev.key === "count" && prev.dir === "desc") return { column, key: "count", dir: "asc"  };
+        if (prev.key === "count" && prev.dir === "asc")  return { column, key: "rate",  dir: "desc" };
+        if (prev.key === "rate"  && prev.dir === "desc") return { column, key: "rate",  dir: "asc"  };
+        return DEFAULT_SORT;
+      });
+
+    const FIELDS = {
+      replies:  { count: "replies",  rate: "repliesPct"  },
+      positive: { count: "positive", rate: "positivePct" },
+    };
+    const getValue = (r) =>
+      sort.column === "campaign"
+        ? new Date(r.dateCreated).getTime()
+        : r[FIELDS[sort.column][sort.key]];
+    const mult = sort.dir === "asc" ? 1 : -1;
+    const sortedRows = [...rows].sort((a, b) => mult * (getValue(a) - getValue(b)));
+
     return (
       <div
         className="ex-table ex-table--campaigns"
@@ -2000,24 +2235,43 @@
         style={{ background: "var(--bg-panel)", borderColor: "var(--border)" }}>
         <div
           className="ex-thead"
-          data-tk-bg="bg.subtle"
+          data-tk-bg="bg.muted"
           data-tk-border="border"
           data-tk-fg="fg.muted"
           style={{
-            background: "var(--bg-subtle)",
+            background: "var(--bg-muted)",
             borderBottomColor: "var(--border)",
             color: "var(--fg-muted)",
           }}>
-          <div className="ex-th">Campaign</div>
+          <SortableHeader
+            label="Campaign"
+            active={sort.column === "campaign"}
+            dir={sort.dir}
+            onClick={() => cycleSort("campaign")}
+          />
           <div className="ex-th ex-th--centered">Owner</div>
           <div className="ex-th ex-th--centered">Status</div>
           <div className="ex-th ex-th--centered">Sending limit</div>
           <div className="ex-th ex-th--centered">Actions</div>
           <div className="ex-th ex-th--centered">Contacts</div>
-          <div className="ex-th ex-th--centered">Replies</div>
-          <div className="ex-th ex-th--centered">Positive replies</div>
+          <SortableHeader
+            label="Replies"
+            alignRight
+            active={sort.column === "replies"}
+            dir={sort.dir}
+            sortKey={sort.key}
+            onClick={() => cycleSort("replies")}
+          />
+          <SortableHeader
+            label="Positive replies"
+            alignRight
+            active={sort.column === "positive"}
+            dir={sort.dir}
+            sortKey={sort.key}
+            onClick={() => cycleSort("positive")}
+          />
         </div>
-        {rows.map((r) => <CampaignRow key={r.id} row={r} />)}
+        {sortedRows.map((r) => <CampaignRow key={r.id} row={r} />)}
       </div>
     );
   }
@@ -2043,13 +2297,16 @@
             </h2>
             <div
               className="ex-stat-card-row"
-              data-tk-bg="bg.muted"
+              data-tk-bg="bg.panel"
               data-tk-border="border"
               style={{
-                background: "var(--bg-muted)",
+                background: "var(--bg-panel)",
                 borderColor: "var(--border)",
               }}>
-              <div className="ex-stat-kpi">
+              <div
+                className="ex-stat-kpi"
+                data-tk-bg="bg.subtle"
+                style={{ background: "var(--bg-subtle)" }}>
                 <MessagesSentDonut
                   segments={MOCK_STATS.messages.segments}
                   total={MOCK_STATS.messages.total}
@@ -2057,11 +2314,9 @@
                 />
               </div>
               <div
-                className="ex-stat-divider"
-                data-tk-bg="border"
-                style={{ background: "var(--border)" }}
-              />
-              <div className="ex-stat-kpi">
+                className="ex-stat-kpi"
+                data-tk-bg="bg.subtle"
+                style={{ background: "var(--bg-subtle)" }}>
                 <ContactsRepliesFunnel
                   contactsValue={MOCK_STATS.contacts.value}
                   repliesValue={MOCK_STATS.replies.value}
@@ -2070,11 +2325,9 @@
                 />
               </div>
               <div
-                className="ex-stat-divider"
-                data-tk-bg="border"
-                style={{ background: "var(--border)" }}
-              />
-              <div className="ex-stat-kpi">
+                className="ex-stat-kpi"
+                data-tk-bg="bg.subtle"
+                style={{ background: "var(--bg-subtle)" }}>
                 <ReplyRateBars
                   current={MOCK_STATS.replyRate.current}
                   previous={MOCK_STATS.replyRate.previous}

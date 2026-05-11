@@ -120,9 +120,9 @@
   cursor: pointer; position: relative;
   transition: padding 180ms ease, background-color 100ms ease, color 100ms ease;
 }
-.ex-side-item:hover { background: rgba(0, 0, 0, 0.04); }
+.ex-side-item:hover { background: var(--alpha-subtle); }
 .ex-side-item--active,
-.ex-side-item--active:hover { background: rgba(0, 0, 0, 0.06); }
+.ex-side-item--active:hover { background: var(--alpha-muted); }
 .ex-side-foot { margin-top: auto; display: flex; flex-direction: column; gap: 2px; }
 .ex-side-user {
   display: flex; align-items: center; gap: 10px;
@@ -364,6 +364,16 @@
   margin-bottom: 6px;
   font-family: inherit;
 }
+.tk-pill-tooltip {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #ECEDEF;
+  margin: -2px 0 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  line-height: 1.35;
+}
 .tk-pill-rows { display: flex; flex-direction: column; gap: 4px; }
 .tk-pill-row {
   display: grid;
@@ -417,28 +427,26 @@
 }
 .ex-campaigns-section { display: flex; flex-direction: column; gap: 16px; }
 
-/* — Stat-card row (3 KPIs in a single bordered card with vertical dividers) — */
+/* — Stat-card row (bg.panel wrapper holding 3 bg.subtle KPI cards) — */
 .ex-stat-card-row {
   display: grid;
-  grid-template-columns: 1fr 1px 1.4fr 1px 1fr;
+  grid-template-columns: 1fr 1.4fr 1fr;
   border: 1px solid;
   border-radius: 12px;
-  padding: 24px 16px;
-  gap: 0;
-  min-height: 156px;
+  padding: 8px;
+  gap: 8px;
+  min-height: 158px;
   align-items: stretch;
+  box-shadow: var(--shadow-sm);
 }
 .ex-stat-kpi {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 12px;
-}
-.ex-stat-divider {
-  width: 1px;
-  align-self: center;
-  height: 110px;
+  padding: 16px 12px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
 }
 
 /* Generic chart-vis container with a slot for an absolutely-positioned
@@ -474,6 +482,7 @@
   line-height: 1;
   letter-spacing: 0;
   white-space: nowrap;
+  box-shadow: inset 0 0 0 0.5px var(--border-subtle);
 }
 
 .ex-stat-num { font-size: 22px; font-weight: 700; line-height: 1; letter-spacing: -0.01em; }
@@ -536,8 +545,7 @@
 .ex-replyrate-bar {
   width: 30px;
   height: 70px;
-  border-radius: 2px;
-  border: 1px solid;
+  border-radius: 5px;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -546,7 +554,7 @@
 .ex-replyrate-fill {
   display: block;
   width: 100%;
-  border-radius: 1px 1px 0 0;
+  border-radius: 5px 5px 0 0;
 }
 .ex-stat-vis-meta {
   display: flex;
@@ -624,6 +632,7 @@
   border: 1px solid;
   border-radius: 12px;
   overflow: hidden;
+  box-shadow: var(--shadow-sm);
 }
 .ex-table--campaigns .ex-thead,
 .ex-table--campaigns .ex-tr {
@@ -649,14 +658,49 @@
 .ex-table--campaigns .ex-tr--campaign:first-of-type { border-top: 0; }
 .ex-th--centered { text-align: center; justify-self: center; }
 .ex-td--centered { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.ex-th--right { text-align: right; justify-self: end; }
+.ex-td--right { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
 .ex-table--campaigns .ex-td--num { gap: 8px; }
 
-.ex-td--name { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.ex-row-icon {
-  width: 32px; height: 32px; flex-shrink: 0;
-  border-radius: 50%; border: 1px solid;
-  display: flex; align-items: center; justify-content: center;
+/* Sortable column header. Native <button> reset so it inherits the
+   .ex-thead typography, plus an inline-flex row for label + icons so it
+   stays at the same baseline / height as the non-sortable .ex-th cells. */
+.ex-th--sortable {
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
+.ex-th--sortable:focus-visible {
+  outline: 2px solid var(--border-emphasized);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+/* Icon cluster keeps the sort-key icon (hash/percent) tight against the
+   direction caret, separated from the column label by the button's gap. */
+.ex-th-sort-cluster {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+}
+.ex-th-sort-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.ex-td--name { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.ex-row-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .ex-row-name { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .ex-row-name-title { font-size: 13px; font-weight: 600; line-height: 1.3; }
 .ex-row-name-sub {
@@ -696,25 +740,33 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 24px;
-  height: 24px;
-  padding: 0 8px;
-  border: 1px solid;
-  border-radius: 999px;
+  width: 32px;
+  height: 20px;
+  border-radius: 9999px;
   font-size: 12px;
   font-weight: 600;
+  box-shadow: inset 0 0 0 0.5px var(--border-subtle);
 }
 
 .ex-progress-ring { display: inline-block; flex-shrink: 0; }
+.ex-progress-ring circle { transition: filter 120ms ease, opacity 120ms ease; }
+.ex-progress-ring circle:hover {
+  filter: brightness(1.2) saturate(0.85);
+  opacity: 0.85;
+  cursor: pointer;
+}
 
 .ex-pct-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 18px;
+  width: 40px;
+  height: 16px;
   padding: 0 6px;
-  border-radius: 6px;
+  border-radius: 9999px;
   font-size: 10px;
   font-weight: 600;
+  box-shadow: inset 0 0 0 0.5px var(--border-subtle);
 }
+.ex-pct-pill > span { margin-left: 1px; }
 

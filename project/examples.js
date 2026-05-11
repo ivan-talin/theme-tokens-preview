@@ -61,8 +61,8 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         }
       }
     }
-    lines.light.push(`  --shadow: 0 1px 0 rgba(20, 22, 26, 0.04), 0 1px 2px rgba(20, 22, 26, 0.04);`, `  --swatch-ring: rgba(0, 0, 0, 0.08);`);
-    lines.dark.push(`  --shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.3);`, `  --swatch-ring: rgba(255, 255, 255, 0.06);`);
+    lines.light.push(`  --shadow: 0 1px 0 rgba(20, 22, 26, 0.04), 0 1px 2px rgba(20, 22, 26, 0.04);`, `  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);`, `  --swatch-ring: rgba(0, 0, 0, 0.08);`);
+    lines.dark.push(`  --shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.3);`, `  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);`, `  --swatch-ring: rgba(255, 255, 255, 0.06);`);
     const css = `html[data-mode="light"] {\n${lines.light.join("\n")}\n}\n` + `html[data-mode="dark"] {\n${lines.dark.join("\n")}\n}\n`;
     let style = document.getElementById("__semantic-tokens__");
     if (!style) {
@@ -172,10 +172,9 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
   }
 
   // ── Reverse-lookup index ───────────────────────────────────────────────
-  // Maps a normalized color key → { token, base }. First-set wins, so
-  // iteration order encodes priority: non-DEFAULT semantic roles before
-  // DEFAULT (so #FFFFFF prefers `bg.panel` over plain `bg`), then
-  // scale-semantic, then palette, then alpha. Cached by (mode, talin.500).
+  // Maps a normalized color key → ordered candidates. A single base value can
+  // be used by multiple semantic tokens (e.g. blackAlpha.100 is both
+  // border.subtle and alpha.muted), so the renderer picks by CSS property.
   let tokenIndexCache = null;
   function buildTokenIndex(mode) {
     const talinKey = window.PALETTE && window.PALETTE.talin ? window.PALETTE.talin[500] : null;
@@ -183,8 +182,13 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       return tokenIndexCache.map;
     }
     const map = new Map();
-    const set = (key, value) => {
-      if (key && !map.has(key)) map.set(key, value);
+    const add = (key, value) => {
+      if (!key) return;
+      const candidates = map.get(key) || [];
+      if (!candidates.some(candidate => candidate.token === value.token)) {
+        candidates.push(value);
+      }
+      map.set(key, candidates);
     };
     const baseFromRef = ref => {
       if (!ref) return null;
@@ -198,9 +202,11 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         for (const [role, refs] of Object.entries(roles)) {
           if (role === "DEFAULT") continue;
           const ref = refs[mode];
-          set(normalizeColor(window.resolveRef(ref)), {
+          add(normalizeColor(window.resolveRef(ref)), {
             token: `${group}.${role}`,
-            base: baseFromRef(ref)
+            base: baseFromRef(ref),
+            group,
+            family: "semantic"
           });
         }
       }
@@ -208,9 +214,11 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         const refs = roles.DEFAULT;
         if (!refs) continue;
         const ref = refs[mode];
-        set(normalizeColor(window.resolveRef(ref)), {
+        add(normalizeColor(window.resolveRef(ref)), {
           token: group,
-          base: baseFromRef(ref)
+          base: baseFromRef(ref),
+          group,
+          family: "semantic"
         });
       }
     }
@@ -218,9 +226,11 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       for (const [hue, roles] of Object.entries(window.SCALE_SEMANTIC)) {
         for (const [role, refs] of Object.entries(roles)) {
           const ref = refs[mode];
-          set(normalizeColor(window.resolveRef(ref)), {
+          add(normalizeColor(window.resolveRef(ref)), {
             token: `${hue}.${role}`,
-            base: baseFromRef(ref)
+            base: baseFromRef(ref),
+            group: hue,
+            family: "scale"
           });
         }
       }
@@ -228,24 +238,38 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     if (window.PALETTE) {
       for (const [hue, node] of Object.entries(window.PALETTE)) {
         if (typeof node === "string") {
-          set(normalizeColor(node), { token: hue, base: hue });
+          add(normalizeColor(node), { token: hue, base: hue, group: hue, family: "palette" });
           continue;
         }
         if (hue === "blackAlpha" || hue === "whiteAlpha" || hue === "chart") continue;
         for (const [step, hex] of Object.entries(node)) {
-          set(normalizeColor(hex), { token: `${hue}.${step}`, base: `${hue}.${step}` });
+          add(normalizeColor(hex), { token: `${hue}.${step}`, base: `${hue}.${step}`, group: hue, family: "palette" });
         }
       }
       for (const hue of ["blackAlpha", "whiteAlpha"]) {
         const node = window.PALETTE[hue];
         if (!node) continue;
         for (const [step, rgba] of Object.entries(node)) {
-          set(normalizeColor(rgba), { token: `${hue}.${step}`, base: `${hue}.${step}` });
+          add(normalizeColor(rgba), { token: `${hue}.${step}`, base: `${hue}.${step}`, group: hue, family: "palette" });
         }
       }
     }
     tokenIndexCache = { mode, talin: talinKey, map };
     return map;
+  }
+  function pickTokenCandidate(candidates, prop) {
+    if (!candidates || candidates.length === 0) return null;
+    const normalizedProp = String(prop || "").toLowerCase();
+    const preferredGroup = normalizedProp === "stroke" ? "border" : normalizedProp === "border" ? "border" : normalizedProp === "fg" ? "fg" : normalizedProp === "bg" ? "bg" : null;
+    if (preferredGroup) {
+      const direct = candidates.find(candidate => candidate.group === preferredGroup);
+      if (direct) return direct;
+    }
+    if (normalizedProp === "bg") {
+      const scale = candidates.find(candidate => candidate.family === "scale");
+      if (scale) return scale;
+    }
+    return candidates.find(candidate => candidate.family !== "palette") || candidates[0];
   }
 
   // ── Effective background ───────────────────────────────────────────────
@@ -264,7 +288,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
           key,
           source: cur === el ? "self" : "ancestor",
           element: cur,
-          declaredToken: cur.getAttribute("data-tk-bg")
+          declaredToken: cur.matches(":hover") && cur.getAttribute("data-tk-bg-hover") ? cur.getAttribute("data-tk-bg-hover") : cur.getAttribute("data-tk-bg")
         };
       }
       cur = cur.parentElement;
@@ -279,7 +303,12 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
   // reverse-lookup against the token index).
   function buildRows(el, mode) {
     const tokenIndex = buildTokenIndex(mode);
-    const attrs = Array.from(el.attributes).filter(a => a.name.indexOf("data-tk-") === 0);
+    // data-tk-tooltip is a free-form description rendered above the rows
+    // by TokenPill — exclude it from the token-row builder so it doesn't
+    // appear as a misleading "TOOLTIP" prop with no resolvable hex.
+    const attrs = Array.from(el.attributes).filter(
+      a => a.name.indexOf("data-tk-") === 0 && a.name !== "data-tk-tooltip" && a.name !== "data-tk-bg-hover"
+    );
     const rows = attrs.map(a => {
       const prop = a.name.replace(/^data-tk-/, "").toUpperCase();
       const token = a.value;
@@ -300,7 +329,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
           return { prop: "BG", token: effective.declaredToken, hex, base, source: effective.source };
         }
       }
-      const matched = tokenIndex.get(effective.key);
+      const matched = pickTokenCandidate(tokenIndex.get(effective.key), "BG");
       if (matched) {
         const { hex } = resolveToken(matched.token, mode);
         return {
@@ -340,6 +369,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       x: 0,
       y: 0,
       label: "",
+      tooltip: "",
       rows: []
     });
     const [, setMode] = useState(readMode());
@@ -402,7 +432,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         elRef.current = el;
 
         // Position near cursor with edge-clamp.
-        const pillW = 320;
+        const pillW = 440;
         const pillH = 40 + rows.length * 24;
         const offset = 16;
         let x = ev.clientX + offset;
@@ -414,11 +444,13 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         const tag = el.tagName.toLowerCase();
         const cls = (el.className && el.className.toString ? el.className.toString() : "").split(" ").filter(Boolean)[0];
         const label = cls ? `${tag}.${cls}` : tag;
+        const tooltip = el.getAttribute("data-tk-tooltip") || "";
         setState({
           visible: true,
           x,
           y,
           label,
+          tooltip,
           rows
         });
       };
@@ -451,11 +483,15 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       style: {
         left: state.x,
         top: state.y,
-        width: 320
+        width: 440
       }
     }, /*#__PURE__*/React.createElement("div", {
       className: "tk-pill-label"
-    }, state.label), /*#__PURE__*/React.createElement("div", {
+    }, state.label),
+    state.tooltip ? /*#__PURE__*/React.createElement("div", {
+      className: "tk-pill-tooltip"
+    }, state.tooltip) : null,
+    /*#__PURE__*/React.createElement("div", {
       className: "tk-pill-rows"
     }, state.rows.map((r, i) => {
       const isAlpha = r.hex && r.hex.toLowerCase().startsWith("rgba");
@@ -463,7 +499,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         className: `tk-pill-row${r.source === "ancestor" ? " tk-pill-row--inherited" : ""}`,
         key: i,
         style: {
-          gridTemplateColumns: "44px 1fr auto"
+          gridTemplateColumns: "44px minmax(112px, 1fr) minmax(180px, auto)"
         }
       }, /*#__PURE__*/React.createElement("span", {
         className: "tk-pill-prop"
@@ -552,11 +588,9 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
   }), /*#__PURE__*/React.createElement("path", {
     d: "M216 40H40a16 16 0 0 0-16 16v144a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16M40 56h40v144H40Zm176 144H96V56h120z"
   }));
+  // Bold weight (single solid path, no duotone layer).
   const CaretRightIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
-    d: "m176 128l-80 80V48Z",
-    opacity: ".2"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "m181.66 122.34l-80-80A8 8 0 0 0 88 48v160a8 8 0 0 0 13.66 5.66l80-80a8 8 0 0 0 0-11.32M104 188.69V67.31L164.69 128Z"
+    d: "M184.49 136.49l-80 80a12 12 0 0 1-17-17L159 128L87.51 56.49a12 12 0 0 1 17-17l80 80a12 12 0 0 1 0 17Z"
   }));
 
   // ── Other icons (non-sidebar utility) ──────────────────────────────────
@@ -585,6 +619,21 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     stroke: "none"
   }), /*#__PURE__*/React.createElement("polygon", {
     points: "6 9 12 15 18 9"
+  }));
+  const CaretUpIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M136.49,71.51l80,80a12,12,0,0,1-17,17L128,97L56.49,168.49a12,12,0,0,1-17-17l80-80a12,12,0,0,1,17,0Z"
+  }));
+  const CaretDownBoldIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M119.51,184.49l-80-80a12,12,0,0,1,17-17L128,159l71.51-71.49a12,12,0,0,1,17,17l-80,80a12,12,0,0,1-17,0Z"
+  }));
+  const CaretUpDownIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M183.51,167.51l-48,48a12,12,0,0,1-17,0l-48-48a12,12,0,0,1,17-17L128,189.51l39.51-39.51a12,12,0,0,1,17,17ZM88.49,89.51a12,12,0,0,1-17-17l48-48a12,12,0,0,1,17,0l48,48a12,12,0,0,1-17,17L128,66.49,88.49,89.51Z"
+  }));
+  const HashIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M224,88H175.4l8.47-47.92a8,8,0,1,0-15.74-2.78L159.14,88H111.4l8.47-47.92a8,8,0,1,0-15.74-2.78L95.14,88H48a8,8,0,0,0,0,16H92.32L85.36,152H32a8,8,0,0,0,0,16H82.54L74,216.92a8,8,0,0,0,6.5,9.27A7.6,7.6,0,0,0,82,226a8,8,0,0,0,7.87-6.61L98.81,168h47.74l-8.51,48.92a8,8,0,0,0,6.5,9.27A7.6,7.6,0,0,0,146,226a8,8,0,0,0,7.87-6.61L162.81,168H208a8,8,0,0,0,0-16H165.65l7-48H224a8,8,0,0,0,0-16ZM149.45,152H101.71l7-48h47.74Z"
+  }));
+  const PercentIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M195.31,76.69a8,8,0,0,1,0,11.31l-112,112a8,8,0,0,1-11.31-11.31l112-112A8,8,0,0,1,195.31,76.69ZM72,104A32,32,0,1,0,40,72,32,32,0,0,0,72,104Zm0-48A16,16,0,1,1,56,72,16,16,0,0,1,72,56Zm112,96a32,32,0,1,0,32,32A32,32,0,0,0,184,152Zm0,48a16,16,0,1,1,16-16A16,16,0,0,1,184,200Z"
   }));
   const ArrowRightIcon = ({ size = 20, ...rest }) => /*#__PURE__*/React.createElement("svg", {
     width: size,
@@ -618,6 +667,12 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     opacity: ".2"
   }), /*#__PURE__*/React.createElement("path", {
     d: "M216 56h-40V48a16 16 0 0 0-16-16H96a16 16 0 0 0-16 16v8H40a16 16 0 0 0-16 16v128a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V72a16 16 0 0 0-16-16M96 48h64v8H96Zm120 24v41.61A184 184 0 0 1 128 136a184.07 184.07 0 0 1-88-22.38V72Zm0 128H40v-67.93a200.06 200.06 0 0 0 88 21.93a200 200 0 0 0 88-21.93V200Zm-112-88a8 8 0 0 1 8-8h32a8 8 0 0 1 0 16h-32a8 8 0 0 1-8-8"
+  }));
+  const UserIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M200 152a72 72 0 1 0-144 0a72 72 0 0 0 144 0",
+    opacity: ".2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M230.92 212c-15.23-26.33-38.7-45.21-66.09-54.16a72 72 0 1 0-73.66 0c-27.39 8.94-50.86 27.82-66.09 54.16a8 8 0 1 0 13.85 8c18.84-32.56 52.14-52 89.07-52s70.23 19.44 89.07 52a8 8 0 1 0 13.85-8M72 96a56 56 0 1 1 56 56a56.06 56.06 0 0 1-56-56"
   }));
   const CalendarBlankIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
     d: "M216 48v40H40V48a8 8 0 0 1 8-8h160a8 8 0 0 1 8 8",
@@ -1546,8 +1601,9 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       "data-label": label,
       "data-tk-fg": active ? "fg" : "fg.muted"
     }, active ? {
-      "data-tk-bg": "blackAlpha.100"
+      "data-tk-bg": "alpha.muted"
     } : {}, {
+      "data-tk-bg-hover": active ? "alpha.muted" : "alpha.subtle",
       style: {
         color: active ? "var(--fg)" : "var(--fg-muted)"
       }
@@ -2171,19 +2227,24 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
   // Positive replies).
 
   const MOCK_CAMPAIGNS = [{
-    id: 1, type: "candidate", actions: 1, contacts: 800, completed: 520, inProgress: 160, skipped: 120, total: 1000,
+    id: 1, name: "US Solar Project Managers", dateCreated: "March 28, 2026", type: "candidate",
+    actions: 1, contacts: 800, completed: 520, inProgress: 160, skipped: 120, total: 1000,
     replies: 135, repliesPct: 9.8, positive: 34, positivePct: 25.2
   }, {
-    id: 2, type: "candidate", actions: 3, contacts: 323, completed: 200, inProgress: 80, skipped: 43, total: 500,
+    id: 2, name: "EU Sales VPs", dateCreated: "April 11, 2026", type: "prospect",
+    actions: 3, contacts: 323, completed: 200, inProgress: 80, skipped: 43, total: 500,
     replies: 200, repliesPct: 24.7, positive: 12, positivePct: 6.8
   }, {
-    id: 3, type: "employer", actions: 5, contacts: 543, completed: 380, inProgress: 90, skipped: 73, total: 700,
+    id: 3, name: "APAC Construction Leads", dateCreated: "April 22, 2026", type: "candidate",
+    actions: 5, contacts: 543, completed: 380, inProgress: 90, skipped: 73, total: 700,
     replies: 157, repliesPct: 19.4, positive: 15, positivePct: 14.5
   }, {
-    id: 4, type: "candidate", actions: 2, contacts: 700, completed: 480, inProgress: 120, skipped: 100, total: 900,
+    id: 4, name: "Renewable IPP Operators", dateCreated: "April 30, 2026", type: "prospect",
+    actions: 2, contacts: 700, completed: 480, inProgress: 120, skipped: 100, total: 900,
     replies: 135, repliesPct: 6.8, positive: 28, positivePct: 22.4
   }, {
-    id: 5, type: "employer", actions: 1, contacts: 913, completed: 600, inProgress: 200, skipped: 113, total: 1100,
+    id: 5, name: "Bay Area Engineering", dateCreated: "May 5, 2026", type: "candidate",
+    actions: 1, contacts: 913, completed: 600, inProgress: 200, skipped: 113, total: 1100,
     replies: 89, repliesPct: 8.3, positive: 29, positivePct: 21.5
   }];
 
@@ -2191,17 +2252,18 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     messages: {
       total: 17,
       change: -23.9,
-      // Segment palette uses project tokens that read as a continuous
-      // navy/blue family — closer to the Figma's chart.primary-dominated
-      // donut while preserving the multi-segment Pie-chart structure
-      // from talin's CampaignMessagesKPI.
+      // Single chart.primary base, opacity stepped per segment (largest
+      // value = full opacity, smallest = lightest). Diverges from talin's
+      // multi-color Pie palette in favour of a calmer single-hue donut.
+      // Labels mirror talin's useMessagesSentData hook readable strings
+      // and surface as native browser tooltips on hover.
       segments: [
-        { id: "connect", token: "chart.primary", value: 6 },
-        { id: "linmsg", token: "blue.fg", value: 5 },
-        { id: "email", token: "blue.solid", value: 3 },
-        { id: "sms", token: "blue.muted", value: 1 },
-        { id: "inmail", token: "blue.subtle", value: 1 },
-        { id: "phone", token: "gray.muted", value: 1 }
+        { id: "connect", label: "Connection requests", value: 6, opacity: 1.0  },
+        { id: "linmsg",  label: "LinkedIn messages",   value: 5, opacity: 0.85 },
+        { id: "email",   label: "Emails",              value: 3, opacity: 0.7  },
+        { id: "sms",     label: "SMS",                 value: 1, opacity: 0.55 },
+        { id: "inmail",  label: "LinkedIn InMails",    value: 1, opacity: 0.4  },
+        { id: "phone",   label: "Phone calls",         value: 1, opacity: 0.25 }
       ]
     },
     contacts: { value: 9, change: -12.3 },
@@ -2218,18 +2280,6 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     const r = window.resolveToken(path, mode);
     return r ? r.hex : null;
   }
-  function lerpHex(start, end, progress) {
-    const parse = hex => {
-      const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || "");
-      return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : [0, 0, 0];
-    };
-    const [r1, g1, b1] = parse(start);
-    const [r2, g2, b2] = parse(end);
-    const r = Math.round(r1 + (r2 - r1) * progress);
-    const g = Math.round(g1 + (g2 - g1) * progress);
-    const b = Math.round(b1 + (b2 - b1) * progress);
-    return "#" + [r, g, b].map(n => n.toString(16).padStart(2, "0")).join("");
-  }
   function polarToCartesian(cx, cy, r, deg) {
     const rad = (deg - 90) * Math.PI / 180;
     return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
@@ -2240,15 +2290,45 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     const largeArc = endDeg - startDeg <= 180 ? "0" : "1";
     return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 0 ${end.x} ${end.y}`;
   }
+  // Filled annular sector with rounded corners on all four corners
+  // (outer-start, outer-end, inner-start, inner-end). Mirrors Nivo's
+  // ResponsivePie cornerRadius behaviour. Used by the half-donut so each
+  // segment is one fill path — no stroke + cap-overlay composition that
+  // can leave anti-aliased seams at segment joints.
+  function annularSectorPath(cx, cy, rOut, rIn, startDeg, endDeg, cr) {
+    const dOut = (cr / rOut) * 180 / Math.PI;
+    const dIn  = (cr / rIn)  * 180 / Math.PI;
+    const A = polarToCartesian(cx, cy, rOut - cr, startDeg);
+    const B = polarToCartesian(cx, cy, rOut,      startDeg + dOut);
+    const C = polarToCartesian(cx, cy, rOut,      endDeg   - dOut);
+    const D = polarToCartesian(cx, cy, rOut - cr, endDeg);
+    const E = polarToCartesian(cx, cy, rIn  + cr, endDeg);
+    const F = polarToCartesian(cx, cy, rIn,       endDeg   - dIn);
+    const G = polarToCartesian(cx, cy, rIn,       startDeg + dIn);
+    const H = polarToCartesian(cx, cy, rIn  + cr, startDeg);
+    const outerLargeArc = (endDeg - dOut) - (startDeg + dOut) > 180 ? 1 : 0;
+    const innerLargeArc = (endDeg - dIn)  - (startDeg + dIn)  > 180 ? 1 : 0;
+    return [
+      `M ${A.x} ${A.y}`,
+      `A ${cr} ${cr} 0 0 1 ${B.x} ${B.y}`,
+      `A ${rOut} ${rOut} 0 ${outerLargeArc} 1 ${C.x} ${C.y}`,
+      `A ${cr} ${cr} 0 0 1 ${D.x} ${D.y}`,
+      `L ${E.x} ${E.y}`,
+      `A ${cr} ${cr} 0 0 1 ${F.x} ${F.y}`,
+      `A ${rIn} ${rIn} 0 ${innerLargeArc} 0 ${G.x} ${G.y}`,
+      `A ${cr} ${cr} 0 0 1 ${H.x} ${H.y}`,
+      "Z"
+    ].join(" ");
+  }
 
   function TrendPill({ variant, value }) {
     const up = variant === "up";
     return /*#__PURE__*/React.createElement("span", {
       className: `ex-trend-pill ex-trend-pill--${up ? "up" : "down"}`,
-      "data-tk-bg": up ? "green.subtle" : "orange.subtle",
+      "data-tk-bg": up ? "green.muted" : "orange.muted",
       "data-tk-fg": up ? "green.fg" : "orange.fg",
       style: {
-        background: up ? "var(--green-subtle)" : "var(--orange-subtle)",
+        background: up ? "var(--green-muted)" : "var(--orange-muted)",
         color: up ? "var(--green-fg)" : "var(--orange-fg)"
       }
     }, /*#__PURE__*/React.createElement("span", {
@@ -2260,7 +2340,13 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
 
   function MessagesSentDonut({ segments, total, change }) {
     const sum = segments.reduce((a, s) => a + s.value, 0) || 1;
-    const cx = 100, cy = 95, r = 78, gap = 2.4;
+    // Each segment is one filled annular-sector path with rounded corners
+    // (cornerRadius=2). rOut=83, rIn=73 → effective stroke width 10. Since
+    // the segment ends exactly at its angular endpoint (no protrusion past
+    // it), adjacent segments cannot overlap visually — the angular gap IS
+    // the visible gap. ~4° gap at r=78 ≈ 5.4px clear separation.
+    const cx = 100, cy = 95, r = 78, gap = 4;
+    const rOut = r + 5, rIn = r - 5, cr = 2;
     const availableArc = 180 - gap * (segments.length - 1);
     let cursor = -90;
     const arcs = segments.map(seg => {
@@ -2268,16 +2354,15 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       const start = cursor;
       const end = cursor + sweep;
       cursor = end + gap;
-      const cssVar = "--" + seg.token.replace(".", "-");
+      const tooltip = `${seg.label}: ${seg.value}`;
       return /*#__PURE__*/React.createElement("path", {
         key: seg.id,
-        d: arcPath(cx, cy, r, start, end),
-        stroke: `var(${cssVar})`,
-        strokeWidth: "13",
-        strokeLinecap: "round",
-        fill: "none",
-        "data-tk-stroke": seg.token
-      });
+        d: annularSectorPath(cx, cy, rOut, rIn, start, end, cr),
+        fill: "var(--chart-primary)",
+        fillOpacity: seg.opacity,
+        "data-tk-fill": "chart.primary",
+        "data-tk-tooltip": tooltip
+      }, /*#__PURE__*/React.createElement("title", null, tooltip));
     });
     return /*#__PURE__*/React.createElement("div", {
       className: "ex-stat-vis ex-stat-vis--msg"
@@ -2313,8 +2398,26 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       ? repliesValue / contactsValue
       : 0.5;
     const targetRatio = Math.max(0.45, conversionRatio);
-    const startColor = "#99c199";
-    const endColor = tokenHex("green.600") || "#2F855A";
+    const startColor = tokenHex("chart.primary") || "#4D4F91";
+    const endColor   = tokenHex("blue.solid")    || "#2B6CB0";
+
+    // Materialize the OKLCH gradient to concrete hex strings via a 1x1
+    // canvas — same trick as regenerateScale() in tokens.js. Concrete hex
+    // makes the token inspector's getComputedStyle readback parse cleanly
+    // (normalizeColor only handles rgb/hex, not color-mix() outputs) and
+    // degrades gracefully on engines without color-mix support.
+    const barCanvas = document.createElement("canvas");
+    barCanvas.width = 1;
+    barCanvas.height = 1;
+    const barCtx = barCanvas.getContext("2d");
+    const barColors = Array.from({ length: lineCount }, (_, i) => {
+      const progress = i / (lineCount - 1);
+      barCtx.fillStyle = startColor;
+      barCtx.fillStyle = `color-mix(in oklch, ${startColor}, ${endColor} ${(progress * 100).toFixed(2)}%)`;
+      barCtx.fillRect(0, 0, 1, 1);
+      const [r, g, b] = barCtx.getImageData(0, 0, 1, 1).data;
+      return "#" + [r, g, b].map(n => n.toString(16).padStart(2, "0")).join("").toUpperCase();
+    });
 
     const bars = Array.from({ length: lineCount }).map((_, i) => {
       const progress = i / (lineCount - 1);
@@ -2324,11 +2427,13 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       const height = heightRatio * maxHeight * heightMul;
       const offsetY = progress * Math.tan(funnelAngle * Math.PI / 180) * 25;
       const width = isEdge ? lineWidth + 8 : lineWidth;
-      const color = lerpHex(startColor, endColor, progress);
+      const color = barColors[i];
       const opacity = isEdge ? 0.8 : 0.5;
       return /*#__PURE__*/React.createElement("span", {
         key: i,
         className: "ex-funnel-bar",
+        "data-tk-from": "chart.primary",
+        "data-tk-to": "blue.solid",
         style: {
           height: `${height}px`,
           width: `${width}px`,
@@ -2387,23 +2492,17 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     })), /*#__PURE__*/React.createElement("div", {
       className: "ex-replyrate-bars"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "ex-replyrate-bar ex-replyrate-bar--prev",
-      "data-tk-bg": "bg.panel",
-      "data-tk-border": "border",
-      style: { background: "var(--bg-panel)", borderColor: "var(--border)" }
+      className: "ex-replyrate-bar ex-replyrate-bar--prev"
     }, /*#__PURE__*/React.createElement("span", {
       className: "ex-replyrate-fill",
-      "data-tk-bg": "gray.emphasized",
-      style: { background: "var(--gray-emphasized)", height: `${prevHeight}%` }
+      "data-tk-bg": "alpha.emphasized",
+      style: { background: "var(--alpha-emphasized)", height: `${prevHeight}%` }
     })), /*#__PURE__*/React.createElement("div", {
-      className: "ex-replyrate-bar ex-replyrate-bar--curr",
-      "data-tk-bg": "bg.panel",
-      "data-tk-border": "border",
-      style: { background: "var(--bg-panel)", borderColor: "var(--border)" }
+      className: "ex-replyrate-bar ex-replyrate-bar--curr"
     }, /*#__PURE__*/React.createElement("span", {
       className: "ex-replyrate-fill",
-      "data-tk-bg": "chart.primary",
-      style: { background: "var(--chart-primary)", height: `${currHeight}%` }
+      "data-tk-bg": "green.solid",
+      style: { background: "var(--green-solid)", height: `${currHeight}%` }
     }))), /*#__PURE__*/React.createElement("div", {
       className: "ex-stat-vis-meta"
     }, /*#__PURE__*/React.createElement("span", {
@@ -2417,15 +2516,17 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     }, "reply rate")));
   }
 
-  function ContactsProgressRing({ completed, inProgress, skipped, total, size = 22 }) {
-    const stroke = 3;
+  function ContactsProgressRing({ completed, inProgress, skipped, total, size = 32 }) {
+    const stroke = 5;
     const r = size / 2 - stroke / 2;
     const c = 2 * Math.PI * r;
     const safeTotal = total || 1;
+    const notStarted = Math.max(0, total - completed - inProgress - skipped);
+    const noun = n => (n === 1 ? "contact" : "contacts");
     const segs = [
-      { value: completed, token: "talin.solid", cssVar: "--talin-solid" },
-      { value: inProgress, token: "orange.solid", cssVar: "--orange-solid" },
-      { value: skipped, token: "gray.emphasized", cssVar: "--gray-emphasized" }
+      { value: completed,  token: "chart.primary", stroke: "var(--chart-primary)", opacity: 1,   title: `Completed: ${completed} ${noun(completed)}` },
+      { value: inProgress, token: "chart.primary", stroke: "var(--chart-primary)", opacity: 0.6, title: `In progress: ${inProgress} ${noun(inProgress)}` },
+      { value: skipped,    token: "orange.solid",  stroke: "var(--orange-solid)",  opacity: 1,   title: `Skipped: ${skipped} ${noun(skipped)}` }
     ];
     let cursor = 0;
     const arcs = segs.map((seg, i) => {
@@ -2437,14 +2538,17 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         cx: size / 2,
         cy: size / 2,
         r: r,
-        stroke: `var(${seg.cssVar})`,
+        stroke: seg.stroke,
+        strokeOpacity: seg.opacity,
         strokeWidth: stroke,
+        strokeLinecap: "round",
         fill: "none",
         strokeDasharray: `${len} ${c - len}`,
         strokeDashoffset: offset,
         transform: `rotate(-90 ${size / 2} ${size / 2})`,
-        "data-tk-stroke": seg.token
-      });
+        "data-tk-stroke": seg.token,
+        "data-tk-tooltip": seg.title
+      }, /*#__PURE__*/React.createElement("title", null, seg.title));
     });
     return /*#__PURE__*/React.createElement("svg", {
       className: "ex-progress-ring",
@@ -2457,8 +2561,10 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       r: r,
       stroke: "var(--border)",
       strokeWidth: stroke,
-      fill: "none"
-    }), arcs);
+      fill: "none",
+      "data-tk-stroke": "border",
+      "data-tk-tooltip": `Not started: ${notStarted} ${noun(notStarted)}`
+    }, /*#__PURE__*/React.createElement("title", null, `Not started: ${notStarted} ${noun(notStarted)}`)), arcs);
   }
 
   function SearchFilter() {
@@ -2495,18 +2601,18 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
        /*#__PURE__*/React.createElement("span", {
       "data-tk-fg": "fg.muted",
       style: { display: "inline-flex", color: "var(--fg-muted)" }
-    }, /*#__PURE__*/React.createElement(CaretDownIcon, { size: 12 })));
+    }, /*#__PURE__*/React.createElement(CaretDownBoldIcon, { size: 12 })));
   }
 
   function FilterPill({ label, value }) {
     return /*#__PURE__*/React.createElement("button", {
       type: "button",
       className: "ex-filter-pill",
-      "data-tk-bg": "bg.muted",
+      "data-tk-bg": "bg.emphasized",
       "data-tk-border": "border",
       "data-tk-fg": "fg",
       style: {
-        background: "var(--bg-muted)",
+        background: "var(--bg-emphasized)",
         borderColor: "var(--border)",
         color: "var(--fg)"
       }
@@ -2539,38 +2645,46 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
        /*#__PURE__*/React.createElement("span", null, "New Campaign"));
   }
 
+  // Three-tier ramp: <10% = okay (subtle), 10–25% = good (muted),
+  // >25% = great (emphasized). Replies use the blue ramp; Positive replies
+  // use the green ramp.
+  const PCT_PILL_TOKENS = {
+    replies: {
+      okay:  { bg: "blue.subtle",     fg: "blue.fg" },
+      good:  { bg: "blue.muted",      fg: "blue.fg" },
+      great: { bg: "blue.emphasized", fg: "blue.fg" }
+    },
+    positive: {
+      okay:  { bg: "green.subtle",     fg: "green.fg" },
+      good:  { bg: "green.muted",      fg: "green.fg" },
+      great: { bg: "green.emphasized", fg: "green.fg" }
+    }
+  };
   function PercentPill({ value, variant }) {
-    const green = variant === "green";
+    const tier = value < 10 ? "okay" : value <= 25 ? "good" : "great";
+    const { bg, fg } = PCT_PILL_TOKENS[variant][tier];
+    const cssVar = token => `var(--${token.replace(".", "-")})`;
     return /*#__PURE__*/React.createElement("span", {
-      className: `ex-pct-pill ex-pct-pill--${green ? "green" : "neutral"}`,
-      "data-tk-bg": green ? "green.subtle" : "bg.muted",
-      "data-tk-fg": green ? "green.fg" : "fg.muted",
-      style: {
-        background: green ? "var(--green-subtle)" : "var(--bg-muted)",
-        color: green ? "var(--green-fg)" : "var(--fg-muted)"
-      }
-    }, value, "%");
+      className: `ex-pct-pill ex-pct-pill--${variant} ex-pct-pill--${tier}`,
+      "data-tk-bg": bg,
+      "data-tk-fg": fg,
+      style: { background: cssVar(bg), color: cssVar(fg) }
+    }, /*#__PURE__*/React.createElement("span", null, value, "%"));
   }
 
   function CampaignRow({ row }) {
-    const RowIcon = row.type === "candidate" ? UserCircleIcon : BriefcaseIcon;
+    const RowIcon = row.type === "candidate" ? UserIcon : BriefcaseIcon;
     return /*#__PURE__*/React.createElement("div", {
       className: "ex-tr ex-tr--campaign",
-      "data-tk-border": "border.muted",
-      style: { borderTopColor: "var(--border-muted)" }
+      "data-tk-border": "border.subtle",
+      style: { borderTopColor: "var(--border-subtle)" }
     },
       /*#__PURE__*/React.createElement("div", {
         className: "ex-td ex-td--name"
       }, /*#__PURE__*/React.createElement("span", {
         className: "ex-row-icon",
-        "data-tk-bg": "bg.muted",
-        "data-tk-border": "border",
         "data-tk-fg": "fg.muted",
-        style: {
-          background: "var(--bg-muted)",
-          borderColor: "var(--border)",
-          color: "var(--fg-muted)"
-        }
+        style: { color: "var(--fg-muted)" }
       }, /*#__PURE__*/React.createElement(RowIcon, { size: 18 })),
         /*#__PURE__*/React.createElement("div", {
         className: "ex-row-name"
@@ -2578,12 +2692,11 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         className: "ex-row-name-title",
         "data-tk-fg": "fg",
         style: { color: "var(--fg)" }
-      }, "US/Canada Campaign"), /*#__PURE__*/React.createElement("span", {
+      }, row.name), /*#__PURE__*/React.createElement("span", {
         className: "ex-row-name-sub",
         "data-tk-fg": "fg.muted",
         style: { color: "var(--fg-muted)" }
-      }, /*#__PURE__*/React.createElement(CalendarBlankIcon, { size: 11 }),
-         /*#__PURE__*/React.createElement("span", null, "October 23, 2025")))),
+      }, /*#__PURE__*/React.createElement("span", null, row.dateCreated)))),
       /*#__PURE__*/React.createElement("div", {
         className: "ex-td ex-td--centered"
       }, /*#__PURE__*/React.createElement("span", {
@@ -2607,11 +2720,11 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         className: "ex-td ex-td--centered"
       }, /*#__PURE__*/React.createElement("span", {
         className: "ex-td-select",
-        "data-tk-bg": "bg.panel",
+        "data-tk-bg": "bg.emphasized",
         "data-tk-border": "border",
         "data-tk-fg": "fg",
         style: {
-          background: "var(--bg-panel)",
+          background: "var(--bg-emphasized)",
           borderColor: "var(--border)",
           color: "var(--fg)"
         }
@@ -2619,19 +2732,14 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         /*#__PURE__*/React.createElement("span", {
         "data-tk-fg": "fg.muted",
         style: { color: "var(--fg-muted)", display: "inline-flex" }
-      }, /*#__PURE__*/React.createElement(CaretDownIcon, { size: 10 })))),
+      }, /*#__PURE__*/React.createElement(CaretDownBoldIcon, { size: 10 })))),
       /*#__PURE__*/React.createElement("div", {
         className: "ex-td ex-td--centered"
       }, /*#__PURE__*/React.createElement("span", {
         className: "ex-td-badge",
-        "data-tk-bg": "bg.panel",
-        "data-tk-border": "border",
-        "data-tk-fg": "fg",
-        style: {
-          background: "var(--bg-panel)",
-          borderColor: "var(--border)",
-          color: "var(--fg)"
-        }
+        "data-tk-bg": "gray.emphasized",
+        "data-tk-fg": "gray.fg",
+        style: { background: "var(--gray-emphasized)", color: "var(--gray-fg)" }
       }, row.actions)),
       /*#__PURE__*/React.createElement("div", {
         className: "ex-td ex-td--centered ex-td--num"
@@ -2643,29 +2751,97 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         inProgress: row.inProgress,
         skipped: row.skipped,
         total: row.total,
-        size: 22
+        size: 32
       })),
       /*#__PURE__*/React.createElement("div", {
-        className: "ex-td ex-td--centered ex-td--num"
+        className: "ex-td ex-td--right ex-td--num"
       }, /*#__PURE__*/React.createElement("span", {
         "data-tk-fg": "fg",
         style: { color: "var(--fg)" }
       }, row.replies), /*#__PURE__*/React.createElement(PercentPill, {
         value: row.repliesPct,
-        variant: row.repliesPct >= 15 ? "green" : "neutral"
+        variant: "replies"
       })),
       /*#__PURE__*/React.createElement("div", {
-        className: "ex-td ex-td--centered ex-td--num"
+        className: "ex-td ex-td--right ex-td--num"
       }, /*#__PURE__*/React.createElement("span", {
         "data-tk-fg": "fg",
         style: { color: "var(--fg)" }
       }, row.positive), /*#__PURE__*/React.createElement(PercentPill, {
         value: row.positivePct,
-        variant: row.positivePct >= 15 ? "green" : "neutral"
+        variant: "positive"
       })));
   }
 
+  function SortableHeader({ label, active, dir, sortKey, alignRight, onClick }) {
+    const dirIcon = !active
+      ? /*#__PURE__*/React.createElement(CaretUpDownIcon,   { size: 12 })
+      : dir === "asc"
+        ? /*#__PURE__*/React.createElement(CaretUpIcon,       { size: 12 })
+        : /*#__PURE__*/React.createElement(CaretDownBoldIcon, { size: 12 });
+    const keyIcon = active && (sortKey === "count" || sortKey === "rate")
+      ? (sortKey === "count"
+          ? /*#__PURE__*/React.createElement(HashIcon,    { size: 11 })
+          : /*#__PURE__*/React.createElement(PercentIcon, { size: 11 }))
+      : null;
+    const className =
+      "ex-th ex-th--sortable" +
+      (alignRight ? " ex-th--right" : "") +
+      (active ? " ex-th--sorted" : "");
+    return /*#__PURE__*/React.createElement("button", {
+      type: "button",
+      className: className,
+      onClick: onClick,
+      "data-tk-fg": active ? "fg" : "fg.muted",
+      style: { color: active ? "var(--fg)" : "var(--fg-muted)" }
+    }, /*#__PURE__*/React.createElement("span", { className: "ex-th-label" }, label),
+       /*#__PURE__*/React.createElement("span", { className: "ex-th-sort-cluster" },
+         keyIcon && /*#__PURE__*/React.createElement("span", {
+           className: "ex-th-sort-icon ex-th-sort-icon--key",
+           "data-tk-fg": "fg.muted",
+           style: { color: "var(--fg-muted)" }
+         }, keyIcon),
+         /*#__PURE__*/React.createElement("span", {
+           className: "ex-th-sort-icon ex-th-sort-icon--dir",
+           "data-tk-fg": "fg.subtle",
+           style: { color: "var(--fg-subtle)" }
+         }, dirIcon)));
+  }
+
   function CampaignsTable({ rows }) {
+    const DEFAULT_SORT = { column: "campaign", key: "date", dir: "desc" };
+    const [sort, setSort] = useState(DEFAULT_SORT);
+    const cycleSort = (column) =>
+      setSort((prev) => {
+        if (prev.column !== column) {
+          return {
+            column,
+            key: column === "campaign" ? "date" : "count",
+            dir: "desc"
+          };
+        }
+        if (column === "campaign") {
+          return prev.dir === "desc"
+            ? { column, key: "date", dir: "asc" }
+            : DEFAULT_SORT;
+        }
+        if (prev.key === "count" && prev.dir === "desc") return { column, key: "count", dir: "asc"  };
+        if (prev.key === "count" && prev.dir === "asc")  return { column, key: "rate",  dir: "desc" };
+        if (prev.key === "rate"  && prev.dir === "desc") return { column, key: "rate",  dir: "asc"  };
+        return DEFAULT_SORT;
+      });
+
+    const FIELDS = {
+      replies: { count: "replies", rate: "repliesPct" },
+      positive: { count: "positive", rate: "positivePct" }
+    };
+    const getValue = (r) =>
+      sort.column === "campaign"
+        ? new Date(r.dateCreated).getTime()
+        : r[FIELDS[sort.column][sort.key]];
+    const mult = sort.dir === "asc" ? 1 : -1;
+    const sortedRows = [...rows].sort((a, b) => mult * (getValue(a) - getValue(b)));
+
     return /*#__PURE__*/React.createElement("div", {
       className: "ex-table ex-table--campaigns",
       "data-tk-bg": "bg.panel",
@@ -2673,23 +2849,42 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       style: { background: "var(--bg-panel)", borderColor: "var(--border)" }
     }, /*#__PURE__*/React.createElement("div", {
       className: "ex-thead",
-      "data-tk-bg": "bg.subtle",
+      "data-tk-bg": "bg.muted",
       "data-tk-border": "border",
       "data-tk-fg": "fg.muted",
       style: {
-        background: "var(--bg-subtle)",
+        background: "var(--bg-muted)",
         borderBottomColor: "var(--border)",
         color: "var(--fg-muted)"
       }
-    }, /*#__PURE__*/React.createElement("div", { className: "ex-th" }, "Campaign"),
+    }, /*#__PURE__*/React.createElement(SortableHeader, {
+         label: "Campaign",
+         active: sort.column === "campaign",
+         dir: sort.dir,
+         onClick: () => cycleSort("campaign")
+       }),
        /*#__PURE__*/React.createElement("div", { className: "ex-th ex-th--centered" }, "Owner"),
        /*#__PURE__*/React.createElement("div", { className: "ex-th ex-th--centered" }, "Status"),
        /*#__PURE__*/React.createElement("div", { className: "ex-th ex-th--centered" }, "Sending limit"),
        /*#__PURE__*/React.createElement("div", { className: "ex-th ex-th--centered" }, "Actions"),
        /*#__PURE__*/React.createElement("div", { className: "ex-th ex-th--centered" }, "Contacts"),
-       /*#__PURE__*/React.createElement("div", { className: "ex-th ex-th--centered" }, "Replies"),
-       /*#__PURE__*/React.createElement("div", { className: "ex-th ex-th--centered" }, "Positive replies")),
-       rows.map(r => /*#__PURE__*/React.createElement(CampaignRow, { key: r.id, row: r })));
+       /*#__PURE__*/React.createElement(SortableHeader, {
+         label: "Replies",
+         alignRight: true,
+         active: sort.column === "replies",
+         dir: sort.dir,
+         sortKey: sort.key,
+         onClick: () => cycleSort("replies")
+       }),
+       /*#__PURE__*/React.createElement(SortableHeader, {
+         label: "Positive replies",
+         alignRight: true,
+         active: sort.column === "positive",
+         dir: sort.dir,
+         sortKey: sort.key,
+         onClick: () => cycleSort("positive")
+       })),
+       sortedRows.map(r => /*#__PURE__*/React.createElement(CampaignRow, { key: r.id, row: r })));
   }
 
   function ExampleCampaigns() {
@@ -2711,32 +2906,30 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       style: { color: "var(--fg)" }
     }, "Campaign stats"), /*#__PURE__*/React.createElement("div", {
       className: "ex-stat-card-row",
-      "data-tk-bg": "bg.muted",
+      "data-tk-bg": "bg.panel",
       "data-tk-border": "border",
-      style: { background: "var(--bg-muted)", borderColor: "var(--border)" }
+      style: { background: "var(--bg-panel)", borderColor: "var(--border)" }
     }, /*#__PURE__*/React.createElement("div", {
-      className: "ex-stat-kpi"
+      className: "ex-stat-kpi",
+      "data-tk-bg": "bg.subtle",
+      style: { background: "var(--bg-subtle)" }
     }, /*#__PURE__*/React.createElement(MessagesSentDonut, {
       segments: MOCK_STATS.messages.segments,
       total: MOCK_STATS.messages.total,
       change: MOCK_STATS.messages.change
     })), /*#__PURE__*/React.createElement("div", {
-      className: "ex-stat-divider",
-      "data-tk-bg": "border",
-      style: { background: "var(--border)" }
-    }), /*#__PURE__*/React.createElement("div", {
-      className: "ex-stat-kpi"
+      className: "ex-stat-kpi",
+      "data-tk-bg": "bg.subtle",
+      style: { background: "var(--bg-subtle)" }
     }, /*#__PURE__*/React.createElement(ContactsRepliesFunnel, {
       contactsValue: MOCK_STATS.contacts.value,
       repliesValue: MOCK_STATS.replies.value,
       contactsChange: MOCK_STATS.contacts.change,
       repliesChange: MOCK_STATS.replies.change
     })), /*#__PURE__*/React.createElement("div", {
-      className: "ex-stat-divider",
-      "data-tk-bg": "border",
-      style: { background: "var(--border)" }
-    }), /*#__PURE__*/React.createElement("div", {
-      className: "ex-stat-kpi"
+      className: "ex-stat-kpi",
+      "data-tk-bg": "bg.subtle",
+      style: { background: "var(--bg-subtle)" }
     }, /*#__PURE__*/React.createElement(ReplyRateBars, {
       current: MOCK_STATS.replyRate.current,
       previous: MOCK_STATS.replyRate.previous,
