@@ -2501,8 +2501,8 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       className: "ex-replyrate-bar ex-replyrate-bar--curr"
     }, /*#__PURE__*/React.createElement("span", {
       className: "ex-replyrate-fill",
-      "data-tk-bg": "green.solid",
-      style: { background: "var(--green-solid)", height: `${currHeight}%` }
+      "data-tk-bg": "blue.solid",
+      style: { background: "color-mix(in oklab, var(--blue-solid) 80%, transparent)", height: `${currHeight}%` }
     }))), /*#__PURE__*/React.createElement("div", {
       className: "ex-stat-vis-meta"
     }, /*#__PURE__*/React.createElement("span", {

@@ -1845,8 +1845,8 @@
           <div className="ex-replyrate-bar ex-replyrate-bar--curr">
             <span
               className="ex-replyrate-fill"
-              data-tk-bg="green.solid"
-              style={{ background: "var(--green-solid)", height: `${currHeight}%` }}
+              data-tk-bg="blue.solid"
+              style={{ background: "color-mix(in oklab, var(--blue-solid) 80%, transparent)", height: `${currHeight}%` }}
             />
           </div>
         </div>
