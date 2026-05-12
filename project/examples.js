@@ -711,60 +711,62 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
   // ── Custom branded illustration icons (user-provided, fixed colors) ────
   // Campaign options — Recruit Candidates / Find Prospects.
   function RecruitCandidatesIcon({
-    size = 40
+    size = 32
   }) {
     return /*#__PURE__*/React.createElement("svg", {
       width: size,
       height: size,
-      viewBox: "0 0 41 41",
+      viewBox: "0 0 32 32",
       fill: "none",
       xmlns: "http://www.w3.org/2000/svg",
       "aria-hidden": "true"
     }, /*#__PURE__*/React.createElement("g", {
-      filter: "url(#rc_ddii)",
-      transform: "translate(0 3)"
+      filter: "url(#rc_ddii)"
     }, /*#__PURE__*/React.createElement("rect", {
-      x: "6.125",
-      y: "3.32498",
-      width: "28",
-      height: "28",
-      rx: "7",
+      x: "4.8126",
+      y: "2.61252",
+      width: "22",
+      height: "22",
+      rx: "5.5",
       fill: "url(#rc_grad)",
       shapeRendering: "crispEdges"
     }), /*#__PURE__*/React.createElement("rect", {
-      x: "6.125",
-      y: "3.32498",
-      width: "28",
-      height: "28",
-      rx: "7",
-      stroke: "#7B914E",
-      strokeOpacity: "0.8",
-      strokeWidth: "1.05",
+      x: "4.8126",
+      y: "2.61252",
+      width: "22",
+      height: "22",
+      rx: "5.5",
+      stroke: "#4E9153",
+      strokeOpacity: "0.4",
+      strokeWidth: "0.825",
       shapeRendering: "crispEdges"
     }), /*#__PURE__*/React.createElement("path", {
-      d: "M22.5755 13.1499C22.5755 10.8948 20.7473 9.06659 18.4921 9.06659C16.237 9.06659 14.4088 10.8948 14.4088 13.1499C14.4088 15.4051 16.237 17.2333 18.4921 17.2333C20.7473 17.2333 22.5755 15.4051 22.5755 13.1499Z",
-      stroke: "#2E4A00",
-      strokeWidth: "1.4",
+      d: "M17.738 10.3321C17.738 8.56017 16.3016 7.12375 14.5297 7.12375C12.7577 7.12375 11.3213 8.56017 11.3213 10.3321C11.3213 12.104 12.7577 13.5404 14.5297 13.5404C16.3016 13.5404 17.738 12.104 17.738 10.3321Z",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
-      d: "M27.4755 24.5833L26.2505 23.3583M26.6588 21.3166C26.6588 19.9635 25.5619 18.8666 24.2088 18.8666C22.8557 18.8666 21.7588 19.9635 21.7588 21.3166C21.7588 22.6697 22.8557 23.7666 24.2088 23.7666C25.5619 23.7666 26.6588 22.6697 26.6588 21.3166Z",
-      stroke: "#2E4A00",
-      strokeWidth: "1.4",
+      d: "M21.588 19.3157L20.6255 18.3532M20.9463 16.749C20.9463 15.6858 20.0845 14.824 19.0213 14.824C17.9581 14.824 17.0963 15.6858 17.0963 16.749C17.0963 17.8122 17.9581 18.674 19.0213 18.674C20.0845 18.674 20.9463 17.8122 20.9463 16.749Z",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
-      d: "M12.775 22.9502C12.775 19.7929 15.3344 17.2335 18.4917 17.2335C19.3684 17.2335 20.1991 17.4309 20.9417 17.7836",
-      stroke: "#2E4A00",
-      strokeWidth: "1.4",
+      d: "M10.0376 18.0323C10.0376 15.5517 12.0486 13.5407 14.5293 13.5407C15.2182 13.5407 15.8708 13.6958 16.4543 13.9729",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     })), /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("filter", {
       id: "rc_ddii",
       x: "0",
       y: "0",
-      width: "40.25",
-      height: "40.25",
+      width: "31.6252",
+      height: "31.625",
       filterUnits: "userSpaceOnUse",
       colorInterpolationFilters: "sRGB"
     }, /*#__PURE__*/React.createElement("feFlood", {
@@ -776,15 +778,15 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
       result: "hardAlpha"
     }), /*#__PURE__*/React.createElement("feOffset", {
-      dy: "2.8"
+      dy: "2.2"
     }), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "2.8"
+      stdDeviation: "2.2"
     }), /*#__PURE__*/React.createElement("feComposite", {
       in2: "hardAlpha",
       operator: "out"
     }), /*#__PURE__*/React.createElement("feColorMatrix", {
       type: "matrix",
-      values: "0 0 0 0 0.376471 0 0 0 0 0.498039 0 0 0 0 0.141176 0 0 0 0.16 0"
+      values: "0 0 0 0 0.141176 0 0 0 0 0.498039 0 0 0 0 0.152941 0 0 0 0.12 0"
     }), /*#__PURE__*/React.createElement("feBlend", {
       mode: "normal",
       in2: "BackgroundImageFix",
@@ -795,15 +797,15 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
       result: "hardAlpha"
     }), /*#__PURE__*/React.createElement("feOffset", {
-      dy: "1.4"
+      dy: "1.1"
     }), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "1.4"
+      stdDeviation: "1.1"
     }), /*#__PURE__*/React.createElement("feComposite", {
       in2: "hardAlpha",
       operator: "out"
     }), /*#__PURE__*/React.createElement("feColorMatrix", {
       type: "matrix",
-      values: "0 0 0 0 0.378381 0 0 0 0 0.496807 0 0 0 0 0.141528 0 0 0 0.16 0"
+      values: "0 0 0 0 0.141528 0 0 0 0 0.496807 0 0 0 0 0.15337 0 0 0 0.12 0"
     }), /*#__PURE__*/React.createElement("feBlend", {
       mode: "normal",
       in2: "effect1_dropShadow",
@@ -819,12 +821,12 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
       result: "hardAlpha"
     }), /*#__PURE__*/React.createElement("feMorphology", {
-      radius: "1.4",
+      radius: "1.1",
       operator: "erode",
       in: "SourceAlpha",
       result: "effect3_innerShadow"
     }), /*#__PURE__*/React.createElement("feOffset", null), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "0.7"
+      stdDeviation: "0.55"
     }), /*#__PURE__*/React.createElement("feComposite", {
       in2: "hardAlpha",
       operator: "arithmetic",
@@ -843,9 +845,9 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
       result: "hardAlpha"
     }), /*#__PURE__*/React.createElement("feOffset", {
-      dy: "1.4"
+      dy: "1.1"
     }), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "0.7"
+      stdDeviation: "0.55"
     }), /*#__PURE__*/React.createElement("feComposite", {
       in2: "hardAlpha",
       operator: "arithmetic",
@@ -864,75 +866,78 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       cy: "0",
       r: "1",
       gradientUnits: "userSpaceOnUse",
-      gradientTransform: "translate(20.125 1.22498) rotate(90) scale(23.8 38.5795)"
+      gradientTransform: "translate(15.8126 0.962517) rotate(90) scale(18.7 30.3124)"
     }, /*#__PURE__*/React.createElement("stop", {
-      stopColor: "#DEF0C5"
+      stopColor: "#E9FAEB"
     }), /*#__PURE__*/React.createElement("stop", {
       offset: "1",
-      stopColor: "#A7CA56"
+      stopColor: "#97D898"
     }))));
   }
   function FindProspectsIcon({
-    size = 40
+    size = 32
   }) {
     return /*#__PURE__*/React.createElement("svg", {
       width: size,
       height: size,
-      viewBox: "0 0 41 41",
+      viewBox: "0 0 32 32",
       fill: "none",
       xmlns: "http://www.w3.org/2000/svg",
       "aria-hidden": "true"
     }, /*#__PURE__*/React.createElement("g", {
-      filter: "url(#fp_ddii)",
-      transform: "translate(0 3)"
+      filter: "url(#fp_ddii)"
     }, /*#__PURE__*/React.createElement("rect", {
-      x: "6.125",
-      y: "3.32498",
-      width: "28",
-      height: "28",
-      rx: "7",
+      x: "4.8126",
+      y: "2.61252",
+      width: "22",
+      height: "22",
+      rx: "5.5",
       fill: "url(#fp_grad)",
       shapeRendering: "crispEdges"
     }), /*#__PURE__*/React.createElement("rect", {
-      x: "6.125",
-      y: "3.32498",
-      width: "28",
-      height: "28",
-      rx: "7",
-      stroke: "#7B914E",
-      strokeOpacity: "0.8",
-      strokeWidth: "1.05",
+      x: "4.8126",
+      y: "2.61252",
+      width: "22",
+      height: "22",
+      rx: "5.5",
+      stroke: "#4E9153",
+      strokeOpacity: "0.4",
+      strokeWidth: "0.825",
       shapeRendering: "crispEdges"
     }), /*#__PURE__*/React.createElement("path", {
-      d: "M17.2663 12.3334C17.2663 11.1864 17.2663 10.6129 17.5416 10.2009C17.6608 10.0226 17.8139 9.86947 17.9922 9.7503C18.4042 9.47504 18.9777 9.47504 20.1247 9.47504C21.2717 9.47504 21.8451 9.47504 22.2571 9.7503C22.4354 9.86947 22.5885 10.0226 22.7077 10.2009C22.983 10.6129 22.983 11.1864 22.983 12.3334",
-      stroke: "#2E4A00",
-      strokeWidth: "1.4",
+      d: "M13.5665 9.6906C13.5665 8.7894 13.5665 8.3387 13.7828 8.015C13.8764 7.8749 13.9967 7.7546 14.1368 7.661C14.4605 7.4447 14.9111 7.4447 15.8124 7.4447C16.7136 7.4447 17.1641 7.4447 17.4878 7.661C17.6279 7.7546 17.7482 7.8749 17.8419 8.015C18.0582 8.3387 18.0582 8.7894 18.0582 9.6906",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
-      d: "M28.2922 18.4585V18.0502C28.2922 15.3553 28.2922 14.0079 27.4551 13.1707C26.6178 12.3335 25.2704 12.3335 22.5756 12.3335H17.6756C14.9807 12.3335 13.6333 12.3335 12.7961 13.1707C11.9589 14.0079 11.9589 15.3553 11.9589 18.0502V18.4585C11.9589 21.1533 11.9589 22.5008 12.7961 23.338C13.6333 24.1752 14.9807 24.1752 17.6756 24.1752H22.5756C25.2704 24.1752 26.6178 24.1752 27.4551 23.338C28.2922 22.5008 28.2922 21.1533 28.2922 18.4585Z",
-      stroke: "#2E4A00",
-      strokeWidth: "1.4",
+      d: "M22.2297 14.5031V14.1823C22.2297 12.065 22.2297 11.0063 21.5719 10.3485C20.914 9.6907 19.8553 9.6907 17.7381 9.6907H13.888C11.7706 9.6907 10.7119 9.6907 10.0541 10.3485C9.3963 11.0063 9.3963 12.065 9.3963 14.1823V14.5031C9.3963 16.6205 9.3963 17.6793 10.0541 18.337C10.7119 18.9949 11.7706 18.9949 13.888 18.9949H17.7381C19.8553 18.9949 20.914 18.9949 21.5719 18.337C22.2297 17.6793 22.2297 16.6205 22.2297 14.5031Z",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
-      d: "M21.3501 18.4583C26.3101 18.0576 28.0876 15.1916 28.0876 15.1916M12.1626 15.1916C12.1626 15.1916 13.9401 18.0576 18.9001 18.4583",
-      stroke: "#2E4A00",
-      strokeWidth: "1.4",
+      d: "M16.7752 14.503C20.6723 14.1882 22.0689 11.9363 22.0689 11.9363M9.5564 11.9363C9.5564 11.9363 10.953 14.1882 14.8502 14.503",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
-      d: "M18.9001 18.4585V17.6418C18.9001 17.4163 19.083 17.2335 19.3084 17.2335H20.9418C21.1673 17.2335 21.3501 17.4163 21.3501 17.6418V18.4585C21.3501 19.135 20.8016 19.6835 20.1251 19.6835C19.4486 19.6835 18.9001 19.135 18.9001 18.4585Z",
-      stroke: "#2E4A00",
-      strokeWidth: "1.4",
+      d: "M14.8502 14.5031V13.8614C14.8502 13.6842 14.9938 13.5406 15.1709 13.5406H16.4543C16.6314 13.5406 16.7752 13.6842 16.7752 13.8614V14.5031C16.7752 15.0347 16.3442 15.4657 15.8126 15.4657C15.281 15.4657 14.8502 15.0347 14.8502 14.5031Z",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     })), /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("filter", {
       id: "fp_ddii",
       x: "0",
       y: "0",
-      width: "40.25",
-      height: "40.25",
+      width: "31.6252",
+      height: "31.625",
       filterUnits: "userSpaceOnUse",
       colorInterpolationFilters: "sRGB"
     }, /*#__PURE__*/React.createElement("feFlood", {
@@ -944,15 +949,15 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
       result: "hardAlpha"
     }), /*#__PURE__*/React.createElement("feOffset", {
-      dy: "2.8"
+      dy: "2.2"
     }), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "2.8"
+      stdDeviation: "2.2"
     }), /*#__PURE__*/React.createElement("feComposite", {
       in2: "hardAlpha",
       operator: "out"
     }), /*#__PURE__*/React.createElement("feColorMatrix", {
       type: "matrix",
-      values: "0 0 0 0 0.376471 0 0 0 0 0.498039 0 0 0 0 0.141176 0 0 0 0.16 0"
+      values: "0 0 0 0 0.141176 0 0 0 0 0.498039 0 0 0 0 0.152941 0 0 0 0.12 0"
     }), /*#__PURE__*/React.createElement("feBlend", {
       mode: "normal",
       in2: "BackgroundImageFix",
@@ -963,15 +968,15 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
       result: "hardAlpha"
     }), /*#__PURE__*/React.createElement("feOffset", {
-      dy: "1.4"
+      dy: "1.1"
     }), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "1.4"
+      stdDeviation: "1.1"
     }), /*#__PURE__*/React.createElement("feComposite", {
       in2: "hardAlpha",
       operator: "out"
     }), /*#__PURE__*/React.createElement("feColorMatrix", {
       type: "matrix",
-      values: "0 0 0 0 0.378381 0 0 0 0 0.496807 0 0 0 0 0.141528 0 0 0 0.16 0"
+      values: "0 0 0 0 0.141528 0 0 0 0 0.496807 0 0 0 0 0.15337 0 0 0 0.12 0"
     }), /*#__PURE__*/React.createElement("feBlend", {
       mode: "normal",
       in2: "effect1_dropShadow",
@@ -987,12 +992,12 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
       result: "hardAlpha"
     }), /*#__PURE__*/React.createElement("feMorphology", {
-      radius: "1.4",
+      radius: "1.1",
       operator: "erode",
       in: "SourceAlpha",
       result: "effect3_innerShadow"
     }), /*#__PURE__*/React.createElement("feOffset", null), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "0.7"
+      stdDeviation: "0.55"
     }), /*#__PURE__*/React.createElement("feComposite", {
       in2: "hardAlpha",
       operator: "arithmetic",
@@ -1011,9 +1016,9 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
       result: "hardAlpha"
     }), /*#__PURE__*/React.createElement("feOffset", {
-      dy: "1.4"
+      dy: "1.1"
     }), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "0.7"
+      stdDeviation: "0.55"
     }), /*#__PURE__*/React.createElement("feComposite", {
       in2: "hardAlpha",
       operator: "arithmetic",
@@ -1032,12 +1037,12 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       cy: "0",
       r: "1",
       gradientUnits: "userSpaceOnUse",
-      gradientTransform: "translate(20.125 1.22498) rotate(90) scale(23.8 38.5795)"
+      gradientTransform: "translate(15.8126 0.962517) rotate(90) scale(18.7 30.3124)"
     }, /*#__PURE__*/React.createElement("stop", {
-      stopColor: "#DEF0C5"
+      stopColor: "#E9FAEB"
     }), /*#__PURE__*/React.createElement("stop", {
       offset: "1",
-      stopColor: "#A7CA56"
+      stopColor: "#97D898"
     }))));
   }
 
@@ -1068,28 +1073,36 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       width: "24",
       height: "24",
       rx: "6",
-      stroke: "#7B914E",
-      strokeOpacity: "0.8",
+      stroke: "#4E9153",
+      strokeOpacity: "0.4",
       strokeWidth: "0.9",
       shapeRendering: "crispEdges"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M12.8055 8.35001C14.4458 8.34772 16.029 8.9414 17.25 10.0167V20.35C16.029 19.2747 14.4458 18.6811 12.8055 18.6833C11.7642 18.6833 11.2435 18.6833 11.0135 18.5361C10.8754 18.4477 10.819 18.3913 10.7306 18.2531C10.5833 18.0231 10.5833 17.6127 10.5833 16.7919V10.6188C10.5833 9.66696 10.5833 9.19103 10.9491 8.80525C11.315 8.41946 11.6895 8.39955 12.4385 8.35974C12.56 8.35328 12.6824 8.35001 12.8055 8.35001Z",
-      stroke: "#2E4A00",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M21.6945 8.35001C20.0541 8.34772 18.471 8.9414 17.25 10.0167V20.35C18.471 19.2747 20.0541 18.6811 21.6945 18.6833C22.7358 18.6833 23.2565 18.6833 23.4865 18.5361C23.6246 18.4477 23.681 18.3913 23.7694 18.2531C23.9167 18.0231 23.9167 17.6127 23.9167 16.7919V10.6188C23.9167 9.66696 23.9167 9.19103 23.5509 8.80525C23.185 8.41946 22.8105 8.39955 22.0615 8.35974C21.94 8.35328 21.8176 8.35001 21.6945 8.35001Z",
-      stroke: "#2E4A00",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M21.9167 11.2338C21.8429 11.2314 21.7688 11.2302 21.6945 11.2302C21.3199 11.2297 20.9483 11.2603 20.5833 11.3205M21.9167 13.6878C21.8429 13.6855 21.7688 13.6843 21.6945 13.6843C20.8507 13.6831 20.022 13.8396 19.25 14.1383M21.9167 16.0174C21.8429 16.015 21.7688 16.0138 21.6945 16.0138C20.8507 16.0126 20.022 16.1692 19.25 16.4678",
-      stroke: "#2E4A00",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M12.5833 11.2338C12.6571 11.2314 12.7312 11.2302 12.8055 11.2302C13.1801 11.2297 13.5517 11.2603 13.9166 11.3205M12.5833 13.6878C12.6571 13.6855 12.7312 13.6843 12.8055 13.6843C13.6493 13.6831 14.478 13.8396 15.25 14.1383M12.5833 16.0174C12.6571 16.015 12.7312 16.0138 12.8055 16.0138C13.6493 16.0126 14.478 16.1692 15.25 16.4678",
-      stroke: "#2E4A00",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     })), /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("filter", {
@@ -1117,7 +1130,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       operator: "out"
     }), /*#__PURE__*/React.createElement("feColorMatrix", {
       type: "matrix",
-      values: "0 0 0 0 0.376471 0 0 0 0 0.498039 0 0 0 0 0.141176 0 0 0 0.16 0"
+      values: "0 0 0 0 0.141176 0 0 0 0 0.498039 0 0 0 0 0.152941 0 0 0 0.12 0"
     }), /*#__PURE__*/React.createElement("feBlend", {
       mode: "normal",
       in2: "BackgroundImageFix",
@@ -1136,7 +1149,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       operator: "out"
     }), /*#__PURE__*/React.createElement("feColorMatrix", {
       type: "matrix",
-      values: "0 0 0 0 0.378381 0 0 0 0 0.496807 0 0 0 0 0.141528 0 0 0 0.16 0"
+      values: "0 0 0 0 0.141528 0 0 0 0 0.496807 0 0 0 0 0.15337 0 0 0 0.12 0"
     }), /*#__PURE__*/React.createElement("feBlend", {
       mode: "normal",
       in2: "effect1_dropShadow",
@@ -1199,10 +1212,10 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       gradientUnits: "userSpaceOnUse",
       gradientTransform: "translate(17.25 1.05) rotate(90) scale(20.4 33.0681)"
     }, /*#__PURE__*/React.createElement("stop", {
-      stopColor: "#DEF0C5"
+      stopColor: "#E9FAEB"
     }), /*#__PURE__*/React.createElement("stop", {
       offset: "1",
-      stopColor: "#A7CA56"
+      stopColor: "#97D898"
     }))));
   }
   function AskAQuestionIcon({
@@ -1231,18 +1244,22 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       width: "24",
       height: "24",
       rx: "6",
-      stroke: "#7B914E",
-      strokeOpacity: "0.8",
+      stroke: "#4E9153",
+      strokeOpacity: "0.4",
       strokeWidth: "0.9",
       shapeRendering: "crispEdges"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M17.25 20.0167C22.0052 20.0167 23.9166 17.3304 23.9166 14.0167C23.9166 10.703 22.6718 8.01666 17.25 8.01666C12.0052 8.01666 10.5833 10.703 10.5833 14.0167C10.5833 15.3975 10.8302 16.6694 11.4977 17.6833C12.3385 19.0167 11.9117 20.2389 11.25 20.6833C12.327 20.6833 13.0514 20.3405 13.5116 20.0011C13.8383 19.76 14.2546 19.6409 14.6489 19.7377C15.3879 19.9189 16.2494 20.0167 17.25 20.0167Z",
-      stroke: "#2E4A00",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M17.3332 14.0167H17.2499M20 14.0167H19.9167M14.6667 14.0167H14.5834M17.4166 14.0167C17.4166 14.1087 17.342 14.1833 17.2499 14.1833C17.1579 14.1833 17.0832 14.1087 17.0832 14.0167C17.0832 13.9246 17.1579 13.85 17.2499 13.85C17.342 13.85 17.4166 13.9246 17.4166 14.0167ZM20.0834 14.0167C20.0834 14.1087 20.0088 14.1833 19.9167 14.1833C19.8246 14.1833 19.75 14.1087 19.75 14.0167C19.75 13.9246 19.8246 13.85 19.9167 13.85C20.0088 13.85 20.0834 13.9246 20.0834 14.0167ZM14.75 14.0167C14.75 14.1087 14.6754 14.1833 14.5834 14.1833C14.4913 14.1833 14.4167 14.1087 14.4167 14.0167C14.4167 13.9246 14.4913 13.85 14.5834 13.85C14.6754 13.85 14.75 13.9246 14.75 14.0167Z",
-      stroke: "#2E4A00",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     })), /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("filter", {
@@ -1270,7 +1287,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       operator: "out"
     }), /*#__PURE__*/React.createElement("feColorMatrix", {
       type: "matrix",
-      values: "0 0 0 0 0.376471 0 0 0 0 0.498039 0 0 0 0 0.141176 0 0 0 0.16 0"
+      values: "0 0 0 0 0.141176 0 0 0 0 0.498039 0 0 0 0 0.152941 0 0 0 0.12 0"
     }), /*#__PURE__*/React.createElement("feBlend", {
       mode: "normal",
       in2: "BackgroundImageFix",
@@ -1289,7 +1306,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       operator: "out"
     }), /*#__PURE__*/React.createElement("feColorMatrix", {
       type: "matrix",
-      values: "0 0 0 0 0.378381 0 0 0 0 0.496807 0 0 0 0 0.141528 0 0 0 0.16 0"
+      values: "0 0 0 0 0.141528 0 0 0 0 0.496807 0 0 0 0 0.15337 0 0 0 0.12 0"
     }), /*#__PURE__*/React.createElement("feBlend", {
       mode: "normal",
       in2: "effect1_dropShadow",
@@ -1352,10 +1369,10 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       gradientUnits: "userSpaceOnUse",
       gradientTransform: "translate(17.25 1.05) rotate(90) scale(20.4 33.0681)"
     }, /*#__PURE__*/React.createElement("stop", {
-      stopColor: "#DEF0C5"
+      stopColor: "#E9FAEB"
     }), /*#__PURE__*/React.createElement("stop", {
       offset: "1",
-      stopColor: "#A7CA56"
+      stopColor: "#97D898"
     }))));
   }
   function ScheduleADemoIcon({
@@ -1384,28 +1401,36 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       width: "24",
       height: "24",
       rx: "6",
-      stroke: "#7B914E",
-      strokeOpacity: "0.8",
+      stroke: "#4E9153",
+      strokeOpacity: "0.4",
       strokeWidth: "0.9",
       shapeRendering: "crispEdges"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M19.9166 7.68335V10.35M14.5833 7.68335V10.35",
-      stroke: "#2E4A00",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M17.9167 9.01666H16.5833C14.0692 9.01666 12.8121 9.01666 12.031 9.79771C11.25 10.5788 11.25 11.8358 11.25 14.35V15.6833C11.25 18.1975 11.25 19.4546 12.031 20.2356C12.8121 21.0167 14.0692 21.0167 16.5833 21.0167H17.9167C20.4308 21.0167 21.6879 21.0167 22.4689 20.2356C23.25 19.4546 23.25 18.1975 23.25 15.6833V14.35C23.25 11.8358 23.25 10.5788 22.4689 9.79771C21.6879 9.01666 20.4308 9.01666 17.9167 9.01666Z",
-      stroke: "#2E4A00",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M11.25 13.0167H23.25",
-      stroke: "#2E4A00",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M19.5833 16.6833V18.0167M20.5833 17.35C20.5833 17.9023 20.1356 18.35 19.5833 18.35C19.031 18.35 18.5833 17.9023 18.5833 17.35C18.5833 16.7977 19.031 16.35 19.5833 16.35C20.1356 16.35 20.5833 16.7977 20.5833 17.35Z",
-      stroke: "#2E4A00",
+      stroke: "#022B07",
+      strokeOpacity: "0.9",
+      strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     })), /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("filter", {
@@ -1433,7 +1458,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       operator: "out"
     }), /*#__PURE__*/React.createElement("feColorMatrix", {
       type: "matrix",
-      values: "0 0 0 0 0.376471 0 0 0 0 0.498039 0 0 0 0 0.141176 0 0 0 0.16 0"
+      values: "0 0 0 0 0.141176 0 0 0 0 0.498039 0 0 0 0 0.152941 0 0 0 0.12 0"
     }), /*#__PURE__*/React.createElement("feBlend", {
       mode: "normal",
       in2: "BackgroundImageFix",
@@ -1452,7 +1477,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       operator: "out"
     }), /*#__PURE__*/React.createElement("feColorMatrix", {
       type: "matrix",
-      values: "0 0 0 0 0.378381 0 0 0 0 0.496807 0 0 0 0 0.141528 0 0 0 0.16 0"
+      values: "0 0 0 0 0.141528 0 0 0 0 0.496807 0 0 0 0 0.15337 0 0 0 0.12 0"
     }), /*#__PURE__*/React.createElement("feBlend", {
       mode: "normal",
       in2: "effect1_dropShadow",
@@ -1515,10 +1540,10 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       gradientUnits: "userSpaceOnUse",
       gradientTransform: "translate(17.25 1.05) rotate(90) scale(20.4 33.0681)"
     }, /*#__PURE__*/React.createElement("stop", {
-      stopColor: "#DEF0C5"
+      stopColor: "#E9FAEB"
     }), /*#__PURE__*/React.createElement("stop", {
       offset: "1",
-      stopColor: "#A7CA56"
+      stopColor: "#97D898"
     }))));
   }
 
@@ -1780,18 +1805,19 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         borderColor: "var(--border)",
         color: "var(--fg)",
         padding: "12px",
-        gap: 12
+        gap: 8
       }
     }, /*#__PURE__*/React.createElement("span", {
       style: {
         display: "inline-flex",
-        flexShrink: 0
+        flexShrink: 0,
+        transform: "translateY(2px)"
       }
     }, /*#__PURE__*/React.createElement(IconComp, {
-      size: 40
+      size: 32
     })), /*#__PURE__*/React.createElement("span", {
       style: {
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: 600
       }
     }, title), /*#__PURE__*/React.createElement("span", {
@@ -1849,13 +1875,14 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       style: {
         color: "var(--fg)",
         textDecoration: "none",
-        gap: 12
+        gap: 8
       },
       onClick: e => e.preventDefault()
     }, /*#__PURE__*/React.createElement("span", {
       style: {
         display: "inline-flex",
-        flexShrink: 0
+        flexShrink: 0,
+        transform: "translateY(2px)"
       }
     }, /*#__PURE__*/React.createElement(IconComp, {
       size: 32
@@ -2071,11 +2098,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         gap: 28
       }
     }, /*#__PURE__*/React.createElement("section", null, /*#__PURE__*/React.createElement("div", {
-      className: "ex-section-row",
-      style: {
-        marginBottom: 12,
-        gap: 10
-      }
+      className: "ex-section-row ex-home-heading-row"
     }, /*#__PURE__*/React.createElement("h2", {
       className: "ex-h2",
       "data-tk-fg": "fg",
@@ -2156,11 +2179,9 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         sub: "Renewable IPPs"
       }]
     })))), /*#__PURE__*/React.createElement("div", {
-      style: {
-        display: "flex",
-        flexDirection: "column",
-        gap: 16
-      }
+      className: "ex-home-aside"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "ex-home-heading-row"
     }, /*#__PURE__*/React.createElement("h2", {
       className: "ex-h2",
       "data-tk-fg": "fg",
@@ -2169,7 +2190,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         fontSize: 20,
         fontWeight: 600
       }
-    }, "Learn how Talin works"), /*#__PURE__*/React.createElement("div", {
+    }, "Learn how Talin works")), /*#__PURE__*/React.createElement("div", {
       className: "ex-card ex-card--video",
       "data-tk-bg": "bg.panel",
       "data-tk-border": "border",
