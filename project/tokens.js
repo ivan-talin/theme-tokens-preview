@@ -157,7 +157,7 @@ const role = (hue, lightStep, darkStep) => ({
 });
 const stdScaleRoles = (hue, opts = {}) => ({
   contrast:   { light: opts.contrastLight || "white", dark: opts.contrastDark || "white" },
-  fg:         role(hue, opts.fg?.[0] || 800, opts.fg?.[1] || 300),
+  fg:         role(hue, opts.fg?.[0] || 900, opts.fg?.[1] || 300),
   subtle:     role(hue, 50, 900),
   muted:      role(hue, 100, 800),
   emphasized: role(hue, 200, 700),
@@ -169,7 +169,7 @@ const stdScaleRoles = (hue, opts = {}) => ({
 window.SCALE_SEMANTIC = {
   gray: {
     contrast:   { light: "{colors.white}",      dark: "{colors.black}" },
-    fg:         { light: "{colors.gray.800}",   dark: "{colors.gray.200}" },
+    fg:         { light: "{colors.gray.900}",   dark: "{colors.gray.200}" },
     subtle:     { light: "{colors.gray.50}",    dark: "{colors.gray.900}" },
     muted:      { light: "{colors.gray.100}",   dark: "{colors.gray.800}" },
     emphasized: { light: "{colors.gray.200}",   dark: "{colors.gray.700}" },
@@ -182,7 +182,7 @@ window.SCALE_SEMANTIC = {
   // surface). contrast inverts because it sits on top of `solid`.
   alpha: {
     contrast:   { light: "{colors.whiteAlpha.800}", dark: "{colors.blackAlpha.800}" },
-    fg:         { light: "{colors.blackAlpha.800}", dark: "{colors.whiteAlpha.800}" },
+    fg:         { light: "{colors.blackAlpha.900}", dark: "{colors.whiteAlpha.900}" },
     subtle:     { light: "{colors.blackAlpha.50}",  dark: "{colors.whiteAlpha.50}" },
     muted:      { light: "{colors.blackAlpha.100}", dark: "{colors.whiteAlpha.100}" },
     emphasized: { light: "{colors.blackAlpha.200}", dark: "{colors.whiteAlpha.200}" },
@@ -194,7 +194,7 @@ window.SCALE_SEMANTIC = {
   orange: { ...stdScaleRoles("orange"), contrast: { light: "white", dark: "black" }, solid: role("orange", 600, 500) },
   yellow: {
     contrast:   { light: "black", dark: "black" },
-    fg:         role("yellow", 800, 300),
+    fg:         role("yellow", 900, 300),
     subtle:     role("yellow", 50, 900),
     muted:      role("yellow", 100, 800),
     emphasized: role("yellow", 200, 700),
