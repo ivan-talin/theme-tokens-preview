@@ -564,17 +564,17 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
   }), /*#__PURE__*/React.createElement("path", {
     d: "M128 80a48 48 0 1 0 48 48a48.05 48.05 0 0 0-48-48m0 80a32 32 0 1 1 32-32a32 32 0 0 1-32 32m88-29.84q.06-2.16 0-4.32l14.92-18.64a8 8 0 0 0 1.48-7.06a107.6 107.6 0 0 0-10.88-26.25a8 8 0 0 0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186 40.54a8 8 0 0 0-3.94-6a107.3 107.3 0 0 0-26.25-10.86a8 8 0 0 0-7.06 1.48L130.16 40h-4.32L107.2 25.11a8 8 0 0 0-7.06-1.48a107.6 107.6 0 0 0-26.25 10.88a8 8 0 0 0-3.93 6l-2.64 23.76q-1.56 1.49-3 3L40.54 70a8 8 0 0 0-6 3.94a107.7 107.7 0 0 0-10.87 26.25a8 8 0 0 0 1.49 7.06L40 125.84v4.32L25.11 148.8a8 8 0 0 0-1.48 7.06a107.6 107.6 0 0 0 10.88 26.25a8 8 0 0 0 6 3.93l23.72 2.64q1.49 1.56 3 3L70 215.46a8 8 0 0 0 3.94 6a107.7 107.7 0 0 0 26.25 10.87a8 8 0 0 0 7.06-1.49L125.84 216q2.16.06 4.32 0l18.64 14.92a8 8 0 0 0 7.06 1.48a107.2 107.2 0 0 0 26.25-10.88a8 8 0 0 0 3.93-6l2.64-23.72q1.56-1.48 3-3l23.78-2.8a8 8 0 0 0 6-3.94a107.7 107.7 0 0 0 10.87-26.25a8 8 0 0 0-1.49-7.06Zm-16.1-6.5a74 74 0 0 1 0 8.68a8 8 0 0 0 1.74 5.48l14.19 17.73a91.6 91.6 0 0 1-6.23 15l-22.6 2.56a8 8 0 0 0-5.1 2.64a74 74 0 0 1-6.14 6.14a8 8 0 0 0-2.64 5.1l-2.51 22.58a91.3 91.3 0 0 1-15 6.23l-17.74-14.19a8 8 0 0 0-5-1.75h-.48a74 74 0 0 1-8.68 0a8.06 8.06 0 0 0-5.48 1.74l-17.78 14.2a91.6 91.6 0 0 1-15-6.23L82.89 187a8 8 0 0 0-2.64-5.1a74 74 0 0 1-6.14-6.14a8 8 0 0 0-5.1-2.64l-22.58-2.52a91.3 91.3 0 0 1-6.23-15l14.19-17.74a8 8 0 0 0 1.74-5.48a74 74 0 0 1 0-8.68a8 8 0 0 0-1.74-5.48L40.2 100.45a91.6 91.6 0 0 1 6.23-15L69 82.89a8 8 0 0 0 5.1-2.64a74 74 0 0 1 6.14-6.14A8 8 0 0 0 82.89 69l2.51-22.57a91.3 91.3 0 0 1 15-6.23l17.74 14.19a8 8 0 0 0 5.48 1.74a74 74 0 0 1 8.68 0a8.06 8.06 0 0 0 5.48-1.74l17.77-14.19a91.6 91.6 0 0 1 15 6.23L173.11 69a8 8 0 0 0 2.64 5.1a74 74 0 0 1 6.14 6.14a8 8 0 0 0 5.1 2.64l22.58 2.51a91.3 91.3 0 0 1 6.23 15l-14.19 17.74a8 8 0 0 0-1.74 5.53Z"
   }));
-  const BookIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
-    d: "M208 32v160H72a24 24 0 0 0-24 24V56a24 24 0 0 1 24-24Z",
+  const BookOpenIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M224 48v144h-64a32 32 0 0 0-32 32V80a32 32 0 0 1 32-32Z",
     opacity: ".2"
   }), /*#__PURE__*/React.createElement("path", {
-    d: "M208 24H72a32 32 0 0 0-32 32v168a8 8 0 0 0 8 8h144a8 8 0 0 0 0-16H56a16 16 0 0 1 16-16h136a8 8 0 0 0 8-8V32a8 8 0 0 0-8-8m-8 160H72a31.8 31.8 0 0 0-16 4.29V56a16 16 0 0 1 16-16h128Z"
+    d: "M224 40h-64a40 40 0 0 0-32 16a40 40 0 0 0-32-16H32a16 16 0 0 0-16 16v144a16 16 0 0 0 16 16h64a24 24 0 0 1 24 24a8 8 0 0 0 16 0a24 24 0 0 1 24-24h64a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16M96 200H32V56h64a24 24 0 0 1 24 24v136a39.8 39.8 0 0 0-24-16m128 0h-64a39.8 39.8 0 0 0-24 8V80a24 24 0 0 1 24-24h64Z"
   }));
-  const ChatCircleTextIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
-    d: "M224 128a96 96 0 0 1-144.07 83.11l-37.39 12.47a8 8 0 0 1-10.12-10.12l12.47-37.39A96 96 0 1 1 224 128",
-    opacity: ".2"
+  const QuestionIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+    d: "M224,128a96,96,0,1,1-96-96A96,96,0,0,1,224,128Z",
+    opacity: "0.2"
   }), /*#__PURE__*/React.createElement("path", {
-    d: "M128 24a104 104 0 0 0-91.82 152.88l-11.35 34.05a16 16 0 0 0 20.24 20.24l34.05-11.35A104 104 0 1 0 128 24m0 192a87.87 87.87 0 0 1-44.06-11.81a8 8 0 0 0-4-1.08a7.9 7.9 0 0 0-2.53.42L40 216l12.47-37.4a8 8 0 0 0-.66-6.54A88 88 0 1 1 128 216m40-104a8 8 0 0 1-8 8H96a8 8 0 0 1 0-16h64a8 8 0 0 1 8 8m0 32a8 8 0 0 1-8 8H96a8 8 0 0 1 0-16h64a8 8 0 0 1 8 8"
+    d: "M140,180a12,12,0,1,1-12-12A12,12,0,0,1,140,180ZM128,72c-22.06,0-40,16.15-40,36v4a8,8,0,0,0,16,0v-4c0-11,10.77-20,24-20s24,9,24,20-10.77,20-24,20a8,8,0,0,0-8,8v8a8,8,0,0,0,16,0v-.72c18.24-3.35,32-17.9,32-35.28C168,88.15,150.06,72,128,72Zm104,56A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"
   }));
   const MagnifyingGlassIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
     d: "M192 112a80 80 0 1 1-80-80a80 80 0 0 1 80 80",
@@ -674,7 +674,18 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
   }), /*#__PURE__*/React.createElement("path", {
     d: "M230.92 212c-15.23-26.33-38.7-45.21-66.09-54.16a72 72 0 1 0-73.66 0c-27.39 8.94-50.86 27.82-66.09 54.16a8 8 0 1 0 13.85 8c18.84-32.56 52.14-52 89.07-52s70.23 19.44 89.07 52a8 8 0 1 0 13.85-8M72 96a56 56 0 1 1 56 56a56.06 56.06 0 0 1-56-56"
   }));
-  const CalendarBlankIcon = p => /*#__PURE__*/React.createElement(PhosphorIcon, p, /*#__PURE__*/React.createElement("path", {
+  const CalendarBlankIcon = ({
+    size = 20,
+    style,
+    ...p
+  }) => /*#__PURE__*/React.createElement(PhosphorIcon, _extends({}, p, {
+    size: size,
+    style: {
+      display: "block",
+      overflow: "visible",
+      ...style
+    }
+  }), /*#__PURE__*/React.createElement("path", {
     d: "M216 48v40H40V48a8 8 0 0 1 8-8h160a8 8 0 0 1 8 8",
     opacity: ".2"
   }), /*#__PURE__*/React.createElement("path", {
@@ -708,342 +719,990 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     d: "M216 128a8 8 0 0 1-8 8h-72v72a8 8 0 0 1-16 0v-72H48a8 8 0 0 1 0-16h72V48a8 8 0 0 1 16 0v72h72a8 8 0 0 1 8 8"
   }));
 
-  // ── Custom branded illustration icons (user-provided, fixed colors) ────
-  // Campaign options — Recruit Candidates / Find Prospects.
-  function RecruitCandidatesIcon({
-    size = 32
+  // Home prototype icon style config mirrors the newer Talin Home DialKit shape.
+  const INTENSITY_NEUTRAL = 0.3;
+  const ICON_PRESET_OPTIONS = ["green", "red", "blue", "pink", "orange", "purple", "custom"];
+  const DEFAULT_ICON_STYLE = {
+    gradientStop1: "#f5fff6",
+    gradientStop2: "#afe4b0",
+    borderColor: "#508650",
+    borderOpacity: 0.5,
+    glyphColor: "#093e0f",
+    glyphOpacity: 0.87,
+    shadowColor: "#1b551e",
+    shadowOpacity: 0.3
+  };
+  const PRESET_PALETTES = {
+    green: {
+      gradientStop1: "#f5fff6",
+      gradientStop2: "#afe4b0",
+      borderColor: "#508650",
+      glyphColor: "#093e0f",
+      shadowColor: "#1b551e"
+    },
+    red: {
+      gradientStop1: "#fff5f5",
+      gradientStop2: "#e4b0b0",
+      borderColor: "#865050",
+      glyphColor: "#3e0909",
+      shadowColor: "#551b1b"
+    },
+    blue: {
+      gradientStop1: "#f5faff",
+      gradientStop2: "#b0c8e4",
+      borderColor: "#506886",
+      glyphColor: "#091f3e",
+      shadowColor: "#1b3855"
+    },
+    pink: {
+      gradientStop1: "#fff5fa",
+      gradientStop2: "#e4b0cf",
+      borderColor: "#865070",
+      glyphColor: "#3e0926",
+      shadowColor: "#551b3e"
+    },
+    orange: {
+      gradientStop1: "#fff9f5",
+      gradientStop2: "#e4c4b0",
+      borderColor: "#866850",
+      glyphColor: "#3e1f09",
+      shadowColor: "#553b1b"
+    },
+    purple: {
+      gradientStop1: "#faf5ff",
+      gradientStop2: "#c8b0e4",
+      borderColor: "#685086",
+      glyphColor: "#1f093e",
+      shadowColor: "#381b55"
+    }
+  };
+  const CHECKMARK_PALETTE = PRESET_PALETTES.green;
+  const HOMEPAGE_PROTOTYPE_CONFIG = {
+    setup: {
+      extensionInstalled: true,
+      linkedinConnected: true,
+      mailboxConnected: false,
+      signatureSet: false,
+      checklistDismissed: false,
+      completionExpired: false
+    },
+    hasCampaigns: {
+      type: "select",
+      options: ["none", "one_draft", "one_active", "multiple"],
+      default: "none"
+    },
+    hasUnreadReplies: {
+      type: "select",
+      options: ["none", "few", "many"],
+      default: "none"
+    },
+    hasPendingTasks: {
+      type: "select",
+      options: ["none", "one_2fa", "multiple_manual"],
+      default: "none"
+    },
+    accountHealth: {
+      type: "select",
+      options: ["ok", "linkedin_expired", "mailbox_failing", "quota_near_limit"],
+      default: "ok"
+    },
+    ats: {
+      connected: false,
+      recommendationDismissed: false
+    },
+    todaysActivityFilter: {
+      type: "select",
+      options: ["my_campaigns", "all_campaigns"],
+      default: "my_campaigns"
+    },
+    video: {
+      dismissed: false,
+      tab: {
+        type: "select",
+        options: ["candidates", "prospects"],
+        default: "candidates"
+      }
+    },
+    iconStyle: {
+      preset: {
+        type: "select",
+        options: ICON_PRESET_OPTIONS,
+        default: "green"
+      },
+      intensity: [0.3, 0, 1, 0.01],
+      gradient: {
+        stop1: DEFAULT_ICON_STYLE.gradientStop1,
+        stop2: DEFAULT_ICON_STYLE.gradientStop2
+      },
+      border: {
+        color: DEFAULT_ICON_STYLE.borderColor,
+        opacity: [DEFAULT_ICON_STYLE.borderOpacity, 0, 1, 0.01]
+      },
+      glyph: {
+        color: DEFAULT_ICON_STYLE.glyphColor,
+        opacity: [DEFAULT_ICON_STYLE.glyphOpacity, 0, 1, 0.01]
+      },
+      shadow: {
+        color: DEFAULT_ICON_STYLE.shadowColor,
+        opacity: [DEFAULT_ICON_STYLE.shadowOpacity, 0, 1, 0.01]
+      }
+    }
+  };
+  const ICON_PALETTE_KEYS = ["gradientStop1", "gradientStop2", "borderColor", "glyphColor", "shadowColor"];
+  function clamp(n, min, max) {
+    return Math.min(max, Math.max(min, n));
+  }
+  function parseHexColor(hex) {
+    const cleaned = String(hex || "").replace("#", "").trim();
+    const full = cleaned.length === 3 ? cleaned.split("").map(c => c + c).join("") : cleaned.padEnd(6, "0").slice(0, 6);
+    const r = parseInt(full.slice(0, 2), 16);
+    const g = parseInt(full.slice(2, 4), 16);
+    const b = parseInt(full.slice(4, 6), 16);
+    return {
+      r: Number.isFinite(r) ? r : 0,
+      g: Number.isFinite(g) ? g : 0,
+      b: Number.isFinite(b) ? b : 0
+    };
+  }
+  function rgbToHex({
+    r,
+    g,
+    b
   }) {
-    return /*#__PURE__*/React.createElement("svg", {
+    const toHex = value => clamp(Math.round(value), 0, 255).toString(16).padStart(2, "0");
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  }
+  function rgbToHsl({
+    r,
+    g,
+    b
+  }) {
+    const rn = r / 255;
+    const gn = g / 255;
+    const bn = b / 255;
+    const max = Math.max(rn, gn, bn);
+    const min = Math.min(rn, gn, bn);
+    const l = (max + min) / 2;
+    if (max === min) return {
+      h: 0,
+      s: 0,
+      l
+    };
+    const d = max - min;
+    const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    let h;
+    if (max === rn) h = (gn - bn) / d + (gn < bn ? 6 : 0);else if (max === gn) h = (bn - rn) / d + 2;else h = (rn - gn) / d + 4;
+    return {
+      h: h / 6,
+      s,
+      l
+    };
+  }
+  function hslToRgb({
+    h,
+    s,
+    l
+  }) {
+    if (s === 0) {
+      const v = l * 255;
+      return {
+        r: v,
+        g: v,
+        b: v
+      };
+    }
+    const hue2rgb = (p, q, t) => {
+      let next = t;
+      if (next < 0) next += 1;
+      if (next > 1) next -= 1;
+      if (next < 1 / 6) return p + (q - p) * 6 * next;
+      if (next < 1 / 2) return q;
+      if (next < 2 / 3) return p + (q - p) * (2 / 3 - next) * 6;
+      return p;
+    };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    return {
+      r: hue2rgb(p, q, h + 1 / 3) * 255,
+      g: hue2rgb(p, q, h) * 255,
+      b: hue2rgb(p, q, h - 1 / 3) * 255
+    };
+  }
+  function mixHex(a, b, amount) {
+    const c1 = parseHexColor(a);
+    const c2 = parseHexColor(b);
+    const t = clamp(amount, 0, 1);
+    return rgbToHex({
+      r: c1.r + (c2.r - c1.r) * t,
+      g: c1.g + (c2.g - c1.g) * t,
+      b: c1.b + (c2.b - c1.b) * t
+    });
+  }
+  function adjustHsl(hex, satMultiplier, lightnessDelta) {
+    const hsl = rgbToHsl(parseHexColor(hex));
+    return rgbToHex(hslToRgb({
+      h: hsl.h,
+      s: clamp(hsl.s * satMultiplier, 0, 1),
+      l: clamp(hsl.l + lightnessDelta, 0, 1)
+    }));
+  }
+  function rgba(hex, alpha) {
+    const {
+      r,
+      g,
+      b
+    } = parseHexColor(hex);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  function applyIntensity(hex, intensity) {
+    const delta = intensity - INTENSITY_NEUTRAL;
+    if (Math.abs(delta) < 0.005) return hex;
+    if (delta > 0) {
+      const t = delta / (1 - INTENSITY_NEUTRAL);
+      return adjustHsl(hex, 1 + t * 1.4, -t * 0.04);
+    }
+    const t = -delta / INTENSITY_NEUTRAL;
+    const desaturated = adjustHsl(hex, 1 - t * 0.7, 0);
+    return mixHex(desaturated, "#ffffff", t * 0.3);
+  }
+  function clonePalette(palette) {
+    return ICON_PALETTE_KEYS.reduce((next, key) => {
+      next[key] = palette[key];
+      return next;
+    }, {});
+  }
+  function deriveIconStyle(basePalette, intensity, opacitySource = DEFAULT_ICON_STYLE) {
+    return {
+      gradientStop1: applyIntensity(basePalette.gradientStop1, intensity),
+      gradientStop2: applyIntensity(basePalette.gradientStop2, intensity),
+      borderColor: applyIntensity(basePalette.borderColor, intensity),
+      borderOpacity: opacitySource.borderOpacity ?? DEFAULT_ICON_STYLE.borderOpacity,
+      glyphColor: applyIntensity(basePalette.glyphColor, intensity),
+      glyphOpacity: opacitySource.glyphOpacity ?? DEFAULT_ICON_STYLE.glyphOpacity,
+      shadowColor: applyIntensity(basePalette.shadowColor, intensity),
+      shadowOpacity: opacitySource.shadowOpacity ?? DEFAULT_ICON_STYLE.shadowOpacity
+    };
+  }
+  const homePrototypeIconState = {
+    config: HOMEPAGE_PROTOTYPE_CONFIG,
+    basePalette: clonePalette(PRESET_PALETTES.green),
+    iconPreset: HOMEPAGE_PROTOTYPE_CONFIG.iconStyle.preset.default,
+    iconIntensity: HOMEPAGE_PROTOTYPE_CONFIG.iconStyle.intensity[0],
+    iconStyle: {
+      ...DEFAULT_ICON_STYLE
+    }
+  };
+  function recomputeHomePrototypeIconStyle() {
+    homePrototypeIconState.iconStyle = deriveIconStyle(homePrototypeIconState.basePalette, homePrototypeIconState.iconIntensity, homePrototypeIconState.iconStyle);
+  }
+  function setHomePrototypeIconPreset(preset) {
+    if (!ICON_PRESET_OPTIONS.includes(preset)) return;
+    homePrototypeIconState.iconPreset = preset;
+    if (preset !== "custom") {
+      homePrototypeIconState.basePalette = clonePalette(PRESET_PALETTES[preset]);
+    }
+    recomputeHomePrototypeIconStyle();
+  }
+  function setHomePrototypeIconIntensity(intensity) {
+    homePrototypeIconState.iconIntensity = clamp(Number(intensity) || 0, 0, 1);
+    recomputeHomePrototypeIconStyle();
+  }
+  function setHomePrototypeIconColor(field, value) {
+    if (!ICON_PALETTE_KEYS.includes(field)) return;
+    homePrototypeIconState.iconPreset = "custom";
+    homePrototypeIconState.basePalette[field] = value;
+    homePrototypeIconState.iconStyle[field] = value;
+  }
+  function setHomePrototypeIconOpacity(field, value) {
+    if (!["borderOpacity", "glyphOpacity", "shadowOpacity"].includes(field)) return;
+    homePrototypeIconState.iconStyle[field] = clamp(Number(value) || 0, 0, 1);
+  }
+  function resetHomePrototypeIconStyle() {
+    homePrototypeIconState.basePalette = clonePalette(PRESET_PALETTES.green);
+    homePrototypeIconState.iconPreset = HOMEPAGE_PROTOTYPE_CONFIG.iconStyle.preset.default;
+    homePrototypeIconState.iconIntensity = HOMEPAGE_PROTOTYPE_CONFIG.iconStyle.intensity[0];
+    homePrototypeIconState.iconStyle = {
+      ...DEFAULT_ICON_STYLE
+    };
+  }
+  function getHomePrototypeIconState() {
+    return homePrototypeIconState;
+  }
+
+  const HOME_PROTOTYPE_PANEL_WIDTH = 306;
+  const HOME_PROTOTYPE_PANEL_PREFS_KEY = "talin.homePrototype.panel";
+  const HOME_PROTOTYPE_VERSION_LIMIT = 12;
+  function defaultHomePrototypePanelPosition() {
+    if (typeof window === "undefined") return {
+      x: 16,
+      y: 16
+    };
+    return {
+      x: Math.max(16, window.innerWidth - HOME_PROTOTYPE_PANEL_WIDTH - 16),
+      y: 16
+    };
+  }
+  function clampHomePrototypePanelPosition(position, size = {}) {
+    if (typeof window === "undefined") return position;
+    const width = size.width || HOME_PROTOTYPE_PANEL_WIDTH;
+    const height = size.height || 56;
+    const maxX = Math.max(8, window.innerWidth - width - 8);
+    const maxY = Math.max(8, window.innerHeight - height - 8);
+    return {
+      x: clamp(position.x, 8, maxX),
+      y: clamp(position.y, 8, maxY)
+    };
+  }
+  function readHomePrototypePanelPrefs() {
+    const fallback = {
+      collapsed: true,
+      position: defaultHomePrototypePanelPosition(),
+      versions: []
+    };
+    try {
+      const raw = localStorage.getItem(HOME_PROTOTYPE_PANEL_PREFS_KEY);
+      if (!raw) return fallback;
+      const parsed = JSON.parse(raw);
+      return {
+        collapsed: Boolean(parsed.collapsed),
+        position: parsed.position ? clampHomePrototypePanelPosition(parsed.position) : fallback.position,
+        versions: Array.isArray(parsed.versions) ? parsed.versions.slice(0, HOME_PROTOTYPE_VERSION_LIMIT) : []
+      };
+    } catch (_) {
+      return fallback;
+    }
+  }
+  function writeHomePrototypePanelPrefs(nextPrefs) {
+    try {
+      localStorage.setItem(HOME_PROTOTYPE_PANEL_PREFS_KEY, JSON.stringify(nextPrefs));
+    } catch (_) {}
+  }
+  function getHomePrototypeIconSnapshot({
+    id = "current",
+    name = "Current config",
+    savedAt = null
+  } = {}) {
+    return {
+      id,
+      name,
+      savedAt,
+      iconPreset: homePrototypeIconState.iconPreset,
+      iconIntensity: homePrototypeIconState.iconIntensity,
+      basePalette: {
+        ...homePrototypeIconState.basePalette
+      },
+      iconStyle: {
+        ...homePrototypeIconState.iconStyle
+      }
+    };
+  }
+  function applyHomePrototypeIconSnapshot(snapshot) {
+    if (!snapshot) return;
+    const iconStyle = {
+      ...DEFAULT_ICON_STYLE,
+      ...(snapshot.iconStyle || {})
+    };
+    const sourcePalette = snapshot.basePalette || snapshot.iconStyle || {};
+    homePrototypeIconState.iconPreset = ICON_PRESET_OPTIONS.includes(snapshot.iconPreset) ? snapshot.iconPreset : "custom";
+    homePrototypeIconState.iconIntensity = clamp(Number(snapshot.iconIntensity) || 0, 0, 1);
+    homePrototypeIconState.basePalette = ICON_PALETTE_KEYS.reduce((next, key) => {
+      next[key] = sourcePalette[key] || iconStyle[key] || DEFAULT_ICON_STYLE[key];
+      return next;
+    }, {});
+    homePrototypeIconState.iconStyle = iconStyle;
+  }
+  function getHomePrototypeConfigPayload(snapshot) {
+    return {
+      iconStyle: {
+        preset: snapshot.iconPreset,
+        intensity: snapshot.iconIntensity,
+        gradient: {
+          stop1: snapshot.iconStyle.gradientStop1,
+          stop2: snapshot.iconStyle.gradientStop2
+        },
+        border: {
+          color: snapshot.iconStyle.borderColor,
+          opacity: snapshot.iconStyle.borderOpacity
+        },
+        glyph: {
+          color: snapshot.iconStyle.glyphColor,
+          opacity: snapshot.iconStyle.glyphOpacity
+        },
+        shadow: {
+          color: snapshot.iconStyle.shadowColor,
+          opacity: snapshot.iconStyle.shadowOpacity
+        },
+        basePalette: snapshot.basePalette
+      }
+    };
+  }
+  function formatHomePrototypeConfig(snapshot) {
+    return JSON.stringify(getHomePrototypeConfigPayload(snapshot), null, 2);
+  }
+  function copyHomePrototypeTextFallback(text) {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.select();
+    let copied = false;
+    try {
+      copied = document.execCommand?.("copy");
+    } finally {
+      document.body.removeChild(textarea);
+    }
+    if (!copied) throw new Error("Copy command failed");
+  }
+  function HomePrototypeControls({
+    onConfigChange
+  }) {
+    const panelPrefsRef = useRef(null);
+    if (!panelPrefsRef.current) panelPrefsRef.current = readHomePrototypePanelPrefs();
+    const panelRef = useRef(null);
+    const dragStateRef = useRef(null);
+    const [, forceUpdate] = useState(0);
+    const [collapsed, setCollapsed] = useState(panelPrefsRef.current.collapsed);
+    const [versions, setVersions] = useState(panelPrefsRef.current.versions);
+    const [selectedVersionId, setSelectedVersionId] = useState("");
+    const [panelNotice, setPanelNotice] = useState("");
+    const [isDragging, setIsDragging] = useState(false);
+    const [panelPosition, setPanelPositionState] = useState(panelPrefsRef.current.position);
+    const panelPositionRef = useRef(panelPrefsRef.current.position);
+    const state = getHomePrototypeIconState();
+    const style = state.iconStyle;
+    const persistPanelPrefs = (patch = {}) => {
+      writeHomePrototypePanelPrefs({
+        collapsed,
+        position: panelPositionRef.current,
+        versions,
+        ...patch
+      });
+    };
+    const updatePanelPosition = nextPosition => {
+      const rawPosition = typeof nextPosition === "function" ? nextPosition(panelPositionRef.current) : nextPosition;
+      const rect = panelRef.current?.getBoundingClientRect();
+      const clampedPosition = clampHomePrototypePanelPosition(rawPosition, rect || {});
+      panelPositionRef.current = clampedPosition;
+      setPanelPositionState(clampedPosition);
+    };
+    const update = (fn, {
+      keepVersionSelection = false
+    } = {}) => {
+      fn();
+      if (!keepVersionSelection) setSelectedVersionId("");
+      forceUpdate(tick => tick + 1);
+      if (onConfigChange) onConfigChange();
+    };
+    const copySelectedConfig = async () => {
+      const text = formatHomePrototypeConfig(getHomePrototypeIconSnapshot());
+      try {
+        if (navigator.clipboard?.writeText) {
+          try {
+            await navigator.clipboard.writeText(text);
+          } catch (_) {
+            copyHomePrototypeTextFallback(text);
+          }
+        } else {
+          copyHomePrototypeTextFallback(text);
+        }
+        setPanelNotice("Copied current config");
+      } catch (_) {
+        setPanelNotice("Copy failed");
+      }
+    };
+    const saveVersion = () => {
+      const savedAt = new Date().toISOString();
+      const name = `Version ${versions.length + 1}`;
+      const snapshot = getHomePrototypeIconSnapshot({
+        id: `version-${Date.now()}`,
+        name,
+        savedAt
+      });
+      setVersions(prevVersions => {
+        const nextVersions = [...prevVersions, snapshot].slice(-HOME_PROTOTYPE_VERSION_LIMIT);
+        writeHomePrototypePanelPrefs({
+          collapsed,
+          position: panelPositionRef.current,
+          versions: nextVersions
+        });
+        return nextVersions;
+      });
+      setSelectedVersionId(snapshot.id);
+      setPanelNotice(`Saved ${name}`);
+    };
+    const loadSavedVersion = versionId => {
+      setSelectedVersionId(versionId);
+      if (!versionId) {
+        setPanelNotice("");
+        return;
+      }
+      const savedVersion = versions.find(version => version.id === versionId);
+      if (!savedVersion) return;
+      applyHomePrototypeIconSnapshot(savedVersion);
+      forceUpdate(tick => tick + 1);
+      if (onConfigChange) onConfigChange();
+      setPanelNotice(`Loaded ${savedVersion.name}`);
+    };
+    const toggleCollapsed = () => {
+      setCollapsed(prevCollapsed => {
+        const nextCollapsed = !prevCollapsed;
+        const nextPosition = nextCollapsed ? panelPositionRef.current : clampHomePrototypePanelPosition(panelPositionRef.current, {
+          width: HOME_PROTOTYPE_PANEL_WIDTH,
+          height: panelRef.current?.getBoundingClientRect().height || 56
+        });
+        panelPositionRef.current = nextPosition;
+        setPanelPositionState(nextPosition);
+        persistPanelPrefs({
+          collapsed: nextCollapsed,
+          position: nextPosition
+        });
+        return nextCollapsed;
+      });
+    };
+    const beginPanelDrag = event => {
+      const target = event.target;
+      if (event.button !== 0) return;
+      if (target instanceof Element && target.closest("button, input, select, textarea")) return;
+      const rect = panelRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      dragStateRef.current = {
+        startX: event.clientX,
+        startY: event.clientY,
+        panelX: panelPositionRef.current.x,
+        panelY: panelPositionRef.current.y
+      };
+      setIsDragging(true);
+      event.currentTarget.setPointerCapture?.(event.pointerId);
+      event.preventDefault();
+    };
+    const movePanel = event => {
+      if (!dragStateRef.current) return;
+      const nextPosition = {
+        x: dragStateRef.current.panelX + event.clientX - dragStateRef.current.startX,
+        y: dragStateRef.current.panelY + event.clientY - dragStateRef.current.startY
+      };
+      updatePanelPosition(nextPosition);
+    };
+    const endPanelDrag = event => {
+      if (!dragStateRef.current) return;
+      dragStateRef.current = null;
+      setIsDragging(false);
+      event.currentTarget.releasePointerCapture?.(event.pointerId);
+      persistPanelPrefs({
+        position: panelPositionRef.current
+      });
+    };
+    const beginPanelMouseDrag = event => {
+      const target = event.target;
+      if (dragStateRef.current || event.button !== 0) return;
+      if (target instanceof Element && target.closest("button, input, select, textarea")) return;
+      const rect = panelRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      dragStateRef.current = {
+        startX: event.clientX,
+        startY: event.clientY,
+        panelX: panelPositionRef.current.x,
+        panelY: panelPositionRef.current.y
+      };
+      setIsDragging(true);
+      event.preventDefault();
+      const handleMouseMove = moveEvent => {
+        if (!dragStateRef.current) return;
+        updatePanelPosition({
+          x: dragStateRef.current.panelX + moveEvent.clientX - dragStateRef.current.startX,
+          y: dragStateRef.current.panelY + moveEvent.clientY - dragStateRef.current.startY
+        });
+      };
+      const handleMouseUp = () => {
+        if (!dragStateRef.current) return;
+        dragStateRef.current = null;
+        setIsDragging(false);
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mouseup", handleMouseUp);
+        persistPanelPrefs({
+          position: panelPositionRef.current
+        });
+      };
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    };
+    useEffect(() => {
+      const handleResize = () => {
+        updatePanelPosition(panelPositionRef.current);
+      };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+    const colorFields = [["gradientStop1", "Gradient stop 1"], ["gradientStop2", "Gradient stop 2"], ["borderColor", "Border"], ["glyphColor", "Glyph"], ["shadowColor", "Shadow"]];
+    const opacityFields = [["borderOpacity", "Border opacity"], ["glyphOpacity", "Glyph opacity"], ["shadowOpacity", "Shadow opacity"]];
+    const labelStyle = {
+      display: "grid",
+      gap: 6,
+      color: "var(--fg-muted)",
+      fontSize: 11,
+      fontWeight: 600
+    };
+    const controlStyle = {
+      width: "100%",
+      minWidth: 0,
+      accentColor: "var(--talin-solid, #348435)"
+    };
+    const buttonStyle = {
+      border: "1px solid var(--border)",
+      borderRadius: 6,
+      background: "var(--bg-subtle)",
+      color: "var(--fg)",
+      fontSize: 11,
+      fontWeight: 600,
+      padding: "5px 7px",
+      cursor: "pointer"
+    };
+    const selectStyle = {
+      ...controlStyle,
+      height: 30,
+      borderRadius: 6,
+      border: "1px solid var(--border)",
+      background: "var(--bg)",
+      color: "var(--fg)"
+    };
+    const header = /*#__PURE__*/React.createElement("div", {
+      onPointerDown: beginPanelDrag,
+      onPointerMove: movePanel,
+      onPointerUp: endPanelDrag,
+      onPointerCancel: endPanelDrag,
+      onMouseDown: beginPanelMouseDrag,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 12,
+        cursor: isDragging ? "grabbing" : "grab",
+        touchAction: "none"
+      }
+    }, /*#__PURE__*/React.createElement("strong", {
+      style: {
+        fontSize: 13,
+        fontWeight: 650
+      }
+    }, "Icon colour config"), /*#__PURE__*/React.createElement("button", {
+      type: "button",
+      "aria-expanded": !collapsed,
+      onClick: toggleCollapsed,
+      style: buttonStyle
+    }, collapsed ? "Expand" : "Collapse"));
+    const versionOptions = [/*#__PURE__*/React.createElement("option", {
+      key: "current",
+      value: ""
+    }, versions.length ? "Current unsaved config" : "Save a version first"), ...versions.slice().reverse().map(version => /*#__PURE__*/React.createElement("option", {
+      key: version.id,
+      value: version.id
+    }, version.name))];
+    const panelBody = collapsed ? null : /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "grid",
+        gap: 12
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 7
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      type: "button",
+      onClick: copySelectedConfig,
+      style: buttonStyle
+    }, "Copy config"), /*#__PURE__*/React.createElement("button", {
+      type: "button",
+      onClick: saveVersion,
+      style: buttonStyle
+    }, "Save version"), /*#__PURE__*/React.createElement("button", {
+      type: "button",
+      onClick: () => update(resetHomePrototypeIconStyle),
+      style: buttonStyle
+    }, "Reset")), panelNotice ? /*#__PURE__*/React.createElement("div", {
+      style: {
+        color: "var(--fg-muted)",
+        fontSize: 11,
+        fontWeight: 600
+      }
+    }, panelNotice) : null, /*#__PURE__*/React.createElement("label", {
+      style: labelStyle
+    }, "Saved version", /*#__PURE__*/React.createElement("select", {
+      "aria-label": "Saved icon version",
+      disabled: !versions.length,
+      value: selectedVersionId,
+      onChange: event => loadSavedVersion(event.target.value),
+      style: selectStyle
+    }, versionOptions)), /*#__PURE__*/React.createElement("label", {
+      style: labelStyle
+    }, "Preset", /*#__PURE__*/React.createElement("select", {
+      "aria-label": "Icon preset",
+      value: state.iconPreset,
+      onChange: event => update(() => setHomePrototypeIconPreset(event.target.value)),
+      style: selectStyle
+    }, ICON_PRESET_OPTIONS.map(preset => /*#__PURE__*/React.createElement("option", {
+      key: preset,
+      value: preset
+    }, preset)))), /*#__PURE__*/React.createElement("label", {
+      style: labelStyle
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        gap: 12
+      }
+    }, /*#__PURE__*/React.createElement("span", null, "Intensity"), /*#__PURE__*/React.createElement("span", null, state.iconIntensity.toFixed(2))), /*#__PURE__*/React.createElement("input", {
+      "aria-label": "Icon intensity",
+      type: "range",
+      min: HOMEPAGE_PROTOTYPE_CONFIG.iconStyle.intensity[1],
+      max: HOMEPAGE_PROTOTYPE_CONFIG.iconStyle.intensity[2],
+      step: HOMEPAGE_PROTOTYPE_CONFIG.iconStyle.intensity[3],
+      value: state.iconIntensity,
+      onChange: event => update(() => setHomePrototypeIconIntensity(event.target.value)),
+      style: controlStyle
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 10
+      }
+    }, colorFields.map(([field, label]) => /*#__PURE__*/React.createElement("label", {
+      key: field,
+      style: labelStyle
+    }, label, /*#__PURE__*/React.createElement("input", {
+      "aria-label": label,
+      type: "color",
+      value: style[field],
+      onChange: event => update(() => setHomePrototypeIconColor(field, event.target.value)),
+      style: {
+        ...controlStyle,
+        height: 32,
+        padding: 2,
+        border: "1px solid var(--border)",
+        borderRadius: 6,
+        background: "var(--bg)"
+      }
+    })))), opacityFields.map(([field, label]) => /*#__PURE__*/React.createElement("label", {
+      key: field,
+      style: labelStyle
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        gap: 12
+      }
+    }, /*#__PURE__*/React.createElement("span", null, label), /*#__PURE__*/React.createElement("span", null, style[field].toFixed(2))), /*#__PURE__*/React.createElement("input", {
+      "aria-label": label,
+      type: "range",
+      min: "0",
+      max: "1",
+      step: "0.01",
+      value: style[field],
+      onChange: event => update(() => setHomePrototypeIconOpacity(field, event.target.value)),
+      style: controlStyle
+    }))));
+    return /*#__PURE__*/React.createElement("aside", {
+      ref: panelRef,
+      "aria-label": "Homepage prototype icon controls",
+      style: {
+        position: "fixed",
+        top: panelPosition.y,
+        left: panelPosition.x,
+        zIndex: 40,
+        width: collapsed ? 236 : HOME_PROTOTYPE_PANEL_WIDTH,
+        maxWidth: "calc(100vw - 32px)",
+        maxHeight: "calc(100vh - 32px)",
+        overflow: collapsed ? "hidden" : "auto",
+        display: "grid",
+        gap: collapsed ? 0 : 12,
+        padding: 14,
+        borderRadius: 8,
+        border: "1px solid var(--border)",
+        background: "var(--bg-panel)",
+        boxShadow: "0 16px 40px rgba(15, 23, 42, 0.14)",
+        color: "var(--fg)"
+      }
+    }, header, panelBody);
+  }
+
+  // Campaign options: Recruit Candidates / Find Prospects.
+  function BrandedIconShell({
+    size = 32,
+    children
+  }) {
+    const {
+      iconStyle
+    } = getHomePrototypeIconState();
+    const visiblePx = size * 22 / 32;
+    const offsetXPx = size * 4.8126 / 32;
+    const offsetYPx = size * 2.61252 / 32;
+    const rxPx = size * 5.5 / 32;
+    const shadowOpacity = iconStyle.shadowOpacity;
+    return /*#__PURE__*/React.createElement("span", {
+      "aria-hidden": "true",
+      style: {
+        position: "relative",
+        display: "inline-block",
+        width: size,
+        height: size,
+        flexShrink: 0
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        position: "absolute",
+        top: offsetYPx,
+        left: offsetXPx,
+        width: visiblePx,
+        height: visiblePx,
+        borderRadius: rxPx,
+        background: `radial-gradient(ellipse 130% 180% at 50% -10%, ${iconStyle.gradientStop1} 0%, ${iconStyle.gradientStop2} 100%)`,
+        boxShadow: ["inset 0 0 0 1px rgba(255, 255, 255, 0.06)", `0 0 0 0.6px ${rgba(iconStyle.borderColor, iconStyle.borderOpacity)}`, `0 0.5px 1px -0.5px ${rgba(iconStyle.shadowColor, shadowOpacity)}`, `0 1px 2px 0 ${rgba(iconStyle.shadowColor, shadowOpacity * 0.667)}`].join(", ")
+      }
+    }), /*#__PURE__*/React.createElement("svg", {
       width: size,
       height: size,
       viewBox: "0 0 32 32",
       fill: "none",
-      xmlns: "http://www.w3.org/2000/svg",
+      style: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        pointerEvents: "none"
+      },
       "aria-hidden": "true"
-    }, /*#__PURE__*/React.createElement("g", {
-      filter: "url(#rc_ddii)"
-    }, /*#__PURE__*/React.createElement("rect", {
-      x: "4.8126",
-      y: "2.61252",
-      width: "22",
-      height: "22",
-      rx: "5.5",
-      fill: "url(#rc_grad)",
-      shapeRendering: "crispEdges"
-    }), /*#__PURE__*/React.createElement("rect", {
-      x: "4.8126",
-      y: "2.61252",
-      width: "22",
-      height: "22",
-      rx: "5.5",
-      stroke: "#4E9153",
-      strokeOpacity: "0.4",
-      strokeWidth: "0.825",
-      shapeRendering: "crispEdges"
-    }), /*#__PURE__*/React.createElement("path", {
+    }, children({
+      glyphColor: iconStyle.glyphColor,
+      glyphOpacity: iconStyle.glyphOpacity
+    })));
+  }
+  function RecruitCandidatesIcon({
+    size = 32
+  }) {
+    return /*#__PURE__*/React.createElement(BrandedIconShell, {
+      size: size
+    }, ({
+      glyphColor,
+      glyphOpacity
+    }) => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
       d: "M17.738 10.3321C17.738 8.56017 16.3016 7.12375 14.5297 7.12375C12.7577 7.12375 11.3213 8.56017 11.3213 10.3321C11.3213 12.104 12.7577 13.5404 14.5297 13.5404C16.3016 13.5404 17.738 12.104 17.738 10.3321Z",
-      stroke: "#022B07",
-      strokeOpacity: "0.9",
+      stroke: glyphColor,
+      strokeOpacity: glyphOpacity,
       strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M21.588 19.3157L20.6255 18.3532M20.9463 16.749C20.9463 15.6858 20.0845 14.824 19.0213 14.824C17.9581 14.824 17.0963 15.6858 17.0963 16.749C17.0963 17.8122 17.9581 18.674 19.0213 18.674C20.0845 18.674 20.9463 17.8122 20.9463 16.749Z",
-      stroke: "#022B07",
-      strokeOpacity: "0.9",
+      stroke: glyphColor,
+      strokeOpacity: glyphOpacity,
       strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M10.0376 18.0323C10.0376 15.5517 12.0486 13.5407 14.5293 13.5407C15.2182 13.5407 15.8708 13.6958 16.4543 13.9729",
-      stroke: "#022B07",
-      strokeOpacity: "0.9",
+      stroke: glyphColor,
+      strokeOpacity: glyphOpacity,
       strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
-    })), /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("filter", {
-      id: "rc_ddii",
-      x: "0",
-      y: "0",
-      width: "31.6252",
-      height: "31.625",
-      filterUnits: "userSpaceOnUse",
-      colorInterpolationFilters: "sRGB"
-    }, /*#__PURE__*/React.createElement("feFlood", {
-      floodOpacity: "0",
-      result: "BackgroundImageFix"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      in: "SourceAlpha",
-      type: "matrix",
-      values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
-      result: "hardAlpha"
-    }), /*#__PURE__*/React.createElement("feOffset", {
-      dy: "2.2"
-    }), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "2.2"
-    }), /*#__PURE__*/React.createElement("feComposite", {
-      in2: "hardAlpha",
-      operator: "out"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      type: "matrix",
-      values: "0 0 0 0 0.141176 0 0 0 0 0.498039 0 0 0 0 0.152941 0 0 0 0.12 0"
-    }), /*#__PURE__*/React.createElement("feBlend", {
-      mode: "normal",
-      in2: "BackgroundImageFix",
-      result: "effect1_dropShadow"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      in: "SourceAlpha",
-      type: "matrix",
-      values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
-      result: "hardAlpha"
-    }), /*#__PURE__*/React.createElement("feOffset", {
-      dy: "1.1"
-    }), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "1.1"
-    }), /*#__PURE__*/React.createElement("feComposite", {
-      in2: "hardAlpha",
-      operator: "out"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      type: "matrix",
-      values: "0 0 0 0 0.141528 0 0 0 0 0.496807 0 0 0 0 0.15337 0 0 0 0.12 0"
-    }), /*#__PURE__*/React.createElement("feBlend", {
-      mode: "normal",
-      in2: "effect1_dropShadow",
-      result: "effect2_dropShadow"
-    }), /*#__PURE__*/React.createElement("feBlend", {
-      mode: "normal",
-      in: "SourceGraphic",
-      in2: "effect2_dropShadow",
-      result: "shape"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      in: "SourceAlpha",
-      type: "matrix",
-      values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
-      result: "hardAlpha"
-    }), /*#__PURE__*/React.createElement("feMorphology", {
-      radius: "1.1",
-      operator: "erode",
-      in: "SourceAlpha",
-      result: "effect3_innerShadow"
-    }), /*#__PURE__*/React.createElement("feOffset", null), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "0.55"
-    }), /*#__PURE__*/React.createElement("feComposite", {
-      in2: "hardAlpha",
-      operator: "arithmetic",
-      k2: "-1",
-      k3: "1"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      type: "matrix",
-      values: "0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.25 0"
-    }), /*#__PURE__*/React.createElement("feBlend", {
-      mode: "normal",
-      in2: "shape",
-      result: "effect3_innerShadow"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      in: "SourceAlpha",
-      type: "matrix",
-      values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
-      result: "hardAlpha"
-    }), /*#__PURE__*/React.createElement("feOffset", {
-      dy: "1.1"
-    }), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "0.55"
-    }), /*#__PURE__*/React.createElement("feComposite", {
-      in2: "hardAlpha",
-      operator: "arithmetic",
-      k2: "-1",
-      k3: "1"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      type: "matrix",
-      values: "0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.2 0"
-    }), /*#__PURE__*/React.createElement("feBlend", {
-      mode: "normal",
-      in2: "effect3_innerShadow",
-      result: "effect4_innerShadow"
-    })), /*#__PURE__*/React.createElement("radialGradient", {
-      id: "rc_grad",
-      cx: "0",
-      cy: "0",
-      r: "1",
-      gradientUnits: "userSpaceOnUse",
-      gradientTransform: "translate(15.8126 0.962517) rotate(90) scale(18.7 30.3124)"
-    }, /*#__PURE__*/React.createElement("stop", {
-      stopColor: "#E9FAEB"
-    }), /*#__PURE__*/React.createElement("stop", {
-      offset: "1",
-      stopColor: "#97D898"
-    }))));
+    })));
   }
   function FindProspectsIcon({
     size = 32
   }) {
-    return /*#__PURE__*/React.createElement("svg", {
-      width: size,
-      height: size,
-      viewBox: "0 0 32 32",
-      fill: "none",
-      xmlns: "http://www.w3.org/2000/svg",
-      "aria-hidden": "true"
-    }, /*#__PURE__*/React.createElement("g", {
-      filter: "url(#fp_ddii)"
-    }, /*#__PURE__*/React.createElement("rect", {
-      x: "4.8126",
-      y: "2.61252",
-      width: "22",
-      height: "22",
-      rx: "5.5",
-      fill: "url(#fp_grad)",
-      shapeRendering: "crispEdges"
-    }), /*#__PURE__*/React.createElement("rect", {
-      x: "4.8126",
-      y: "2.61252",
-      width: "22",
-      height: "22",
-      rx: "5.5",
-      stroke: "#4E9153",
-      strokeOpacity: "0.4",
-      strokeWidth: "0.825",
-      shapeRendering: "crispEdges"
-    }), /*#__PURE__*/React.createElement("path", {
+    return /*#__PURE__*/React.createElement(BrandedIconShell, {
+      size: size
+    }, ({
+      glyphColor,
+      glyphOpacity
+    }) => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
       d: "M13.5665 9.6906C13.5665 8.7894 13.5665 8.3387 13.7828 8.015C13.8764 7.8749 13.9967 7.7546 14.1368 7.661C14.4605 7.4447 14.9111 7.4447 15.8124 7.4447C16.7136 7.4447 17.1641 7.4447 17.4878 7.661C17.6279 7.7546 17.7482 7.8749 17.8419 8.015C18.0582 8.3387 18.0582 8.7894 18.0582 9.6906",
-      stroke: "#022B07",
-      strokeOpacity: "0.9",
+      stroke: glyphColor,
+      strokeOpacity: glyphOpacity,
       strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M22.2297 14.5031V14.1823C22.2297 12.065 22.2297 11.0063 21.5719 10.3485C20.914 9.6907 19.8553 9.6907 17.7381 9.6907H13.888C11.7706 9.6907 10.7119 9.6907 10.0541 10.3485C9.3963 11.0063 9.3963 12.065 9.3963 14.1823V14.5031C9.3963 16.6205 9.3963 17.6793 10.0541 18.337C10.7119 18.9949 11.7706 18.9949 13.888 18.9949H17.7381C19.8553 18.9949 20.914 18.9949 21.5719 18.337C22.2297 17.6793 22.2297 16.6205 22.2297 14.5031Z",
-      stroke: "#022B07",
-      strokeOpacity: "0.9",
+      stroke: glyphColor,
+      strokeOpacity: glyphOpacity,
       strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M16.7752 14.503C20.6723 14.1882 22.0689 11.9363 22.0689 11.9363M9.5564 11.9363C9.5564 11.9363 10.953 14.1882 14.8502 14.503",
-      stroke: "#022B07",
-      strokeOpacity: "0.9",
+      stroke: glyphColor,
+      strokeOpacity: glyphOpacity,
       strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }), /*#__PURE__*/React.createElement("path", {
       d: "M14.8502 14.5031V13.8614C14.8502 13.6842 14.9938 13.5406 15.1709 13.5406H16.4543C16.6314 13.5406 16.7752 13.6842 16.7752 13.8614V14.5031C16.7752 15.0347 16.3442 15.4657 15.8126 15.4657C15.281 15.4657 14.8502 15.0347 14.8502 14.5031Z",
-      stroke: "#022B07",
-      strokeOpacity: "0.9",
+      stroke: glyphColor,
+      strokeOpacity: glyphOpacity,
       strokeWidth: "1.1",
       strokeLinecap: "round",
       strokeLinejoin: "round"
-    })), /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("filter", {
-      id: "fp_ddii",
-      x: "0",
-      y: "0",
-      width: "31.6252",
-      height: "31.625",
-      filterUnits: "userSpaceOnUse",
-      colorInterpolationFilters: "sRGB"
-    }, /*#__PURE__*/React.createElement("feFlood", {
-      floodOpacity: "0",
-      result: "BackgroundImageFix"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      in: "SourceAlpha",
-      type: "matrix",
-      values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
-      result: "hardAlpha"
-    }), /*#__PURE__*/React.createElement("feOffset", {
-      dy: "2.2"
-    }), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "2.2"
-    }), /*#__PURE__*/React.createElement("feComposite", {
-      in2: "hardAlpha",
-      operator: "out"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      type: "matrix",
-      values: "0 0 0 0 0.141176 0 0 0 0 0.498039 0 0 0 0 0.152941 0 0 0 0.12 0"
-    }), /*#__PURE__*/React.createElement("feBlend", {
-      mode: "normal",
-      in2: "BackgroundImageFix",
-      result: "effect1_dropShadow"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      in: "SourceAlpha",
-      type: "matrix",
-      values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
-      result: "hardAlpha"
-    }), /*#__PURE__*/React.createElement("feOffset", {
-      dy: "1.1"
-    }), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "1.1"
-    }), /*#__PURE__*/React.createElement("feComposite", {
-      in2: "hardAlpha",
-      operator: "out"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      type: "matrix",
-      values: "0 0 0 0 0.141528 0 0 0 0 0.496807 0 0 0 0 0.15337 0 0 0 0.12 0"
-    }), /*#__PURE__*/React.createElement("feBlend", {
-      mode: "normal",
-      in2: "effect1_dropShadow",
-      result: "effect2_dropShadow"
-    }), /*#__PURE__*/React.createElement("feBlend", {
-      mode: "normal",
-      in: "SourceGraphic",
-      in2: "effect2_dropShadow",
-      result: "shape"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      in: "SourceAlpha",
-      type: "matrix",
-      values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
-      result: "hardAlpha"
-    }), /*#__PURE__*/React.createElement("feMorphology", {
-      radius: "1.1",
-      operator: "erode",
-      in: "SourceAlpha",
-      result: "effect3_innerShadow"
-    }), /*#__PURE__*/React.createElement("feOffset", null), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "0.55"
-    }), /*#__PURE__*/React.createElement("feComposite", {
-      in2: "hardAlpha",
-      operator: "arithmetic",
-      k2: "-1",
-      k3: "1"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      type: "matrix",
-      values: "0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.25 0"
-    }), /*#__PURE__*/React.createElement("feBlend", {
-      mode: "normal",
-      in2: "shape",
-      result: "effect3_innerShadow"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      in: "SourceAlpha",
-      type: "matrix",
-      values: "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0",
-      result: "hardAlpha"
-    }), /*#__PURE__*/React.createElement("feOffset", {
-      dy: "1.1"
-    }), /*#__PURE__*/React.createElement("feGaussianBlur", {
-      stdDeviation: "0.55"
-    }), /*#__PURE__*/React.createElement("feComposite", {
-      in2: "hardAlpha",
-      operator: "arithmetic",
-      k2: "-1",
-      k3: "1"
-    }), /*#__PURE__*/React.createElement("feColorMatrix", {
-      type: "matrix",
-      values: "0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.2 0"
-    }), /*#__PURE__*/React.createElement("feBlend", {
-      mode: "normal",
-      in2: "effect3_innerShadow",
-      result: "effect4_innerShadow"
-    })), /*#__PURE__*/React.createElement("radialGradient", {
-      id: "fp_grad",
-      cx: "0",
-      cy: "0",
-      r: "1",
-      gradientUnits: "userSpaceOnUse",
-      gradientTransform: "translate(15.8126 0.962517) rotate(90) scale(18.7 30.3124)"
-    }, /*#__PURE__*/React.createElement("stop", {
-      stopColor: "#E9FAEB"
-    }), /*#__PURE__*/React.createElement("stop", {
-      offset: "1",
-      stopColor: "#97D898"
-    }))));
+    })));
+  }
+  function BrandedCheckIcon({
+    size = 20
+  }) {
+    const {
+      iconStyle,
+      iconIntensity
+    } = getHomePrototypeIconState();
+    const visiblePx = size * 13 / 16;
+    const offsetPx = size * 1.5 / 16;
+    const shadowOpacity = iconStyle.shadowOpacity;
+    const stop1 = applyIntensity(CHECKMARK_PALETTE.gradientStop1, iconIntensity);
+    const stop2 = applyIntensity(CHECKMARK_PALETTE.gradientStop2, iconIntensity);
+    const borderColor = applyIntensity(CHECKMARK_PALETTE.borderColor, iconIntensity);
+    const shadowColor = applyIntensity(CHECKMARK_PALETTE.shadowColor, iconIntensity);
+    const glyphColor = applyIntensity(CHECKMARK_PALETTE.glyphColor, iconIntensity);
+    return /*#__PURE__*/React.createElement("span", {
+      "aria-hidden": "true",
+      style: {
+        position: "relative",
+        display: "inline-block",
+        width: size,
+        height: size,
+        flexShrink: 0
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        position: "absolute",
+        top: offsetPx,
+        left: offsetPx,
+        width: visiblePx,
+        height: visiblePx,
+        borderRadius: "50%",
+        background: `radial-gradient(ellipse 130% 180% at 50% -10%, ${stop1} 0%, ${stop2} 100%)`,
+        boxShadow: ["inset 0 0 0 0.5px rgba(255, 255, 255, 0.06)", `0 0 0 0.3px ${rgba(borderColor, iconStyle.borderOpacity)}`, `0 0.5px 1px -0.5px ${rgba(shadowColor, shadowOpacity)}`, `0 1px 2px 0 ${rgba(shadowColor, shadowOpacity * 0.667)}`].join(", ")
+      }
+    }), /*#__PURE__*/React.createElement("svg", {
+      width: size,
+      height: size,
+      viewBox: "0 0 16 16",
+      fill: "none",
+      style: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        pointerEvents: "none"
+      },
+      "aria-hidden": "true"
+    }, /*#__PURE__*/React.createElement("polyline", {
+      points: "5.4 8.2 7.1 9.9 10.6 6.4",
+      stroke: glyphColor,
+      strokeOpacity: iconStyle.glyphOpacity,
+      strokeWidth: "1.4",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      fill: "none"
+    })));
   }
 
   // Learn link icons (smaller — 35x35 viewBox).
@@ -1717,22 +2376,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
         alignItems: "center",
         gap: 8
       }
-    }, /*#__PURE__*/React.createElement("span", null, title), done ? /*#__PURE__*/React.createElement("span", {
-      "aria-hidden": "true",
-      style: {
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: 14,
-        height: 14,
-        borderRadius: "50%",
-        background: "var(--talin-accent)",
-        color: "white"
-      }
-    }, /*#__PURE__*/React.createElement(CheckIcon, {
-      size: 10,
-      strokeWidth: 2.5
-    })) : null), /*#__PURE__*/React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("span", null, title), done ? /*#__PURE__*/React.createElement(BrandedCheckIcon, null) : null), /*#__PURE__*/React.createElement("div", {
       className: "ex-setup-sub",
       "data-tk-fg": "fg.muted",
       style: {
@@ -1879,13 +2523,18 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       },
       onClick: e => e.preventDefault()
     }, /*#__PURE__*/React.createElement("span", {
+      "data-tk-fg": "fg.muted",
       style: {
         display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 20,
+        height: 20,
         flexShrink: 0,
-        transform: "translateY(2px)"
+        color: "var(--fg-muted)"
       }
     }, /*#__PURE__*/React.createElement(IconComp, {
-      size: 32
+      size: 20
     })), /*#__PURE__*/React.createElement("span", null, label));
   }
 
@@ -1909,13 +2558,22 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
   //   "home" | "campaigns" | "inbox" | "settings"
   // Home and Campaigns are clickable links to their respective example
   // pages, preserving the current light/dark mode via the URL.
+  function examplePageHref(id, mode) {
+    const query = `ex=${encodeURIComponent(id)}&mode=${encodeURIComponent(mode)}`;
+    if (typeof window === "undefined") return `project/example.html?${query}`;
+    const path = window.location.pathname || "";
+    const marker = "/project/";
+    const projectIndex = path.lastIndexOf(marker);
+    const base = projectIndex >= 0 ? path.slice(0, projectIndex + marker.length) : `${path.replace(/\/[^/]*$/, "/")}project/`;
+    return `${base}example.html?${query}`;
+  }
   function TalinSidebar({
     active,
     sidebarCollapsed,
     onToggleSidebar
   }) {
     const mode = (typeof document !== "undefined" && document.documentElement.dataset.mode) || "light";
-    const navHref = id => `example?ex=${id}&mode=${mode}`;
+    const navHref = id => examplePageHref(id, mode);
     return /*#__PURE__*/React.createElement("aside", {
       className: "ex-sidebar",
       "data-tk-bg": "bg.muted",
@@ -1977,10 +2635,10 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     })), /*#__PURE__*/React.createElement("div", {
       className: "ex-side-foot"
     }, /*#__PURE__*/React.createElement(SideItem, {
-      icon: BookIcon,
+      icon: BookOpenIcon,
       label: "Knowledge Hub"
     }), /*#__PURE__*/React.createElement(SideItem, {
-      icon: ChatCircleTextIcon,
+      icon: QuestionIcon,
       label: "Ask a question"
     }), /*#__PURE__*/React.createElement("div", {
       className: "ex-side-user",
@@ -2075,6 +2733,7 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
 
   // ── ExampleHome ────────────────────────────────────────────────────────
   function ExampleHome() {
+    const [, forceIconUpdate] = useState(0);
     return /*#__PURE__*/React.createElement(ShellWithSidebar, {
       active: "home"
     }, /*#__PURE__*/React.createElement("main", {
@@ -2229,15 +2888,17 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     }, "End-to-end workflow setup"), /*#__PURE__*/React.createElement("span", null, "9 min"))), /*#__PURE__*/React.createElement("div", {
       className: "ex-link-list"
     }, /*#__PURE__*/React.createElement(LinkRow, {
-      icon: TalinDocumentationIcon,
+      icon: BookOpenIcon,
       label: "Talin documentation"
     }), /*#__PURE__*/React.createElement(LinkRow, {
-      icon: AskAQuestionIcon,
+      icon: QuestionIcon,
       label: "Ask a question"
     }), /*#__PURE__*/React.createElement(LinkRow, {
-      icon: ScheduleADemoIcon,
+      icon: CalendarBlankIcon,
       label: "Schedule a demo with us"
-    }))))));
+    }))))), /*#__PURE__*/React.createElement(HomePrototypeControls, {
+      onConfigChange: () => forceIconUpdate(tick => tick + 1)
+    }));
   }
 
   // ── ExampleCampaigns ───────────────────────────────────────────────────

@@ -473,6 +473,15 @@ const EXAMPLE_LINKS = [{
   label: "Example 3",
   sub: "Create campaign"
 }];
+function examplePageHref(id, mode) {
+  const query = `ex=${encodeURIComponent(id)}&mode=${encodeURIComponent(mode)}`;
+  if (typeof window === "undefined") return `project/example.html?${query}`;
+  const path = window.location.pathname || "";
+  const marker = "/project/";
+  const projectIndex = path.lastIndexOf(marker);
+  const base = projectIndex >= 0 ? path.slice(0, projectIndex + marker.length) : `${path.replace(/\/[^/]*$/, "/")}project/`;
+  return `${base}example.html?${query}`;
+}
 function ExamplesMenu({
   mode
 }) {
@@ -486,7 +495,7 @@ function ExamplesMenu({
     if (closeRef.current) clearTimeout(closeRef.current);
     closeRef.current = setTimeout(() => setOpen(false), 120);
   };
-  const href = id => `example?ex=${id}&mode=${mode}`;
+  const href = id => examplePageHref(id, mode);
   return /*#__PURE__*/React.createElement("div", {
     className: `examples-menu ${open ? "is-open" : ""}`,
     onMouseEnter: onEnter,
